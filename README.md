@@ -11,7 +11,7 @@
 
 **Turn any competitor's public footprint into a traceable intelligence dossier.**
 
-Competitor Census is a reusable Agent Skill, project CLI, and open toolkit for global competitor research. Give it a company and market; it helps discover the channels that matter, collect public Facebook Page posts or YouTube metadata, build a structured evidence base, translate multilingual content, derive categories from the real corpus, quantify what performs, and generate a report whose claims lead back to source rows and URLs. The same evidence bundle can run a validated customer-voice analysis when public conversations are available.
+Competitor Census is a clone-and-run Agent Skill and project CLI for global competitor research. Give it a company and market; it helps discover the channels that matter, collect public TikTok profiles and conversations, Facebook Page posts, or YouTube metadata, build a structured evidence base, translate multilingual content, derive categories from the real corpus, quantify what performs, and generate a report whose claims lead back to source rows and URLs. The same evidence bundle can run a validated customer-voice analysis when public conversations are available.
 
 > Census first. Conclusions second.
 
@@ -20,7 +20,8 @@ Competitor Census is a reusable Agent Skill, project CLI, and open toolkit for g
 | Capability | Result |
 |---|---|
 | **Platform census** | Find and verify the competitor's active public channels before choosing where to go deep |
-| **In-scope capture** | Preserve publication dates, text, views, likes, comments, shares, account fields, and source URLs |
+| **Runnable connectors** | Collect TikTok profile videos and selected conversations, Facebook Page posts, or YouTube metadata from one CLI |
+| **In-scope capture** | Preserve stable IDs, publication dates, text, views, available engagement fields, account fields, and source URLs |
 | **Multilingual normalization** | Keep original text beside a separate working translation in one consistent schema |
 | **Corpus-grounded classification** | Let an Agent read the complete corpus and derive categories from repeated meanings rather than preset keywords |
 | **Professional analysis** | Compare content supply with mean and median reach, count customer needs, study reply patterns, and map opportunities |
@@ -40,9 +41,9 @@ The same workflow can be reused across companies, languages, regions, and approv
 
 This is not another “scrape and summarize” tool. Collection is a versioned evidence layer; translation, analysis, reports, monitoring, and approved collaboration handoffs are separate layers that can be rerun without overwriting the original capture. Read [`references/monitoring-playbook.md`](references/monitoring-playbook.md) for monitoring and [`references/persona-research.md`](references/persona-research.md) for persona research.
 
-## See it in 60 seconds
+## Clone, check, run
 
-No API key, browser login, or package install is required:
+The offline demo needs no API key, browser login, or package install:
 
 ```bash
 git clone https://github.com/KayZhongyi/competitor-census.git
@@ -56,6 +57,16 @@ Open `demo/output/report.html`, or view the [live fictional report](https://kayz
   <img src="assets/demo-preview.svg" alt="Fictional evidence-linked competitor report preview" width="100%" />
 </p>
 
+Check optional live connectors, then install the checkout as an Agent Skill:
+
+```bash
+./competitor-census doctor
+./competitor-census install-skill --target codex
+# or: ./competitor-census install-skill --target claude
+```
+
+For live TikTok or Facebook collection, install [OpenCLI](https://github.com/jackwener/OpenCLI), connect its Chrome extension, and use a Chrome profile that can ordinarily view the target public page. YouTube collection uses `yt-dlp`. `doctor` reports exactly which optional dependency is missing.
+
 ## Use the project CLI
 
 ```bash
@@ -65,6 +76,9 @@ Open `demo/output/report.html`, or view the [live fictional report](https://kayz
 One command surface covers live connectors, evidence analysis, customer voice, incremental merging, and the offline demo:
 
 ```text
+./competitor-census doctor
+./competitor-census tiktok ...
+./competitor-census tiktok-comments ...
 ./competitor-census facebook ...
 ./competitor-census youtube ...
 ./competitor-census prepare-analysis ...
@@ -72,11 +86,56 @@ One command surface covers live connectors, evidence analysis, customer voice, i
 ./competitor-census prepare-voice ...
 ./competitor-census apply-voice ...
 ./competitor-census merge ...
+./competitor-census export ...
 ```
+
+## Collect a TikTok public profile
+
+The TikTok connector reads the rendered public profile grid through an authorized Chrome session. It writes a stable video ID, publication date, original caption, point-in-time view count, and canonical source URL for every retrievable card in scope. It does not download videos or call private TikTok APIs.
+
+Install OpenCLI and verify the browser bridge:
+
+```bash
+npm install -g @jackwener/opencli
+opencli doctor
+```
+
+Start with a small field check:
+
+```bash
+./competitor-census tiktok \
+  --company "Target Company" \
+  --profile "@targethandle" \
+  --max-scrolls 1 \
+  --output runs/target-tiktok-check
+```
+
+After checking account identity and the date, caption, view, and link columns, run a wider best-effort census. `--manual-scroll` lets a human finish loading the ordinary public grid if automatic scrolling becomes stagnant:
+
+```bash
+./competitor-census tiktok \
+  --company "Target Company" \
+  --profile "@targethandle" \
+  --max-scrolls 100 \
+  --manual-scroll \
+  --output runs/target-tiktok
+```
+
+Deep-read the 30 highest-view captured videos and preserve public comments, visible replies, parent-child structure, comment likes, official identity, and available video-page engagement:
+
+```bash
+./competitor-census tiktok-comments \
+  --bundle runs/target-tiktok \
+  --top 30 \
+  --owner "@targethandle" \
+  --owner "Target Company"
+```
+
+TikTok may present a puzzle before loading comments. The command stops with a resumable checkpoint and leaves the challenge for a human; it never solves or bypasses it. Rerun with `--resume` after manual completion, or use `--wait-for-human` in an interactive terminal. Field provenance, coverage language, selection rules, and limitations are documented in [`references/tiktok-adapter.md`](references/tiktok-adapter.md).
 
 ## Collect a Facebook Page feed
 
-The included Facebook connector reads public Page posts through a Chrome profile the user is already authorized to use. It captures every visible feed window before scrolling, deduplicates by platform ID or canonical URL, and checkpoints after each round.
+The Facebook connector reads public Page posts through a Chrome profile the user is already authorized to use. It captures each visible feed window before scrolling, deduplicates by platform ID or canonical URL, and checkpoints after every round. The current public command covers Page posts; Facebook comments and replies remain a documented extension rather than a shipped connector.
 
 Install [OpenCLI](https://github.com/jackwener/OpenCLI), connect its Chrome extension, log into Facebook normally, and verify the browser bridge:
 
@@ -221,16 +280,21 @@ This repository documents the handoff contract rather than shipping a credential
 
 ## Install as an Agent Skill
 
-### Codex
+Clone once, then link the checkout into the Agent you use:
+
+```bash
+git clone https://github.com/KayZhongyi/competitor-census.git
+cd competitor-census
+./competitor-census install-skill --target codex
+# or: ./competitor-census install-skill --target claude
+# both: repeat --target codex --target claude
+```
+
+Direct cloning into a skill directory also works:
 
 ```bash
 git clone https://github.com/KayZhongyi/competitor-census.git ~/.codex/skills/competitor-census
-```
-
-### Claude Code
-
-```bash
-git clone https://github.com/KayZhongyi/competitor-census.git ~/.claude/skills/competitor-census
+# Claude Code: clone to ~/.claude/skills/competitor-census instead
 ```
 
 Then ask:
@@ -240,7 +304,19 @@ Use $competitor-census to research the public channels of [company] in [market].
 Build the evidence bundle first, then write a traceable strategy report.
 ```
 
-The Skill is plain Markdown plus Python standard-library tooling, so other terminal- and browser-capable Agents can use the same workflow. The Facebook connector uses OpenCLI as an external Apache-2.0 browser-bridge dependency; the collection, checkpoint, evidence, validation, and reporting code in this repository belongs to Competitor Census. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+The Skill is plain Markdown plus Python standard-library tooling, so other terminal- and browser-capable Agents can use the same workflow. TikTok and Facebook use OpenCLI as an external Apache-2.0 browser bridge; YouTube uses `yt-dlp`. The collection rules, command surface, checkpoints, evidence schema, validation, and reporting code live in this repository. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
+## Export a vector PDF
+
+Every report remains an HTML file with clickable evidence links. Export a portable vector PDF with Chrome or Chromium:
+
+```bash
+./competitor-census export \
+  --html runs/target-company/analysis_report.html \
+  --pdf runs/target-company/analysis_report.pdf
+```
+
+Keep the CSV and JSON bundle alongside the PDF; the PDF is a presentation layer, not the evidence source.
 
 ## What you get
 

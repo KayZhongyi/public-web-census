@@ -10,8 +10,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 COMMANDS = {
+    "doctor": "doctor.py",
+    "export": "export_report.py",
+    "install-skill": "install_skill.py",
     "demo": "run_demo.py",
     "facebook": "collect_facebook.py",
+    "tiktok": "collect_tiktok.py",
+    "tiktok-comments": "collect_tiktok_comments.py",
     "youtube": "collect_youtube.py",
     "prepare-analysis": "prepare_analysis.py",
     "apply-analysis": "apply_analysis.py",
@@ -29,9 +34,20 @@ Usage:
   ./competitor-census <command> [options]
 
 Live collection:
+  tiktok           Collect a public TikTok profile grid with dates, captions,
+                   views, stable IDs, and source links through OpenCLI
+  tiktok-comments  Collect public comments and replies for selected TikTok
+                   evidence records; human verification is never bypassed
   facebook          Collect public Facebook Page posts through an authorized
                     Chrome session using the OpenCLI browser bridge
   youtube           Collect public YouTube channel metadata with yt-dlp
+
+Setup:
+  doctor            Check the local runtime and optional live connectors
+  install-skill     Link this clone into Codex and/or Claude Code skills
+
+Delivery:
+  export            Export an HTML report to vector PDF with Chrome/Chromium
 
 Evidence workflow:
   demo              Build the fictional offline report
@@ -52,7 +68,7 @@ def main(argv: list[str] | None = None) -> int:
         print_help()
         return 0
     if args[0] in {"-V", "--version"}:
-        print("competitor-census 0.5.0")
+        print("competitor-census 0.6.0")
         return 0
 
     command = args.pop(0)

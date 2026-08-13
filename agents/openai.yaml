@@ -1,9 +1,7 @@
 interface:
   display_name: "Competitor Census"
-  short_description: "Traceable Facebook, YouTube, and customer intelligence"
+  short_description: "Traceable multi-platform competitor intelligence"
   icon_small: "./assets/icon-small.svg"
   icon_large: "./assets/logo.svg"
   brand_color: "#0B2239"
-  default_prompt: "Use $competitor-census to turn public competitor or customer signals into a traceable dataset and decision-ready report."
-policy:
-  allow_implicit_invocation: true
+  default_prompt: "Use $competitor-census to collect public competitor evidence and produce a traceable intelligence report."

@@ -1,4 +1,4 @@
-.PHONY: demo test validate cli-help facebook-help youtube-help analysis-help voice-help incremental-help
+.PHONY: demo test validate cli-help doctor tiktok-help tiktok-comments-help facebook-help youtube-help analysis-help voice-help incremental-help
 
 demo:
 	python3 scripts/run_demo.py
@@ -9,10 +9,23 @@ test:
 validate: test
 	python3 scripts/run_demo.py --quiet
 	./competitor-census --help >/dev/null
+	./competitor-census tiktok --help >/dev/null
+	./competitor-census tiktok-comments --help >/dev/null
 	./competitor-census facebook --help >/dev/null
+	./competitor-census export --help >/dev/null
+	./competitor-census install-skill --help >/dev/null
 
 cli-help:
 	./competitor-census --help
+
+doctor:
+	./competitor-census doctor
+
+tiktok-help:
+	./competitor-census tiktok --help
+
+tiktok-comments-help:
+	./competitor-census tiktok-comments --help
 
 facebook-help:
 	./competitor-census facebook --help

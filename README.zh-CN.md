@@ -6,7 +6,7 @@
 
 **把任意友商分散在公开渠道中的信息，变成一份可追溯、可复用的竞品情报档案。**
 
-Competitor Census 是面向全球市场的 Agent Skill、项目 CLI 与开源工具包。输入公司和市场，它可以帮助你找到真正活跃的公开渠道，采集 Facebook 公开主页帖子或 YouTube 公开元数据，建立结构化证据库，处理多语言内容，从完整语料中形成分类，量化内容表现与客户诉求，并生成每条关键结论都能回到数据行和原始链接的报告。当证据库包含公开对话时，还可以运行经过校验的客户声音分析模式。
+Competitor Census 是面向全球市场、克隆后即可运行的 Agent Skill 与项目 CLI。输入公司和市场，它可以帮助你找到真正活跃的公开渠道，采集 TikTok 公开视频与对话、Facebook 公开主页帖子或 YouTube 公开元数据，建立结构化证据库，处理多语言内容，从完整语料中形成分类，量化内容表现与客户诉求，并生成每条关键结论都能回到数据行和原始链接的报告。当证据库包含公开对话时，还可以运行经过校验的客户声音分析模式。
 
 > 先普查，后深挖；先证据，后结论。
 
@@ -15,7 +15,8 @@ Competitor Census 是面向全球市场的 Agent Skill、项目 CLI 与开源工
 | 能力 | 结果 |
 |---|---|
 | **平台普查** | 先找到并核验友商真正活跃的公开渠道，再决定深挖哪些平台 |
-| **范围内全量采集** | 统一保留发布日期、正文、播放量、点赞、评论、分享、账号字段和原始链接 |
+| **可运行平台连接器** | 用统一 CLI 采集 TikTok 主页及选定对话、Facebook 主页帖子或 YouTube 元数据 |
+| **范围内全量采集** | 统一保留稳定 ID、发布日期、正文、播放量、可见互动字段、账号信息和原始链接 |
 | **多语言处理** | 原文与工作译文分开保存，不同语言进入同一套结构化数据 |
 | **自下而上归类** | Agent 通读完整语料后再形成类别，不用预设关键词硬套标签 |
 | **专业分析** | 对比内容供给与平均/中位传播效果，统计客户诉求、回复方式和机会缺口 |
@@ -35,9 +36,9 @@ Competitor Census 是面向全球市场的 Agent Skill、项目 CLI 与开源工
 
 这不是一个“抓下来再总结”的工具。采集是有版本的证据层；翻译、分析、报告、监测和经批准的协作交接是独立层，可以反复运行而不覆盖原始采集结果。持续监测见 [`references/monitoring-playbook.md`](references/monitoring-playbook.md)，角色研究见 [`references/persona-research.md`](references/persona-research.md)。
 
-## 60 秒看到结果
+## 克隆、检查、运行
 
-无需 API Key、浏览器登录或第三方依赖：
+离线演示无需 API Key、浏览器登录或第三方依赖：
 
 ```bash
 git clone https://github.com/KayZhongyi/competitor-census.git
@@ -51,6 +52,16 @@ python3 scripts/run_demo.py
   <img src="assets/demo-preview.svg" alt="可追溯竞品报告虚构示例" width="100%" />
 </p>
 
+检查可选的真实平台连接器，并将当前仓库安装为 Agent Skill：
+
+```bash
+./competitor-census doctor
+./competitor-census install-skill --target codex
+# 或：./competitor-census install-skill --target claude
+```
+
+真实 TikTok 或 Facebook 采集需要安装 [OpenCLI](https://github.com/jackwener/OpenCLI)、连接其 Chrome 扩展，并使用能够正常查看目标公开页面的 Chrome 登录态。YouTube 采集使用 `yt-dlp`。`doctor` 会明确提示缺少哪一项可选依赖。
+
 ## 使用项目自己的 CLI
 
 ```bash
@@ -60,6 +71,9 @@ python3 scripts/run_demo.py
 同一个命令入口覆盖真实平台采集、证据分析、客户声音、增量合并和离线演示：
 
 ```text
+./competitor-census doctor
+./competitor-census tiktok ...
+./competitor-census tiktok-comments ...
 ./competitor-census facebook ...
 ./competitor-census youtube ...
 ./competitor-census prepare-analysis ...
@@ -67,11 +81,56 @@ python3 scripts/run_demo.py
 ./competitor-census prepare-voice ...
 ./competitor-census apply-voice ...
 ./competitor-census merge ...
+./competitor-census export ...
 ```
+
+## 采集 TikTok 公开主页
+
+TikTok 连接器通过用户已有权限的 Chrome 登录态读取公开主页网格，为范围内可检索的视频保存稳定视频 ID、发布日期、原始文案、采集时播放量和原始链接。它不下载视频，也不调用 TikTok 私有接口。
+
+安装 OpenCLI 并检查浏览器桥：
+
+```bash
+npm install -g @jackwener/opencli
+opencli doctor
+```
+
+先做小范围字段核验：
+
+```bash
+./competitor-census tiktok \
+  --company "目标公司" \
+  --profile "@targethandle" \
+  --max-scrolls 1 \
+  --output runs/target-tiktok-check
+```
+
+确认账号身份以及日期、文案、播放量、链接字段后，再扩大范围。若程序滚动不再加载新卡片，`--manual-scroll` 会保留同一浏览器会话，请人正常滚动公开主页后完成最后一次提取：
+
+```bash
+./competitor-census tiktok \
+  --company "目标公司" \
+  --profile "@targethandle" \
+  --max-scrolls 100 \
+  --manual-scroll \
+  --output runs/target-tiktok
+```
+
+从已采集视频中按播放量选择 Top 30，进一步保存公开评论、可见二级回复、父子关系、评论点赞、官方身份及可见的视频页互动数：
+
+```bash
+./competitor-census tiktok-comments \
+  --bundle runs/target-tiktok \
+  --top 30 \
+  --owner "@targethandle" \
+  --owner "目标公司"
+```
+
+TikTok 可能在评论加载前弹出拼图验证。命令会保存可续跑检查点并停止，验证只能由人手动完成，程序不会破解或绕过。人工完成后使用 `--resume` 续跑；也可以在交互式终端增加 `--wait-for-human`，让命令原地等待。字段出处、覆盖范围口径、筛选规则和限制见 [`references/tiktok-adapter.md`](references/tiktok-adapter.md)。
 
 ## 采集 Facebook 公开主页
 
-仓库自带 Facebook 主页帖子连接器。它通过用户已有权限的 Chrome 登录态读取公开帖子；每次滚动前先保存当前页面窗口，按平台帖子 ID 或永久链接去重，并在每轮完成后写入检查点。
+Facebook 连接器通过用户已有权限的 Chrome 登录态读取公开帖子；每次滚动前先保存当前页面窗口，按平台帖子 ID 或永久链接去重，并在每轮完成后写入检查点。当前公开命令覆盖主页帖子；Facebook 评论与回复仍属于已记录的扩展项，不包装成已经交付的连接器。
 
 先安装 [OpenCLI](https://github.com/jackwener/OpenCLI)，连接其 Chrome 扩展，在 Chrome 中正常登录 Facebook，然后检查浏览器桥：
 
@@ -216,16 +275,21 @@ comments.csv + content.csv（原始证据，不改写）
 
 ## 安装为 Agent Skill
 
-Codex：
+先克隆一次，再把当前仓库链接到所使用的 Agent：
+
+```bash
+git clone https://github.com/KayZhongyi/competitor-census.git
+cd competitor-census
+./competitor-census install-skill --target codex
+# 或：./competitor-census install-skill --target claude
+# 同时安装：重复传入 --target codex --target claude
+```
+
+也可以直接克隆到 Skill 目录：
 
 ```bash
 git clone https://github.com/KayZhongyi/competitor-census.git ~/.codex/skills/competitor-census
-```
-
-Claude Code：
-
-```bash
-git clone https://github.com/KayZhongyi/competitor-census.git ~/.claude/skills/competitor-census
+# Claude Code：改为克隆到 ~/.claude/skills/competitor-census
 ```
 
 调用示例：
@@ -235,7 +299,19 @@ git clone https://github.com/KayZhongyi/competitor-census.git ~/.claude/skills/c
 先建立证据库，再生成可追溯的策略报告。
 ```
 
-Skill 由 Markdown 流程和 Python 标准库脚本组成，其他具备终端和浏览器能力的 Agent 也可以执行。Facebook 连接器把 OpenCLI 作为外部 Apache-2.0 浏览器桥依赖；本仓库负责采集规则、检查点、证据结构、校验和报告。第三方归属见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
+Skill 由 Markdown 流程和 Python 标准库脚本组成，其他具备终端和浏览器能力的 Agent 也可以执行。TikTok 和 Facebook 使用 OpenCLI 这一外部 Apache-2.0 浏览器桥，YouTube 使用 `yt-dlp`；本仓库提供采集规则、统一命令、检查点、证据结构、校验和报告流程。第三方归属见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
+
+## 导出矢量 PDF
+
+每份报告默认保留为带可点击证据链接的 HTML；需要便携交付时，可通过 Chrome 或 Chromium 导出矢量 PDF：
+
+```bash
+./competitor-census export \
+  --html runs/target-company/analysis_report.html \
+  --pdf runs/target-company/analysis_report.pdf
+```
+
+PDF 只是展示层，CSV 与 JSON 证据库仍应与其一同保留。
 
 ## 最终交付什么
 

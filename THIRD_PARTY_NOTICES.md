@@ -5,10 +5,10 @@ Competitor Census integrates with the following separately maintained tools. The
 ## OpenCLI
 
 - Project: [jackwener/OpenCLI](https://github.com/jackwener/OpenCLI)
-- Role here: optional browser bridge used by the Facebook connector to read an authorized Chrome session
+- Role here: optional browser bridge used by the TikTok and Facebook connectors to read an authorized Chrome session
 - License: Apache License 2.0
 
-OpenCLI remains the work of its upstream authors. Users install it separately. Competitor Census supplies its own command surface, Facebook collection logic, checkpoints, evidence schema, validation, and reporting workflow.
+OpenCLI remains the work of its upstream authors. Users install it separately. Competitor Census supplies its own command surface, TikTok and Facebook collection logic, checkpoints, evidence schema, validation, and reporting workflow.
 
 ## yt-dlp
 
