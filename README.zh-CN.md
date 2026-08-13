@@ -6,7 +6,7 @@
 
 **把任意友商分散在公开渠道中的信息，变成一份可追溯、可复用的竞品情报档案。**
 
-Competitor Census 是面向全球市场的 Agent Skill 与开源工具包。输入公司和市场，它可以帮助你找到真正活跃的公开渠道，建立结构化证据库，处理多语言内容，从完整语料中形成分类，量化内容表现与客户诉求，并生成每条关键结论都能回到数据行和原始链接的报告。当证据库包含公开对话时，还可以运行经过校验的客户声音分析模式。
+Competitor Census 是面向全球市场的 Agent Skill、项目 CLI 与开源工具包。输入公司和市场，它可以帮助你找到真正活跃的公开渠道，采集 Facebook 公开主页帖子或 YouTube 公开元数据，建立结构化证据库，处理多语言内容，从完整语料中形成分类，量化内容表现与客户诉求，并生成每条关键结论都能回到数据行和原始链接的报告。当证据库包含公开对话时，还可以运行经过校验的客户声音分析模式。
 
 > 先普查，后深挖；先证据，后结论。
 
@@ -51,13 +51,64 @@ python3 scripts/run_demo.py
   <img src="assets/demo-preview.svg" alt="可追溯竞品报告虚构示例" width="100%" />
 </p>
 
-## 运行真实公开渠道普查
+## 使用项目自己的 CLI
+
+```bash
+./competitor-census --help
+```
+
+同一个命令入口覆盖真实平台采集、证据分析、客户声音、增量合并和离线演示：
+
+```text
+./competitor-census facebook ...
+./competitor-census youtube ...
+./competitor-census prepare-analysis ...
+./competitor-census apply-analysis ...
+./competitor-census prepare-voice ...
+./competitor-census apply-voice ...
+./competitor-census merge ...
+```
+
+## 采集 Facebook 公开主页
+
+仓库自带 Facebook 主页帖子连接器。它通过用户已有权限的 Chrome 登录态读取公开帖子；每次滚动前先保存当前页面窗口，按平台帖子 ID 或永久链接去重，并在每轮完成后写入检查点。
+
+先安装 [OpenCLI](https://github.com/jackwener/OpenCLI)，连接其 Chrome 扩展，在 Chrome 中正常登录 Facebook，然后检查浏览器桥：
+
+```bash
+npm install -g @jackwener/opencli
+opencli doctor
+```
+
+先用少量滚动核验账号、日期、互动数和原始链接：
+
+```bash
+./competitor-census facebook \
+  --company "目标公司" \
+  --page "https://www.facebook.com/TargetPage" \
+  --max-scrolls 3 \
+  --output runs/target-facebook-check
+```
+
+核验无误后再扩大声明范围：
+
+```bash
+./competitor-census facebook \
+  --company "目标公司" \
+  --page "https://www.facebook.com/TargetPage" \
+  --max-scrolls 100 \
+  --output runs/target-facebook
+```
+
+连接器全程只读，不发布、点赞、评论、关注或私信。遇到人机验证时会停止并保留可续跑检查点，只能由人手动完成验证，程序不会绕过。`--bind`、断点续跑、字段说明和覆盖范围表述见 [`references/facebook-adapter.md`](references/facebook-adapter.md)。
+
+## 采集 YouTube 公开频道
 
 仓库自带 YouTube 公开元数据连接器，不下载视频文件。建议先用少量记录核验账号和字段：
 
 ```bash
 python3 -m pip install -U "yt-dlp[default]"
-python3 scripts/collect_youtube.py \
+./competitor-census youtube \
   --company "OpenAI" \
   --channel "https://www.youtube.com/@OpenAI" \
   --tabs videos \
@@ -73,7 +124,7 @@ python3 scripts/collect_youtube.py \
 核验无误后，对所选标签页中可检索的公开内容执行尽可能完整的普查：
 
 ```bash
-python3 scripts/collect_youtube.py \
+./competitor-census youtube \
   --company "目标公司" \
   --channel "https://www.youtube.com/@TargetHandle" \
   --tabs videos,shorts,streams \
@@ -83,7 +134,7 @@ python3 scripts/collect_youtube.py \
 需要持续监测时，将指定日期之后的新一轮采集写入独立目录，再按稳定ID合并：
 
 ```bash
-python3 scripts/collect_youtube.py \
+./competitor-census youtube \
   --company "目标公司" \
   --channel "https://www.youtube.com/@TargetHandle" \
   --since 2026-07-01 \
@@ -184,7 +235,7 @@ git clone https://github.com/KayZhongyi/competitor-census.git ~/.claude/skills/c
 先建立证据库，再生成可追溯的策略报告。
 ```
 
-Skill 由 Markdown 流程和 Python 标准库脚本组成，其他具备终端和浏览器能力的 Agent 也可以执行。
+Skill 由 Markdown 流程和 Python 标准库脚本组成，其他具备终端和浏览器能力的 Agent 也可以执行。Facebook 连接器把 OpenCLI 作为外部 Apache-2.0 浏览器桥依赖；本仓库负责采集规则、检查点、证据结构、校验和报告。第三方归属见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
 
 ## 最终交付什么
 

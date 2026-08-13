@@ -1,6 +1,6 @@
 # YouTube adapter
 
-Use `scripts/collect_youtube.py` for a real, public-metadata vertical slice. It invokes `yt-dlp`, does not download media, and writes the standard Competitor Census evidence bundle.
+Use `./competitor-census youtube` for a real, public-metadata vertical slice. It invokes `scripts/collect_youtube.py`, which uses `yt-dlp`, does not download media, and writes the standard Competitor Census evidence bundle.
 
 ## Install the collector dependency
 
@@ -15,7 +15,7 @@ If an extractor breaks, update yt-dlp before debugging the adapter.
 ## Trial run
 
 ```bash
-python3 scripts/collect_youtube.py \
+./competitor-census youtube \
   --company "Example Company" \
   --channel "https://www.youtube.com/@ExampleCompany" \
   --tabs videos \
@@ -25,7 +25,7 @@ python3 scripts/collect_youtube.py \
 ## Best-effort selected-tab census
 
 ```bash
-python3 scripts/collect_youtube.py \
+./competitor-census youtube \
   --company "Example Company" \
   --channel "https://www.youtube.com/@ExampleCompany" \
   --tabs videos,shorts,streams \

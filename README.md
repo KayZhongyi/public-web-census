@@ -11,7 +11,7 @@
 
 **Turn any competitor's public footprint into a traceable intelligence dossier.**
 
-Competitor Census is a reusable Agent Skill and open toolkit for global competitor research. Give it a company and market; it helps discover the channels that matter, build a structured evidence base, translate multilingual content, derive categories from the real corpus, quantify what performs, and generate a report whose claims lead back to source rows and URLs. The same evidence bundle can run a validated customer-voice analysis when public conversations are available.
+Competitor Census is a reusable Agent Skill, project CLI, and open toolkit for global competitor research. Give it a company and market; it helps discover the channels that matter, collect public Facebook Page posts or YouTube metadata, build a structured evidence base, translate multilingual content, derive categories from the real corpus, quantify what performs, and generate a report whose claims lead back to source rows and URLs. The same evidence bundle can run a validated customer-voice analysis when public conversations are available.
 
 > Census first. Conclusions second.
 
@@ -56,13 +56,64 @@ Open `demo/output/report.html`, or view the [live fictional report](https://kayz
   <img src="assets/demo-preview.svg" alt="Fictional evidence-linked competitor report preview" width="100%" />
 </p>
 
-## Run a real public-channel census
+## Use the project CLI
+
+```bash
+./competitor-census --help
+```
+
+One command surface covers live connectors, evidence analysis, customer voice, incremental merging, and the offline demo:
+
+```text
+./competitor-census facebook ...
+./competitor-census youtube ...
+./competitor-census prepare-analysis ...
+./competitor-census apply-analysis ...
+./competitor-census prepare-voice ...
+./competitor-census apply-voice ...
+./competitor-census merge ...
+```
+
+## Collect a Facebook Page feed
+
+The included Facebook connector reads public Page posts through a Chrome profile the user is already authorized to use. It captures every visible feed window before scrolling, deduplicates by platform ID or canonical URL, and checkpoints after each round.
+
+Install [OpenCLI](https://github.com/jackwener/OpenCLI), connect its Chrome extension, log into Facebook normally, and verify the browser bridge:
+
+```bash
+npm install -g @jackwener/opencli
+opencli doctor
+```
+
+Start with a small field-verification run:
+
+```bash
+./competitor-census facebook \
+  --company "Target Company" \
+  --page "https://www.facebook.com/TargetPage" \
+  --max-scrolls 3 \
+  --output runs/target-facebook-check
+```
+
+After checking account identity, dates, metrics, and source links, widen the declared scope:
+
+```bash
+./competitor-census facebook \
+  --company "Target Company" \
+  --page "https://www.facebook.com/TargetPage" \
+  --max-scrolls 100 \
+  --output runs/target-facebook
+```
+
+The connector is read-only. It never posts, reacts, comments, follows, or messages. If Facebook presents human verification, it stops and writes a resumable checkpoint; a human must complete the challenge manually, and the connector never bypasses it. See [`references/facebook-adapter.md`](references/facebook-adapter.md) for coverage language, `--bind`, resume behavior, and field details.
+
+## Collect a YouTube channel
 
 The included YouTube connector captures public video metadata without downloading media. Start with a small verification run:
 
 ```bash
 python3 -m pip install -U "yt-dlp[default]"
-python3 scripts/collect_youtube.py \
+./competitor-census youtube \
   --company "OpenAI" \
   --channel "https://www.youtube.com/@OpenAI" \
   --tabs videos \
@@ -78,7 +129,7 @@ It writes the evidence bundle, baseline report, run manifest, and an Agent-ready
 After checking the account and fields, run a best-effort census of all retrievable entries in the selected tabs:
 
 ```bash
-python3 scripts/collect_youtube.py \
+./competitor-census youtube \
   --company "Target Company" \
   --channel "https://www.youtube.com/@TargetHandle" \
   --tabs videos,shorts,streams \
@@ -88,7 +139,7 @@ python3 scripts/collect_youtube.py \
 For repeat monitoring, collect a date-bounded update into a new directory and merge by stable ID:
 
 ```bash
-python3 scripts/collect_youtube.py \
+./competitor-census youtube \
   --company "Target Company" \
   --channel "https://www.youtube.com/@TargetHandle" \
   --since 2026-07-01 \
@@ -189,7 +240,7 @@ Use $competitor-census to research the public channels of [company] in [market].
 Build the evidence bundle first, then write a traceable strategy report.
 ```
 
-The Skill is plain Markdown plus Python standard-library tooling, so other terminal- and browser-capable Agents can use the same workflow.
+The Skill is plain Markdown plus Python standard-library tooling, so other terminal- and browser-capable Agents can use the same workflow. The Facebook connector uses OpenCLI as an external Apache-2.0 browser-bridge dependency; the collection, checkpoint, evidence, validation, and reporting code in this repository belongs to Competitor Census. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
 ## What you get
 

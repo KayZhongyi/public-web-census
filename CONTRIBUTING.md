@@ -15,4 +15,6 @@ Before opening a pull request:
 
 Live-adapter tests must use a fake local collector in CI. Do not commit real target output, cookies, session material, or downloaded media.
 
+The Facebook connector intentionally depends on OpenCLI as an external browser bridge. Contributions belong in this repository when they implement Competitor Census commands, schemas, checkpoints, validation, or reporting. Changes to the generic browser bridge should go upstream to OpenCLI instead of copying or rebranding its source here.
+
 Open an issue before a large architectural change so the scope can be agreed first.

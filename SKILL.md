@@ -1,6 +1,6 @@
 ---
 name: competitor-census
-description: Build evidence-backed competitor intelligence or customer-voice datasets and reports from publicly visible web and social channels, including live YouTube metadata collection and validated model-agnostic analysis handoffs. Use when an agent must discover a competitor's active platforms, capture an in-scope public corpus, translate multilingual material, derive corpus-grounded content or issue taxonomies, analyze content performance, customer questions, sentiment, severity, and visible response patterns, preserve source-level traceability, or repeat the workflow for another company or market.
+description: Build evidence-backed competitor intelligence or customer-voice datasets and reports from publicly visible web and social channels, including live Facebook Page-post collection through an authorized browser, live YouTube metadata collection, and validated model-agnostic analysis handoffs. Use when an agent must discover a competitor's active platforms, capture an in-scope public corpus, translate multilingual material, derive corpus-grounded content or issue taxonomies, analyze content performance, customer questions, sentiment, severity, and visible response patterns, preserve source-level traceability, or repeat the workflow for another company or market.
 ---
 
 # Competitor Census
@@ -57,6 +57,8 @@ Collect all retrievable records inside the declared scope. Preserve source field
 Use incremental capture for virtualized or infinite-scroll pages. Deduplicate by stable ID or canonical URL, not by text alone. Normalize Unicode before matching disguised phone numbers or product codes. See [references/data-schema.md](references/data-schema.md).
 
 For a public YouTube channel, read [references/youtube-adapter.md](references/youtube-adapter.md) and use `scripts/collect_youtube.py`. Start with a limited run, verify account identity and output fields, then set `--max-items-per-tab 0` only when the user wants a best-effort selected-tab census. The adapter collects metadata without downloading media and leaves translation/classification for the analysis phase.
+
+For a public Facebook Page, read [references/facebook-adapter.md](references/facebook-adapter.md) and use `./competitor-census facebook`. It incrementally captures each visible feed window through the user's authorized Chrome session, deduplicates by platform ID or canonical URL, and checkpoints after every round because Facebook virtualizes long feeds. Start with three scrolls and verify the output before widening the run. Treat a challenge or collector error as a stopped checkpoint, not a completed census.
 
 For repeat monitoring, read [references/incremental-updates.md](references/incremental-updates.md). Use a new run directory, apply an explicit date boundary when supported, and merge by stable ID with `scripts/merge_incremental.py`. Treat records absent from a bounded update as “not returned in this run,” not deleted.
 

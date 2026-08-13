@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Repository CLI for Competitor Census."""
+
+from __future__ import annotations
+
+import subprocess
+import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parent
+COMMANDS = {
+    "demo": "run_demo.py",
+    "facebook": "collect_facebook.py",
+    "youtube": "collect_youtube.py",
+    "prepare-analysis": "prepare_analysis.py",
+    "apply-analysis": "apply_analysis.py",
+    "prepare-voice": "prepare_customer_voice.py",
+    "apply-voice": "apply_customer_voice.py",
+    "merge": "merge_incremental.py",
+}
+
+
+def print_help() -> None:
+    print(
+        """Competitor Census CLI
+
+Usage:
+  ./competitor-census <command> [options]
+
+Live collection:
+  facebook          Collect public Facebook Page posts through an authorized
+                    Chrome session using the OpenCLI browser bridge
+  youtube           Collect public YouTube channel metadata with yt-dlp
+
+Evidence workflow:
+  demo              Build the fictional offline report
+  prepare-analysis  Create an Agent analysis packet
+  apply-analysis    Validate and merge completed analysis
+  prepare-voice     Create a customer-voice analysis packet
+  apply-voice       Validate customer-voice analysis
+  merge             Merge a new capture into a baseline by stable ID
+
+Run './competitor-census <command> --help' for command-specific options.
+"""
+    )
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = list(sys.argv[1:] if argv is None else argv)
+    if not args or args[0] in {"-h", "--help", "help"}:
+        print_help()
+        return 0
+    if args[0] in {"-V", "--version"}:
+        print("competitor-census 0.5.0")
+        return 0
+
+    command = args.pop(0)
+    script = COMMANDS.get(command)
+    if script is None:
+        print(f"Unknown command: {command}\n", file=sys.stderr)
+        print_help()
+        return 2
+
+    completed = subprocess.run([sys.executable, str(ROOT / "scripts" / script), *args])
+    return completed.returncode
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

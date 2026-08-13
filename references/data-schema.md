@@ -42,6 +42,8 @@ Production bundles should also include `collected_at`, `retrieval_status`, `medi
 
 The YouTube adapter additionally writes `duration_seconds`, `channel_id`, `availability`, and `source_tab`. It leaves `text_translation` blank and `content_type` as `unclassified` until the Agent analysis phase. Platform fields that are not publicly exposed at collection time remain blank rather than becoming zero.
 
+The Facebook Page connector additionally writes `published_label`, `metric_labels`, `collected_at`, and `retrieval_status`. `published_label` preserves the visible date text when Facebook does not expose a machine-readable date. `metric_labels` preserves the raw visible engagement labels used for parsing. Blank engagement fields mean unavailable or unparsed, not zero. See [facebook-adapter.md](facebook-adapter.md).
+
 The v0.3 analysis handoff keeps this file unchanged. Agent output is validated separately, then merged into `analyzed_content.csv` with `classification_confidence` and `classification_notes`. See [analysis-handoff.md](analysis-handoff.md).
 
 ## `comments.csv`
