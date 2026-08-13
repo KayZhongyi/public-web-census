@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 COMMANDS = {
+    "setup": "setup.py",
     "doctor": "doctor.py",
     "export": "export_report.py",
     "install-skill": "install_skill.py",
@@ -43,6 +44,8 @@ Live collection:
   youtube           Collect public YouTube channel metadata with yt-dlp
 
 Setup:
+  setup             Guide OpenCLI installation, open the official Chrome
+                    extension page, and verify the local browser bridge
   doctor            Check the local runtime and optional live connectors
   install-skill     Link this clone into Codex and/or Claude Code skills
 
@@ -68,7 +71,7 @@ def main(argv: list[str] | None = None) -> int:
         print_help()
         return 0
     if args[0] in {"-V", "--version"}:
-        print("competitor-census 0.6.0")
+        print("competitor-census 0.7.0")
         return 0
 
     command = args.pop(0)

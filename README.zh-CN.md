@@ -52,15 +52,16 @@ python3 scripts/run_demo.py
   <img src="assets/demo-preview.svg" alt="可追溯竞品报告虚构示例" width="100%" />
 </p>
 
-检查可选的真实平台连接器，并将当前仓库安装为 Agent Skill：
+运行真实平台连接器安装向导，再将当前仓库安装为 Agent Skill：
 
 ```bash
+./competitor-census setup
 ./competitor-census doctor
 ./competitor-census install-skill --target codex
 # 或：./competitor-census install-skill --target claude
 ```
 
-真实 TikTok 或 Facebook 采集需要安装 [OpenCLI](https://github.com/jackwener/OpenCLI)、连接其 Chrome 扩展，并使用能够正常查看目标公开页面的 Chrome 登录态。YouTube 采集使用 `yt-dlp`。`doctor` 会明确提示缺少哪一项可选依赖。
+`setup` 可协助安装 [OpenCLI](https://github.com/jackwener/OpenCLI)、打开官方 Chrome 扩展页面、重启本地桥接服务并验证连接。根据 Chrome 的安全机制，扩展授权以及 TikTok/Facebook 登录必须由用户本人在浏览器中完成；安装助手不会索取平台密码。需要同时安装 YouTube 连接器依赖时，增加 `--with-youtube`。之后可随时用 `doctor` 做只读检查。
 
 ## 使用项目自己的 CLI
 
@@ -71,6 +72,7 @@ python3 scripts/run_demo.py
 同一个命令入口覆盖真实平台采集、证据分析、客户声音、增量合并和离线演示：
 
 ```text
+./competitor-census setup
 ./competitor-census doctor
 ./competitor-census tiktok ...
 ./competitor-census tiktok-comments ...
@@ -88,11 +90,10 @@ python3 scripts/run_demo.py
 
 TikTok 连接器通过用户已有权限的 Chrome 登录态读取公开主页网格，为范围内可检索的视频保存稳定视频 ID、发布日期、原始文案、采集时播放量和原始链接。它不下载视频，也不调用 TikTok 私有接口。
 
-安装 OpenCLI 并检查浏览器桥：
+使用安装向导安装 OpenCLI、打开官方扩展页面并检查浏览器桥：
 
 ```bash
-npm install -g @jackwener/opencli
-opencli doctor
+./competitor-census setup
 ```
 
 先做小范围字段核验：
@@ -132,11 +133,10 @@ TikTok 可能在评论加载前弹出拼图验证。命令会保存可续跑检�
 
 Facebook 连接器通过用户已有权限的 Chrome 登录态读取公开帖子；每次滚动前先保存当前页面窗口，按平台帖子 ID 或永久链接去重，并在每轮完成后写入检查点。当前公开命令覆盖主页帖子；Facebook 评论与回复仍属于已记录的扩展项，不包装成已经交付的连接器。
 
-先安装 [OpenCLI](https://github.com/jackwener/OpenCLI)，连接其 Chrome 扩展，在 Chrome 中正常登录 Facebook，然后检查浏览器桥：
+先运行安装向导，在 Chrome 中批准官方扩展并正常登录 Facebook，然后检查浏览器桥：
 
 ```bash
-npm install -g @jackwener/opencli
-opencli doctor
+./competitor-census setup
 ```
 
 先用少量滚动核验账号、日期、互动数和原始链接：

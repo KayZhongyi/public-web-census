@@ -9,6 +9,12 @@ import sys
 from pathlib import Path
 
 
+OPENCLI_EXTENSION_URL = (
+    "https://chromewebstore.google.com/detail/opencli/"
+    "ildkmabpimmkaediidaifkhjpohdnifk"
+)
+
+
 def command_result(command: list[str], timeout: int = 45) -> tuple[bool, str]:
     try:
         completed = subprocess.run(
@@ -52,9 +58,11 @@ def main() -> int:
         print(f"[{'OK' if bridge_ok else 'WARN'}] Browser bridge: {summary.strip()}")
         if not bridge_ok:
             print("       Live TikTok/Facebook collection needs Chrome plus the OpenCLI extension.")
+            print(f"       Guided setup: ./competitor-census setup")
+            print(f"       Extension: {OPENCLI_EXTENSION_URL}")
     else:
         print("[WARN] OpenCLI: not installed (needed for live TikTok/Facebook collection)")
-        print("       npm install -g @jackwener/opencli")
+        print("       Guided setup: ./competitor-census setup")
 
     ytdlp = shutil.which("yt-dlp")
     if ytdlp:

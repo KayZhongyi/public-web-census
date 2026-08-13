@@ -18,7 +18,7 @@ Turn scattered public signals into two separate deliverables: a machine-readable
 
 Read [references/collection-safety.md](references/collection-safety.md) before live collection.
 
-From a cloned repository, run `./competitor-census doctor` first. Use `./competitor-census install-skill --target codex` or `--target claude` when this checkout is not already inside the Agent's skill directory.
+From a cloned repository, run `./competitor-census setup` for guided live-connector onboarding, then use `./competitor-census doctor` for later checks. The setup assistant may install OpenCLI, open its official Chrome Web Store page, and verify the browser bridge; extension approval, platform login, and human verification always remain manual. Use `./competitor-census install-skill --target codex` or `--target claude` when this checkout is not already inside the Agent's skill directory.
 
 ## Choose the research mode
 

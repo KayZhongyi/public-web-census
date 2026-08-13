@@ -57,15 +57,16 @@ Open `demo/output/report.html`, or view the [live fictional report](https://kayz
   <img src="assets/demo-preview.svg" alt="Fictional evidence-linked competitor report preview" width="100%" />
 </p>
 
-Check optional live connectors, then install the checkout as an Agent Skill:
+Run the guided live-connector setup, then install the checkout as an Agent Skill:
 
 ```bash
+./competitor-census setup
 ./competitor-census doctor
 ./competitor-census install-skill --target codex
 # or: ./competitor-census install-skill --target claude
 ```
 
-For live TikTok or Facebook collection, install [OpenCLI](https://github.com/jackwener/OpenCLI), connect its Chrome extension, and use a Chrome profile that can ordinarily view the target public page. YouTube collection uses `yt-dlp`. `doctor` reports exactly which optional dependency is missing.
+`setup` can offer to install [OpenCLI](https://github.com/jackwener/OpenCLI), open its official Chrome Web Store page, restart the local bridge, and verify the connection. Chrome requires the user to approve the extension and sign into TikTok/Facebook directly; no setup command can or should automate those steps. Add `--with-youtube` to install `yt-dlp` as well. `doctor` provides a read-only recheck later.
 
 ## Use the project CLI
 
@@ -76,6 +77,7 @@ For live TikTok or Facebook collection, install [OpenCLI](https://github.com/jac
 One command surface covers live connectors, evidence analysis, customer voice, incremental merging, and the offline demo:
 
 ```text
+./competitor-census setup
 ./competitor-census doctor
 ./competitor-census tiktok ...
 ./competitor-census tiktok-comments ...
@@ -93,11 +95,10 @@ One command surface covers live connectors, evidence analysis, customer voice, i
 
 The TikTok connector reads the rendered public profile grid through an authorized Chrome session. It writes a stable video ID, publication date, original caption, point-in-time view count, and canonical source URL for every retrievable card in scope. It does not download videos or call private TikTok APIs.
 
-Install OpenCLI and verify the browser bridge:
+Use the guided setup to install OpenCLI, open the official extension page, and verify the browser bridge:
 
 ```bash
-npm install -g @jackwener/opencli
-opencli doctor
+./competitor-census setup
 ```
 
 Start with a small field check:
@@ -137,11 +138,10 @@ TikTok may present a puzzle before loading comments. The command stops with a re
 
 The Facebook connector reads public Page posts through a Chrome profile the user is already authorized to use. It captures each visible feed window before scrolling, deduplicates by platform ID or canonical URL, and checkpoints after every round. The current public command covers Page posts; Facebook comments and replies remain a documented extension rather than a shipped connector.
 
-Install [OpenCLI](https://github.com/jackwener/OpenCLI), connect its Chrome extension, log into Facebook normally, and verify the browser bridge:
+Run the guided setup, approve the official extension in Chrome, log into Facebook normally, and verify the browser bridge:
 
 ```bash
-npm install -g @jackwener/opencli
-opencli doctor
+./competitor-census setup
 ```
 
 Start with a small field-verification run:
