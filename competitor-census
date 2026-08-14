@@ -19,6 +19,7 @@ COMMANDS = {
     "tiktok": "collect_tiktok.py",
     "tiktok-comments": "collect_tiktok_comments.py",
     "youtube": "collect_youtube.py",
+    "youtube-comments": "collect_youtube_comments.py",
     "prepare-analysis": "prepare_analysis.py",
     "apply-analysis": "apply_analysis.py",
     "prepare-voice": "prepare_customer_voice.py",
@@ -42,6 +43,8 @@ Live collection:
   facebook          Collect public Facebook Page posts through an authorized
                     Chrome session using the OpenCLI browser bridge
   youtube           Collect public YouTube channel metadata with yt-dlp
+  youtube-comments  Deep-read selected public YouTube video conversations
+                   with yt-dlp; no API key or media download
 
 Setup:
   setup             Guide OpenCLI installation, open the official Chrome
@@ -71,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
         print_help()
         return 0
     if args[0] in {"-V", "--version"}:
-        print("competitor-census 0.7.0")
+        print("competitor-census 0.8.0")
         return 0
 
     command = args.pop(0)

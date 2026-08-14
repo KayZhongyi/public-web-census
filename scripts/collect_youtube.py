@@ -408,7 +408,7 @@ def write_bundle(
             "Account identity is not automatically verified.",
             "Deleted, private, members-only, region-restricted, age-restricted, and personalized items may be absent.",
             "YouTube and yt-dlp behavior can change; rerun with a current yt-dlp release.",
-            "Comments and replies are not collected by the v0.2 YouTube adapter.",
+            "Baseline collection does not include comments. Run ./competitor-census youtube-comments for selected public videos.",
         ],
     }
     manifest_path = output_dir / "run_manifest.json"

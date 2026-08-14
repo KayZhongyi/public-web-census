@@ -6,7 +6,7 @@
 
 **把任意友商分散在公开渠道中的信息，变成一份可追溯、可复用的竞品情报档案。**
 
-Competitor Census 是面向全球市场、克隆后即可运行的 Agent Skill 与项目 CLI。输入公司和市场，它可以帮助你找到真正活跃的公开渠道，采集 TikTok 公开视频与对话、Facebook 公开主页帖子或 YouTube 公开元数据，建立结构化证据库，处理多语言内容，从完整语料中形成分类，量化内容表现与客户诉求，并生成每条关键结论都能回到数据行和原始链接的报告。当证据库包含公开对话时，还可以运行经过校验的客户声音分析模式。
+Competitor Census 是面向全球市场、克隆后即可运行的 Agent Skill 与项目 CLI。输入公司和市场，它可以帮助你找到真正活跃的公开渠道，采集 TikTok 公开视频与对话、Facebook 公开主页帖子，或 YouTube 公开元数据及选定视频评论，建立结构化证据库，处理多语言内容，从完整语料中形成分类，量化内容表现与客户诉求，并生成每条关键结论都能回到数据行和原始链接的报告。当证据库包含公开对话时，还可以运行经过校验的客户声音分析模式。
 
 > 先普查，后深挖；先证据，后结论。
 
@@ -15,7 +15,7 @@ Competitor Census 是面向全球市场、克隆后即可运行的 Agent Skill �
 | 能力 | 结果 |
 |---|---|
 | **平台普查** | 先找到并核验友商真正活跃的公开渠道，再决定深挖哪些平台 |
-| **可运行平台连接器** | 用统一 CLI 采集 TikTok 主页及选定对话、Facebook 主页帖子或 YouTube 元数据 |
+| **可运行平台连接器** | 用统一 CLI 采集 TikTok 主页及选定对话、Facebook 主页帖子，或 YouTube 元数据及选定对话 |
 | **范围内全量采集** | 统一保留稳定 ID、发布日期、正文、播放量、可见互动字段、账号信息和原始链接 |
 | **多语言处理** | 原文与工作译文分开保存，不同语言进入同一套结构化数据 |
 | **自下而上归类** | Agent 通读完整语料后再形成类别，不用预设关键词硬套标签 |
@@ -78,6 +78,7 @@ python3 scripts/run_demo.py
 ./competitor-census tiktok-comments ...
 ./competitor-census facebook ...
 ./competitor-census youtube ...
+./competitor-census youtube-comments ...
 ./competitor-census prepare-analysis ...
 ./competitor-census apply-analysis ...
 ./competitor-census prepare-voice ...
@@ -189,6 +190,17 @@ python3 -m pip install -U "yt-dlp[default]"
   --tabs videos,shorts,streams \
   --max-items-per-tab 0
 ```
+
+随后可用同一套 `yt-dlp` 依赖，深挖已采集视频中播放量最高的视频评论。无需 Google API Key、浏览器登录态、Cookie，也不会下载媒体：
+
+```bash
+./competitor-census youtube-comments \
+  --bundle runs/target-company \
+  --top 30 \
+  --max-comments-per-video 500
+```
+
+命令会把评论 ID、回复关系、公开显示名称、可见时间、点赞数、原始链接和可确定的官方账号标记写入 `comments.csv`，再生成已有的客户声音分析任务。只有在范围声明明确要求时，才使用 `--max-comments-per-video 0` 读取单条视频下全部可检索评论。评论采集仍是尽力获取：关闭、删除、受限、排序变化或平台未返回的评论可能缺失；遇到人机验证时命令会停止，绝不绕过。
 
 需要持续监测时，将指定日期之后的新一轮采集写入独立目录，再按稳定ID合并：
 

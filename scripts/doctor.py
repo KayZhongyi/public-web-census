@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import shutil
 import subprocess
 import sys
@@ -43,6 +44,13 @@ def chrome_path() -> str | None:
     return next((str(path) for path in candidates if path and Path(path).exists()), None)
 
 
+def ytdlp_command() -> list[str] | None:
+    executable = shutil.which("yt-dlp")
+    if executable:
+        return [executable]
+    return [sys.executable, "-m", "yt_dlp"] if importlib.util.find_spec("yt_dlp") else None
+
+
 def main() -> int:
     required_ok = True
     python_ok = sys.version_info >= (3, 10)
@@ -64,10 +72,11 @@ def main() -> int:
         print("[WARN] OpenCLI: not installed (needed for live TikTok/Facebook collection)")
         print("       Guided setup: ./competitor-census setup")
 
-    ytdlp = shutil.which("yt-dlp")
+    ytdlp = ytdlp_command()
     if ytdlp:
-        ok, version = command_result([ytdlp, "--version"], timeout=15)
-        print(f"[{'OK' if ok else 'WARN'}] yt-dlp: {version or ytdlp}")
+        ok, version = command_result([*ytdlp, "--version"], timeout=15)
+        source = " (Python module)" if ytdlp[0] == sys.executable else ""
+        print(f"[{'OK' if ok else 'WARN'}] yt-dlp: {version or 'available'}{source}")
     else:
         print("[WARN] yt-dlp: not installed (needed only for live YouTube collection)")
         print('       python3 -m pip install -U "yt-dlp[default]"')

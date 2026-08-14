@@ -11,7 +11,7 @@
 
 **Turn any competitor's public footprint into a traceable intelligence dossier.**
 
-Competitor Census is a clone-and-run Agent Skill and project CLI for global competitor research. Give it a company and market; it helps discover the channels that matter, collect public TikTok profiles and conversations, Facebook Page posts, or YouTube metadata, build a structured evidence base, translate multilingual content, derive categories from the real corpus, quantify what performs, and generate a report whose claims lead back to source rows and URLs. The same evidence bundle can run a validated customer-voice analysis when public conversations are available.
+Competitor Census is a clone-and-run Agent Skill and project CLI for global competitor research. Give it a company and market; it helps discover the channels that matter, collect public TikTok profiles and conversations, Facebook Page posts, or YouTube metadata and selected conversations, build a structured evidence base, translate multilingual content, derive categories from the real corpus, quantify what performs, and generate a report whose claims lead back to source rows and URLs. The same evidence bundle can run a validated customer-voice analysis when public conversations are available.
 
 > Census first. Conclusions second.
 
@@ -20,7 +20,7 @@ Competitor Census is a clone-and-run Agent Skill and project CLI for global comp
 | Capability | Result |
 |---|---|
 | **Platform census** | Find and verify the competitor's active public channels before choosing where to go deep |
-| **Runnable connectors** | Collect TikTok profile videos and selected conversations, Facebook Page posts, or YouTube metadata from one CLI |
+| **Runnable connectors** | Collect TikTok profile videos and selected conversations, Facebook Page posts, or YouTube metadata and selected conversations from one CLI |
 | **In-scope capture** | Preserve stable IDs, publication dates, text, views, available engagement fields, account fields, and source URLs |
 | **Multilingual normalization** | Keep original text beside a separate working translation in one consistent schema |
 | **Corpus-grounded classification** | Let an Agent read the complete corpus and derive categories from repeated meanings rather than preset keywords |
@@ -83,6 +83,7 @@ One command surface covers live connectors, evidence analysis, customer voice, i
 ./competitor-census tiktok-comments ...
 ./competitor-census facebook ...
 ./competitor-census youtube ...
+./competitor-census youtube-comments ...
 ./competitor-census prepare-analysis ...
 ./competitor-census apply-analysis ...
 ./competitor-census prepare-voice ...
@@ -194,6 +195,17 @@ After checking the account and fields, run a best-effort census of all retrievab
   --tabs videos,shorts,streams \
   --max-items-per-tab 0
 ```
+
+Deep-read the public conversations beneath the highest-view captured videos with the same `yt-dlp` dependency. No Google API key, browser login, cookie, or media download is required:
+
+```bash
+./competitor-census youtube-comments \
+  --bundle runs/target-company \
+  --top 30 \
+  --max-comments-per-video 500
+```
+
+This writes comment IDs, reply relationships, public display authors, available timestamps, likes, source links, and deterministic official-uploader markers to `comments.csv`, then creates the existing customer-voice packet. Use `--max-comments-per-video 0` only for an explicitly declared all-retrievable scope. Collection remains best effort: disabled, deleted, restricted, reordered, or unreturned comments may be absent. A verification request stops the command; it is never bypassed.
 
 For repeat monitoring, collect a date-bounded update into a new directory and merge by stable ID:
 

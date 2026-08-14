@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import shutil
 import subprocess
 import sys
@@ -102,6 +103,13 @@ def chrome_path() -> str | None:
         "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
     ]
     return next((str(path) for path in candidates if path and Path(path).exists()), None)
+
+
+def ytdlp_command() -> list[str] | None:
+    executable = shutil.which("yt-dlp")
+    if executable:
+        return [executable]
+    return [sys.executable, "-m", "yt_dlp"] if importlib.util.find_spec("yt_dlp") else None
 
 
 def open_extension_page(chrome: str | None) -> bool:
@@ -208,11 +216,16 @@ def main() -> int:
         extension_ok, detail = bridge_connected(opencli)
         print(f"[{'OK' if extension_ok else 'ACTION'}] Chrome extension/browser bridge: {detail}")
 
-    ytdlp = shutil.which("yt-dlp")
+    ytdlp = ytdlp_command()
     if args.with_youtube and not ytdlp and not args.check_only:
         if install_ytdlp():
-            ytdlp = shutil.which("yt-dlp")
-    print(f"[{'OK' if ytdlp else 'OPTIONAL'}] yt-dlp: {ytdlp or 'not installed; needed only for YouTube'}")
+            ytdlp = ytdlp_command()
+    if ytdlp:
+        ytdlp_ok, ytdlp_version = run_capture([*ytdlp, "--version"], timeout=15)
+        ytdlp_source = " (Python module)" if ytdlp[0] == sys.executable else ""
+        print(f"[{'OK' if ytdlp_ok == 0 else 'WARN'}] yt-dlp: {ytdlp_version or 'available'}{ytdlp_source}")
+    else:
+        print("[OPTIONAL] yt-dlp: not installed; needed only for YouTube")
 
     print("\nHuman steps that the setup assistant cannot and should not automate:")
     print("  1. Approve the official OpenCLI extension in Chrome.")

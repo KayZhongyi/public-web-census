@@ -62,6 +62,7 @@ Collectors should leave translation, topic, commenter type, and response mode bl
 | `is_official` | true only after deterministic identity check |
 | `text_original` | Unmodified visible text |
 | `text_translation` | Separate working translation |
+| `published_at` | Comment publication timestamp when the source exposes one; blank otherwise |
 | `likes` | Visible likes |
 | `topic` | Emergent customer-need topic |
 | `response_mode` | useful_answer / template / redirect / no_reply / not_applicable |
