@@ -13,7 +13,18 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class ProjectCliTest(unittest.TestCase):
     def test_doctor_and_export_help(self) -> None:
-        for command in ("setup", "doctor", "export", "install-skill"):
+        for command in (
+            "setup",
+            "doctor",
+            "export",
+            "install-skill",
+            "discover",
+            "refresh",
+            "diff",
+            "validate",
+            "snapshot",
+            "history",
+        ):
             result = subprocess.run(
                 [sys.executable, str(ROOT / "public-web-census"), command, "--help"],
                 check=True,
@@ -22,6 +33,17 @@ class ProjectCliTest(unittest.TestCase):
                 cwd=ROOT,
             )
             self.assertIn("usage:", result.stdout.lower())
+
+    def test_unified_collect_and_analyze_help(self) -> None:
+        for command in ("collect", "analyze"):
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "public-web-census"), command, "--help"],
+                check=True,
+                capture_output=True,
+                text=True,
+                cwd=ROOT,
+            )
+            self.assertIn("Usage:", result.stdout)
 
     def test_setup_check_only_never_installs(self) -> None:
         result = subprocess.run(

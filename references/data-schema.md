@@ -1,6 +1,10 @@
-# Evidence bundle schema
+# Evidence bundle and ledger schema
 
-Keep raw source fields immutable. Add translations and analysis fields in separate columns.
+Keep raw source fields immutable. Add translations and analysis fields in separate columns. CSV/JSON is the portable bundle contract; `evidence.sqlite3` is the optional versioned history for repeat use. See [versioned-evidence-store.md](versioned-evidence-store.md).
+
+## Versioned observations
+
+Each imported bundle creates one `runs` row and one immutable `observations` row per stable platform, content, or comment ID. The ledger keeps the exact archived bundle fingerprint, observed time, collection scope, raw row JSON, and change classification. `current/` is a rebuildable materialized view, not the historical source of truth.
 
 ## `platform_census.csv`
 
@@ -71,6 +75,8 @@ Collectors should leave translation, topic, commenter type, and response mode bl
 ## `run_manifest.json`
 
 Record `research_mode`, target, market, date range, cutoff, timezone, platforms/accounts/queries checked, included scope, comment selection rule, tool versions, row counts, validation results, failures, and known limitations.
+
+For a derived workspace snapshot, the manifest instead declares `artifact_type: derived_current_snapshot` and lists every source run and fingerprint used to construct the current view.
 
 ## Customer voice analysis outputs
 

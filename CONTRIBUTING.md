@@ -10,8 +10,9 @@ Before opening a pull request:
 2. Use fictional or explicitly licensed examples.
 3. Do not add CAPTCHA bypasses, stealth evasion, rate-limit bypasses, or authentication circumvention.
 4. Normalize adapter output to the documented evidence-bundle schema.
-5. Run `python3 -m unittest discover -s tests -v` and `python3 scripts/run_demo.py`.
-6. Explain the target platform/tool, tested environment, limitations, and evidence fields in the pull request.
+5. Keep `evidence.sqlite3` append-only and never make `current/` the historical source of truth.
+6. Run `python3 -m unittest discover -s tests -v`, `python3 scripts/run_demo.py`, and `python3 -m py_compile public-web-census scripts/*.py tests/*.py` when changing the Skill contract.
+7. Explain the target platform/tool, tested environment, limitations, and evidence fields in the pull request.
 
 Live-adapter tests must use a fake local collector in CI. Do not commit real target output, cookies, session material, or downloaded media.
 

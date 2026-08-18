@@ -8,3 +8,7 @@ venv/
 demo/output/*
 !demo/output/.gitkeep
 runs/
+*.sqlite3
+captures/
+changes/
+current/

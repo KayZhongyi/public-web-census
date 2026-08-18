@@ -1,6 +1,24 @@
 # Incremental updates
 
-Use a new run directory for every capture. Never overwrite the previous evidence bundle before validation.
+Use a new run directory for every capture. Never overwrite the previous evidence bundle before validation. For recurring use, prefer the versioned workspace described in [versioned-evidence-store.md](versioned-evidence-store.md).
+
+## Versioned workspace
+
+```bash
+./public-web-census discover \
+  --workspace runs/target \
+  --target "Target Company" \
+  --purpose "Track material public changes"
+
+./public-web-census refresh \
+  --workspace runs/target \
+  --bundle runs/target-2026-07
+
+./public-web-census diff --workspace runs/target
+./public-web-census validate --workspace runs/target
+```
+
+This path archives every imported bundle, retains every observation, and rebuilds `current/` without deleting records absent from a bounded refresh.
 
 ## Date-bounded YouTube capture
 
@@ -15,7 +33,7 @@ python3 scripts/collect_youtube.py \
 
 The adapter passes the date boundary to the collector and records it in `run_manifest.json`.
 
-## Stable-ID merge
+## Portable stable-ID merge
 
 ```bash
 python3 scripts/merge_incremental.py \
@@ -24,7 +42,7 @@ python3 scripts/merge_incremental.py \
   --output runs/target-current/content.csv
 ```
 
-For comments, add `--id-field comment_id`. The tool requires identical CSV schemas, ignores `collected_at` only when detecting changes, keeps the incoming row for a known ID, retains base rows absent from the incoming scope, and writes a JSON report containing new, updated, unchanged, and absent counts. Each updated record also lists the changed fields and whether the difference is `content`, `engagement`, or `metadata`, so a notification layer can suppress harmless metric drift and route material changes for review.
+Use this legacy path when a one-off CSV result is sufficient and a historical workspace is unnecessary. For comments, add `--id-field comment_id`. The tool requires identical schemas, retains base rows absent from the incoming scope, and reports new, updated, unchanged, and absent records.
 
 Absence from a bounded incoming run is not proof of deletion. Verify the source separately before marking a record removed or unavailable.
 

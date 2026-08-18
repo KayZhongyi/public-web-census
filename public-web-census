@@ -9,22 +9,40 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent
-COMMANDS = {
-    "setup": "setup.py",
-    "doctor": "doctor.py",
-    "export": "export_report.py",
-    "install-skill": "install_skill.py",
-    "demo": "run_demo.py",
+COMMANDS: dict[str, tuple[str, list[str]]] = {
+    "setup": ("setup.py", []),
+    "doctor": ("doctor.py", []),
+    "export": ("export_report.py", []),
+    "install-skill": ("install_skill.py", []),
+    "demo": ("run_demo.py", []),
+    "facebook": ("collect_facebook.py", []),
+    "tiktok": ("collect_tiktok.py", []),
+    "tiktok-comments": ("collect_tiktok_comments.py", []),
+    "youtube": ("collect_youtube.py", []),
+    "youtube-comments": ("collect_youtube_comments.py", []),
+    "prepare-analysis": ("prepare_analysis.py", []),
+    "apply-analysis": ("apply_analysis.py", []),
+    "prepare-voice": ("prepare_customer_voice.py", []),
+    "apply-voice": ("apply_customer_voice.py", []),
+    "merge": ("merge_incremental.py", []),
+    "discover": ("evidence_store.py", ["init"]),
+    "ingest": ("evidence_store.py", ["ingest"]),
+    "refresh": ("evidence_store.py", ["ingest"]),
+    "diff": ("evidence_store.py", ["diff"]),
+    "validate": ("evidence_store.py", ["validate"]),
+    "snapshot": ("evidence_store.py", ["export"]),
+    "history": ("evidence_store.py", ["history"]),
+}
+COLLECTORS = {
     "facebook": "collect_facebook.py",
     "tiktok": "collect_tiktok.py",
     "tiktok-comments": "collect_tiktok_comments.py",
     "youtube": "collect_youtube.py",
     "youtube-comments": "collect_youtube_comments.py",
-    "prepare-analysis": "prepare_analysis.py",
-    "apply-analysis": "apply_analysis.py",
-    "prepare-voice": "prepare_customer_voice.py",
-    "apply-voice": "apply_customer_voice.py",
-    "merge": "merge_incremental.py",
+}
+ANALYSIS_MODES = {
+    "content": "prepare_analysis.py",
+    "customer-voice": "prepare_customer_voice.py",
 }
 
 
@@ -35,7 +53,17 @@ def print_help() -> None:
 Usage:
   ./public-web-census <command> [options]
 
-Live collection:
+Versioned workflow:
+  discover          Create a research contract, discovery table, and SQLite ledger
+  collect           Run a platform connector; optionally ingest it into a workspace
+  refresh           Archive and ingest a new CSV/JSON evidence bundle
+  diff              Show new, updated, unchanged, and not-observed records
+  validate          Check database integrity, hashes, archives, and references
+  snapshot          Export the current evidence view as portable CSV/JSON
+  history           Show every observation retained for one stable record
+  analyze           Prepare a content or customer-voice Agent analysis packet
+
+Direct live connectors:
   tiktok           Collect a public TikTok profile grid with dates, captions,
                    views, stable IDs, and source links through OpenCLI
   tiktok-comments  Collect public comments and replies for selected TikTok
@@ -57,6 +85,7 @@ Delivery:
 
 Evidence workflow:
   demo              Build the fictional offline report
+  ingest            Alias of refresh for explicit import workflows
   prepare-analysis  Create an Agent analysis packet
   apply-analysis    Validate and merge completed analysis
   prepare-voice     Create a customer-voice analysis packet
@@ -64,8 +93,99 @@ Evidence workflow:
   merge             Merge a new capture into a baseline by stable ID
 
 Run './public-web-census <command> --help' for command-specific options.
+Run './public-web-census collect --help' for the unified collector syntax.
 """
     )
+
+
+def run_script(script: str, args: list[str]) -> int:
+    completed = subprocess.run([sys.executable, str(ROOT / "scripts" / script), *args])
+    return completed.returncode
+
+
+def take_option(args: list[str], name: str) -> str | None:
+    prefix = f"{name}="
+    for index, value in enumerate(list(args)):
+        if value.startswith(prefix):
+            args.pop(index)
+            return value[len(prefix) :]
+        if value == name:
+            if index + 1 >= len(args):
+                raise SystemExit(f"{name} requires a value")
+            result = args[index + 1]
+            del args[index : index + 2]
+            return result
+    return None
+
+
+def find_option(args: list[str], name: str) -> str | None:
+    prefix = f"{name}="
+    for index, value in enumerate(args):
+        if value.startswith(prefix):
+            return value[len(prefix) :]
+        if value == name and index + 1 < len(args):
+            return args[index + 1]
+    return None
+
+
+def collect(args: list[str]) -> int:
+    if not args or args[0] in {"-h", "--help", "help"}:
+        print(
+            "Usage: ./public-web-census collect <platform> [--workspace PATH] "
+            "[--ingest-label LABEL] <connector options>\n\n"
+            "Platforms: facebook, tiktok, tiktok-comments, youtube, youtube-comments\n"
+            "When --workspace is supplied, use --output for profile/channel collectors or "
+            "--bundle for comment collectors. A successful capture is archived and ingested."
+        )
+        return 0
+    platform = args.pop(0)
+    script = COLLECTORS.get(platform)
+    if script is None:
+        print(f"Unknown collection platform: {platform}", file=sys.stderr)
+        return 2
+    workspace = take_option(args, "--workspace")
+    label = take_option(args, "--ingest-label")
+    bundle_option = "--bundle" if platform.endswith("comments") else "--output"
+    bundle = find_option(args, bundle_option)
+    if workspace and not bundle:
+        print(
+            f"collect {platform} with --workspace also requires {bundle_option} PATH",
+            file=sys.stderr,
+        )
+        return 2
+    result = run_script(script, args)
+    if result or not workspace:
+        return result
+    ingest_args = ["ingest", "--workspace", workspace, "--bundle", str(Path(bundle).resolve())]
+    if label:
+        ingest_args.extend(["--label", label])
+    return run_script("evidence_store.py", ingest_args)
+
+
+def analyze(args: list[str]) -> int:
+    if not args or args[0] in {"-h", "--help", "help"}:
+        print(
+            "Usage: ./public-web-census analyze <content|customer-voice> "
+            "(--workspace PATH | --bundle PATH)\n\n"
+            "This prepares a validated Agent handoff. Use apply-analysis or apply-voice "
+            "after the Agent completes the packet."
+        )
+        return 0
+    mode = args.pop(0)
+    script = ANALYSIS_MODES.get(mode)
+    if script is None:
+        print(f"Unknown analysis mode: {mode}", file=sys.stderr)
+        return 2
+    workspace = take_option(args, "--workspace")
+    if workspace:
+        if find_option(args, "--bundle"):
+            print("Use either --workspace or --bundle, not both", file=sys.stderr)
+            return 2
+        args.extend(["--bundle", str(Path(workspace).resolve() / "current")])
+    if not find_option(args, "--bundle"):
+        print("analyze requires --workspace PATH or --bundle PATH", file=sys.stderr)
+        return 2
+    return run_script(script, args)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -74,18 +194,21 @@ def main(argv: list[str] | None = None) -> int:
         print_help()
         return 0
     if args[0] in {"-V", "--version"}:
-        print("public-web-census 0.9.0")
+        print("public-web-census 1.0.0")
         return 0
 
     command = args.pop(0)
-    script = COMMANDS.get(command)
-    if script is None:
+    if command == "collect":
+        return collect(args)
+    if command == "analyze":
+        return analyze(args)
+    specification = COMMANDS.get(command)
+    if specification is None:
         print(f"Unknown command: {command}\n", file=sys.stderr)
         print_help()
         return 2
-
-    completed = subprocess.run([sys.executable, str(ROOT / "scripts" / script), *args])
-    return completed.returncode
+    script, prefix = specification
+    return run_script(script, [*prefix, *args])
 
 
 if __name__ == "__main__":

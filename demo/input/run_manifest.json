@@ -1,0 +1,23 @@
+{
+  "schema_version": "demo",
+  "research_mode": "competitor_intelligence",
+  "target": {
+    "company": "Northstar Home Energy",
+    "market": "Fictional market"
+  },
+  "input_url": "https://example.com/northstar",
+  "scope": "Fictional offline public-channel evidence bundle",
+  "cutoff_utc": "2026-06-30T00:00:00+00:00",
+  "collector": {
+    "name": "offline-demo",
+    "version": "1.0"
+  },
+  "counts": {
+    "unique_content": 18,
+    "comments": 16,
+    "platforms": 3
+  },
+  "limitations": [
+    "All records in this bundle are fictional and exist only to exercise the workflow."
+  ]
+}

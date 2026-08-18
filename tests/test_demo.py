@@ -41,6 +41,57 @@ class DemoTest(unittest.TestCase):
             self.assertIn("Fictional", rendered)
             self.assertIn("NS-010", rendered)
 
+    def test_fictional_bundle_can_enter_versioned_workspace(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = Path(tmp) / "workspace"
+            bundle = ROOT / "demo" / "input"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "public-web-census"),
+                    "discover",
+                    "--workspace",
+                    str(workspace),
+                    "--target",
+                    "Northstar Home Energy",
+                ],
+                check=True,
+                cwd=ROOT,
+            )
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "public-web-census"),
+                    "refresh",
+                    "--workspace",
+                    str(workspace),
+                    "--bundle",
+                    str(bundle),
+                ],
+                check=True,
+                cwd=ROOT,
+            )
+            validation = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "public-web-census"),
+                    "validate",
+                    "--workspace",
+                    str(workspace),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+                cwd=ROOT,
+            )
+            self.assertTrue(json.loads(validation.stdout)["valid"])
+            self.assertEqual(
+                json.loads((workspace / "current" / "run_manifest.json").read_text(encoding="utf-8"))[
+                    "counts"
+                ]["content"],
+                18,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

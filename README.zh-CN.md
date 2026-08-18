@@ -17,6 +17,8 @@ Public Web Census 是一套克隆后即可运行的 Agent Skill 与项目 CLI。
 | **平台普查** | 先找到并核验调查对象真正活跃的公开渠道，再决定深挖哪些平台 |
 | **可运行平台连接器** | 用统一 CLI 采集 TikTok 主页及选定对话、Facebook 主页帖子，或 YouTube 元数据及选定对话 |
 | **范围内全量采集** | 统一保留稳定 ID、发布日期、正文、播放量、可见互动字段、账号信息和原始链接 |
+| **版本化证据账本** | 以SQLite保存每次导入的观察历史和原始包，不用新结果覆盖旧证据 |
+| **实质变化识别** | 区分新增、更新、未变化和本轮未观察，并拆分内容、互动与元数据变化 |
 | **多语言处理** | 原文与工作译文分开保存，不同语言进入同一套结构化数据 |
 | **自下而上归类** | Agent 通读完整语料后再形成类别，不用预设关键词硬套标签 |
 | **可复用分析** | 分析内容表现、客户诉求和回复方式，或为明确的业务问题准备证据 |
@@ -34,7 +36,28 @@ Public Web Census 是一套克隆后即可运行的 Agent Skill 与项目 CLI。
 | **增量监测** | 与上一次审核快照相比，出现了哪些实质变化？ | 带证据链接的变化简报，而非互动数噪声 |
 | **证据型角色画像** | 公开信号能够支持哪些安装商、合作伙伴或终端用户判断？ | 含证据ID、反证与置信度边界的角色画像 |
 
-这不是一个“抓下来再总结”的工具。采集是有版本的证据层；翻译、分析、报告、监测和经批准的协作交接是独立层，可以反复运行而不覆盖原始采集结果。持续监测见 [`references/monitoring-playbook.md`](references/monitoring-playbook.md)，角色研究见 [`references/persona-research.md`](references/persona-research.md)。
+这不是一个“抓下来再总结”的工具。SQLite保留追加式观察历史，`current/`只是可以重建的CSV/JSON当前视图；翻译、分析、报告和协作交接可以反复运行而不覆盖原始采集结果。存储设计见 [`references/versioned-evidence-store.md`](references/versioned-evidence-store.md)，跨部门用法见 [`references/department-recipes.md`](references/department-recipes.md)。
+
+## 版本化工作流
+
+```bash
+./public-web-census discover \
+  --workspace runs/example \
+  --target "示例公司" \
+  --market "新加坡" \
+  --purpose "了解公开渠道中的产品问题"
+
+./public-web-census collect youtube \
+  --workspace runs/example \
+  --company "示例公司" \
+  --channel "https://www.youtube.com/@Example" \
+  --output runs/example-youtube-2026-08
+
+./public-web-census diff --workspace runs/example
+./public-web-census validate --workspace runs/example
+```
+
+统一的 `collect` 命令会先执行现有平台连接器，成功后再自动归档并导入证据包。已有采集结果可以通过 `refresh --workspace ... --bundle ...` 导入。
 
 ## 克隆、检查、运行
 
@@ -69,11 +92,19 @@ python3 scripts/run_demo.py
 ./public-web-census --help
 ```
 
-同一个命令入口覆盖真实平台采集、证据分析、客户声音、增量合并和离线演示：
+同一个命令入口覆盖发现、采集、版本更新、证据分析和交付：
 
 ```text
 ./public-web-census setup
 ./public-web-census doctor
+./public-web-census discover ...
+./public-web-census collect youtube ...
+./public-web-census refresh ...
+./public-web-census diff ...
+./public-web-census validate ...
+./public-web-census snapshot ...
+./public-web-census history ...
+./public-web-census analyze content ...
 ./public-web-census tiktok ...
 ./public-web-census tiktok-comments ...
 ./public-web-census facebook ...
@@ -333,6 +364,10 @@ PDF 只是展示层，CSV 与 JSON 证据库仍应与其一同保留。
 | `content.csv` | 公开内容、发布日期和互动指标等源级证据 |
 | `comments.csv` | 采集到的用户对话和官方回复关系 |
 | `run_manifest.json` | 调研范围、截止时间、工具、覆盖与运行记录 |
+| `evidence.sqlite3` | 面向重复使用的运行、对象、观察和变化追加式历史 |
+| `captures/<run-id>/` | 带来源指纹的历次原始证据包归档 |
+| `changes/<run-id>.json` | 每次更新的新增、变化、未变化和本轮未观察记录 |
+| `current/` | 每个稳定ID最新观察组成的可重建CSV/JSON当前视图 |
 | `analysis/taxonomy.json` | 从语料中形成的类别定义与代表性证据 ID |
 | `analysis/validation_report.json` | 可机器检查的完整性与一致性结果 |
 | `analyzed_content.csv` | 在不改写原始证据的前提下合并译文与分类 |
@@ -362,7 +397,7 @@ PDF 只是展示层，CSV 与 JSON 证据库仍应与其一同保留。
 - 客户声音分享版输出默认将公开用户名替换为稳定匿名ID。
 - 账号核验、平台验证和最终业务判断保留人工确认。
 - 标准 CSV/JSON 接口便于继续增加合规连接器和报告格式。
-- 按日期采集与稳定ID合并支持持续监测，同时保留历次原始证据。
+- SQLite观察记录、原始包归档和稳定ID支持持续监测，同时保留历次原始证据。
 - 协作摘要始终保留证据 ID 和原始链接，避免群内结论再次成为不可追溯的信息。
 
 公开信息采集规范见 [`references/collection-safety.md`](references/collection-safety.md)。仓库中的演示公司与数据全部为虚构内容。

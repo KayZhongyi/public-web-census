@@ -22,6 +22,8 @@ Public Web Census is a clone-and-run Agent Skill and project CLI for collecting 
 | **Platform census** | Find and verify a target's active public channels before choosing where to go deep |
 | **Runnable connectors** | Collect TikTok profile videos and selected conversations, Facebook Page posts, or YouTube metadata and selected conversations from one CLI |
 | **In-scope capture** | Preserve stable IDs, publication dates, text, views, available engagement fields, account fields, and source URLs |
+| **Versioned evidence ledger** | Archive every imported bundle in SQLite-backed observation history without replacing earlier captures |
+| **Material-change diff** | Separate new, updated, unchanged, and not-observed records with content, engagement, and metadata changes |
 | **Multilingual normalization** | Keep original text beside a separate working translation in one consistent schema |
 | **Corpus-grounded classification** | Let an Agent read the complete corpus and derive categories from repeated meanings rather than preset keywords |
 | **Reusable analysis** | Compare content performance, study customer needs and reply patterns, or prepare evidence for a declared business question |
@@ -39,7 +41,28 @@ The same workflow can be reused across companies, languages, regions, and approv
 | **Incremental monitoring** | What materially changed since the last reviewed snapshot? | Evidence-linked change brief, not noisy counter updates |
 | **Evidence-grounded personas** | What can public signals support about installers, partners, or end users? | Explicitly bounded personas with source IDs, counter-evidence, and confidence |
 
-This is not another “scrape and summarize” tool. Collection is a versioned evidence layer; translation, analysis, reports, monitoring, and approved collaboration handoffs are separate layers that can be rerun without overwriting the original capture. Read [`references/monitoring-playbook.md`](references/monitoring-playbook.md) for monitoring and [`references/persona-research.md`](references/persona-research.md) for persona research.
+This is not another “scrape and summarize” tool. SQLite keeps an append-only observation history while `current/` remains a rebuildable CSV/JSON view. Translation, analysis, reports, monitoring, and approved collaboration handoffs can be rerun without overwriting the original capture. Read [`references/versioned-evidence-store.md`](references/versioned-evidence-store.md) for the storage model and [`references/department-recipes.md`](references/department-recipes.md) for cross-team use.
+
+## Versioned workflow
+
+```bash
+./public-web-census discover \
+  --workspace runs/example \
+  --target "Example Company" \
+  --market "Singapore" \
+  --purpose "Understand public product questions"
+
+./public-web-census collect youtube \
+  --workspace runs/example \
+  --company "Example Company" \
+  --channel "https://www.youtube.com/@Example" \
+  --output runs/example-youtube-2026-08
+
+./public-web-census diff --workspace runs/example
+./public-web-census validate --workspace runs/example
+```
+
+The unified `collect` command runs the existing platform connector and, after a successful capture, archives and ingests the bundle. Existing bundles can be imported with `refresh --workspace ... --bundle ...`.
 
 ## Clone, check, run
 
@@ -74,11 +97,19 @@ Run the guided live-connector setup, then install the checkout as an Agent Skill
 ./public-web-census --help
 ```
 
-One command surface covers live connectors, evidence analysis, customer voice, incremental merging, and the offline demo:
+One command surface covers discovery, collection, versioned refresh, evidence analysis, and delivery:
 
 ```text
 ./public-web-census setup
 ./public-web-census doctor
+./public-web-census discover ...
+./public-web-census collect youtube ...
+./public-web-census refresh ...
+./public-web-census diff ...
+./public-web-census validate ...
+./public-web-census snapshot ...
+./public-web-census history ...
+./public-web-census analyze content ...
 ./public-web-census tiktok ...
 ./public-web-census tiktok-comments ...
 ./public-web-census facebook ...
@@ -338,6 +369,10 @@ Keep the CSV and JSON bundle alongside the PDF; the PDF is a presentation layer,
 | `content.csv` | Source-level public content and point-in-time metrics |
 | `comments.csv` | Public conversation evidence and official-reply structure when collected |
 | `run_manifest.json` | Scope, cutoff, tools, coverage, and collection record |
+| `evidence.sqlite3` | Append-only run, entity, observation, and change history for repeat work |
+| `captures/<run-id>/` | Exact archived input bundles with source fingerprints |
+| `changes/<run-id>.json` | New, updated, unchanged, and not-observed records for each refresh |
+| `current/` | Rebuildable portable CSV/JSON view of the latest observation per stable ID |
 | `analysis/taxonomy.json` | Corpus-derived category definitions and representative row IDs |
 | `analysis/validation_report.json` | Machine-checkable completeness and integrity result |
 | `analyzed_content.csv` | Translation and classification merged without changing source evidence |
@@ -367,7 +402,7 @@ See [`references/analysis-playbook.md`](references/analysis-playbook.md) for com
 - Shareable customer-voice outputs replace public usernames with stable aliases.
 - Human review remains at account verification, platform challenges, and final business judgment.
 - Standard CSV/JSON contracts make new approved connectors and report formats easy to add.
-- Date-bounded capture and stable-ID merging support repeat monitoring without overwriting earlier evidence.
+- SQLite observations, archived source bundles, and stable IDs support repeat monitoring without overwriting earlier evidence.
 - Collaboration handoff preserves an evidence ID and source link instead of turning a group summary into an untraceable conclusion.
 
 Responsible collection guidance lives in [`references/collection-safety.md`](references/collection-safety.md). The included demo is entirely fictional and public-safe.

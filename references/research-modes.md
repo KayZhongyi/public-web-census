@@ -1,6 +1,6 @@
 # Research modes
 
-Use one evidence-first workflow, then route to the analysis pack that matches the business question.
+Use one versioned evidence workflow, then route to the validated analysis pack that matches the business question. Cross-department applications and handoff contracts are listed in [department-recipes.md](department-recipes.md).
 
 ## Competitor intelligence
 
@@ -38,9 +38,9 @@ python3 scripts/apply_customer_voice.py --bundle runs/target
 
 Read [customer-voice-playbook.md](customer-voice-playbook.md) before completing the Agent task.
 
-## Adjacent applications
+## Department applications
 
-Channel intelligence, market-entry research, and brand-risk monitoring can reuse the same evidence contract, but do not claim them as implemented modes until their discovery rules, analysis fields, validation, tests, and public-safe example have been completed.
+Channel intelligence, market-entry research, owned-channel monitoring, presales evidence, and product-feedback review can reuse the same ledger. Treat them as declared business recipes, not implemented analysis validators, until their discovery rules, analysis fields, validation, tests, and public-safe example have been completed.
 
 Two reusable extension playbooks are available:
 
