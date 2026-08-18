@@ -194,7 +194,7 @@ else:
     def test_project_cli_exposes_tiktok_commands(self) -> None:
         for command, expected in (("tiktok", "--profile"), ("tiktok-comments", "--bundle")):
             result = subprocess.run(
-                [sys.executable, str(ROOT / "competitor-census"), command, "--help"],
+                [sys.executable, str(ROOT / "public-web-census"), command, "--help"],
                 check=True,
                 capture_output=True,
                 text=True,

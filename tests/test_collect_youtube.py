@@ -36,7 +36,7 @@ class YouTubeCollectorTest(unittest.TestCase):
 
     def test_project_cli_exposes_youtube_comment_command(self) -> None:
         result = subprocess.run(
-            [sys.executable, str(ROOT / "competitor-census"), "--help"],
+            [sys.executable, str(ROOT / "public-web-census"), "--help"],
             check=True,
             capture_output=True,
             text=True,

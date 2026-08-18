@@ -1,7 +1,7 @@
 interface:
-  display_name: "Competitor Census"
-  short_description: "Traceable multi-platform competitor intelligence"
+  display_name: "Public Web Census"
+  short_description: "Collect and refresh traceable public web evidence"
   icon_small: "./assets/icon-small.svg"
   icon_large: "./assets/logo.svg"
   brand_color: "#0B2239"
-  default_prompt: "Use $competitor-census to collect public competitor evidence and produce a traceable intelligence report."
+  default_prompt: "Use $public-web-census to collect and refresh public web evidence for this business question."

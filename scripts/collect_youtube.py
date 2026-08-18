@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Collect public YouTube channel metadata into a Competitor Census bundle."""
+"""Collect public YouTube channel metadata into a Public Web Census bundle."""
 
 from __future__ import annotations
 
@@ -408,7 +408,7 @@ def write_bundle(
             "Account identity is not automatically verified.",
             "Deleted, private, members-only, region-restricted, age-restricted, and personalized items may be absent.",
             "YouTube and yt-dlp behavior can change; rerun with a current yt-dlp release.",
-            "Baseline collection does not include comments. Run ./competitor-census youtube-comments for selected public videos.",
+            "Baseline collection does not include comments. Run ./public-web-census youtube-comments for selected public videos.",
         ],
     }
     manifest_path = output_dir / "run_manifest.json"

@@ -8,30 +8,30 @@ test:
 
 validate: test
 	python3 scripts/run_demo.py --quiet
-	./competitor-census --help >/dev/null
-	./competitor-census tiktok --help >/dev/null
-	./competitor-census tiktok-comments --help >/dev/null
-	./competitor-census facebook --help >/dev/null
-	./competitor-census export --help >/dev/null
-	./competitor-census install-skill --help >/dev/null
+	./public-web-census --help >/dev/null
+	./public-web-census tiktok --help >/dev/null
+	./public-web-census tiktok-comments --help >/dev/null
+	./public-web-census facebook --help >/dev/null
+	./public-web-census export --help >/dev/null
+	./public-web-census install-skill --help >/dev/null
 
 cli-help:
-	./competitor-census --help
+	./public-web-census --help
 
 doctor:
-	./competitor-census doctor
+	./public-web-census doctor
 
 tiktok-help:
-	./competitor-census tiktok --help
+	./public-web-census tiktok --help
 
 tiktok-comments-help:
-	./competitor-census tiktok-comments --help
+	./public-web-census tiktok-comments --help
 
 facebook-help:
-	./competitor-census facebook --help
+	./public-web-census facebook --help
 
 youtube-help:
-	./competitor-census youtube --help
+	./public-web-census youtube --help
 
 analysis-help:
 	python3 scripts/prepare_analysis.py --help

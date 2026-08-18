@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the Competitor Census runtime and optional live connectors."""
+"""Check the Public Web Census runtime and optional live connectors."""
 
 from __future__ import annotations
 
@@ -66,11 +66,11 @@ def main() -> int:
         print(f"[{'OK' if bridge_ok else 'WARN'}] Browser bridge: {summary.strip()}")
         if not bridge_ok:
             print("       Live TikTok/Facebook collection needs Chrome plus the OpenCLI extension.")
-            print(f"       Guided setup: ./competitor-census setup")
+            print(f"       Guided setup: ./public-web-census setup")
             print(f"       Extension: {OPENCLI_EXTENSION_URL}")
     else:
         print("[WARN] OpenCLI: not installed (needed for live TikTok/Facebook collection)")
-        print("       Guided setup: ./competitor-census setup")
+        print("       Guided setup: ./public-web-census setup")
 
     ytdlp = ytdlp_command()
     if ytdlp:
@@ -90,6 +90,6 @@ def main() -> int:
 if __name__ == "__main__":
     if any(arg in {"-h", "--help"} for arg in sys.argv[1:]):
         print(__doc__)
-        print("\nUsage: ./competitor-census doctor")
+        print("\nUsage: ./public-web-census doctor")
         raise SystemExit(0)
     raise SystemExit(main())

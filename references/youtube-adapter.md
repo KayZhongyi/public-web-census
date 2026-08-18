@@ -1,6 +1,6 @@
 # YouTube adapter
 
-Use `./competitor-census youtube` for a real, public-metadata vertical slice. It invokes `scripts/collect_youtube.py`, which uses `yt-dlp`, does not download media, and writes the standard Competitor Census evidence bundle. Use `./competitor-census youtube-comments` afterward to deep-read selected public video conversations into the same bundle.
+Use `./public-web-census youtube` for a real, public-metadata vertical slice. It invokes `scripts/collect_youtube.py`, which uses `yt-dlp`, does not download media, and writes the standard Public Web Census evidence bundle. Use `./public-web-census youtube-comments` afterward to deep-read selected public video conversations into the same bundle.
 
 ## Install the collector dependency
 
@@ -15,7 +15,7 @@ If an extractor breaks, update yt-dlp before debugging the adapter.
 ## Trial run
 
 ```bash
-./competitor-census youtube \
+./public-web-census youtube \
   --company "Example Company" \
   --channel "https://www.youtube.com/@ExampleCompany" \
   --tabs videos \
@@ -25,7 +25,7 @@ If an extractor breaks, update yt-dlp before debugging the adapter.
 ## Best-effort selected-tab census
 
 ```bash
-./competitor-census youtube \
+./public-web-census youtube \
   --company "Example Company" \
   --channel "https://www.youtube.com/@ExampleCompany" \
   --tabs videos,shorts,streams \
@@ -66,7 +66,7 @@ Do not describe a limited run as a census. Even with `--max-items-per-tab 0`, us
 Use the existing `yt-dlp` dependency to read public comments and replies from selected video pages. No Google API Key, browser login, cookie, or media download is required:
 
 ```bash
-./competitor-census youtube-comments \
+./public-web-census youtube-comments \
   --bundle runs/example-company \
   --top 30 \
   --max-comments-per-video 500

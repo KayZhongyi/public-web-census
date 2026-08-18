@@ -2,9 +2,9 @@
 
 ## Scope
 
-`./competitor-census tiktok` reads the publicly rendered profile grid through an authorized Chrome session connected by OpenCLI. It stores the canonical video URL and numeric ID, publication time derived from that ID, rendered thumbnail accessibility text, and the point-in-time profile-grid view count.
+`./public-web-census tiktok` reads the publicly rendered profile grid through an authorized Chrome session connected by OpenCLI. It stores the canonical video URL and numeric ID, publication time derived from that ID, rendered thumbnail accessibility text, and the point-in-time profile-grid view count.
 
-`./competitor-census tiktok-comments` opens selected videos already present in `content.csv`, reads public comments and visible replies, records parent-child relationships, and updates visible per-video likes, comment count, and shares when those metrics are exposed.
+`./public-web-census tiktok-comments` opens selected videos already present in `content.csv`, reads public comments and visible replies, records parent-child relationships, and updates visible per-video likes, comment count, and shares when those metrics are exposed.
 
 Both commands are read-only. They do not post, like, follow, message, download media, call private TikTok endpoints, replay signatures, or bypass access controls.
 
@@ -15,12 +15,12 @@ Both commands are read-only. They do not post, like, follow, message, download m
 - OpenCLI and its Chrome extension;
 - an ordinary TikTok session that can view the target public page.
 
-Run `./competitor-census doctor` before live collection.
+Run `./public-web-census doctor` before live collection.
 
 ## Start with a field check
 
 ```bash
-./competitor-census tiktok \
+./public-web-census tiktok \
   --company "Target Company" \
   --profile "@targethandle" \
   --max-scrolls 1 \
@@ -32,7 +32,7 @@ Check the target identity and the coverage of `published_at`, `text_original`, `
 ## Best-effort profile census
 
 ```bash
-./competitor-census tiktok \
+./public-web-census tiktok \
   --company "Target Company" \
   --profile "@targethandle" \
   --max-scrolls 100 \
@@ -49,7 +49,7 @@ Use `--resume` to merge a later attempt into the existing checkpoint by stable v
 Select the top 30 captured videos by view count:
 
 ```bash
-./competitor-census tiktok-comments \
+./public-web-census tiktok-comments \
   --bundle runs/target-tiktok \
   --top 30 \
   --owner "@targethandle" \

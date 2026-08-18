@@ -199,7 +199,7 @@ def fetch_comments(
     video_id = content_video_id(content)
     if not video_id:
         raise ValueError(f"Could not determine a YouTube video ID for {content.get('record_id', 'record')}")
-    with tempfile.TemporaryDirectory(prefix="competitor-census-youtube-comments-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="public-web-census-youtube-comments-") as temporary:
         output_template = str(Path(temporary) / "%(id)s.%(ext)s")
         args = [
             *command,

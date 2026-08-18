@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Repository CLI for Competitor Census."""
+"""Repository CLI for Public Web Census."""
 
 from __future__ import annotations
 
@@ -30,10 +30,10 @@ COMMANDS = {
 
 def print_help() -> None:
     print(
-        """Competitor Census CLI
+        """Public Web Census CLI
 
 Usage:
-  ./competitor-census <command> [options]
+  ./public-web-census <command> [options]
 
 Live collection:
   tiktok           Collect a public TikTok profile grid with dates, captions,
@@ -63,7 +63,7 @@ Evidence workflow:
   apply-voice       Validate customer-voice analysis
   merge             Merge a new capture into a baseline by stable ID
 
-Run './competitor-census <command> --help' for command-specific options.
+Run './public-web-census <command> --help' for command-specific options.
 """
     )
 
@@ -74,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
         print_help()
         return 0
     if args[0] in {"-V", "--version"}:
-        print("competitor-census 0.8.0")
+        print("public-web-census 0.9.0")
         return 0
 
     command = args.pop(0)

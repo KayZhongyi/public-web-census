@@ -441,7 +441,7 @@ def write_bundle(
         "started_at_utc": started_at,
         "cutoff_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "collector": {
-            "name": "competitor-census Facebook connector",
+            "name": "public-web-census Facebook connector",
             "version": "0.5.0",
             "browser_bridge": "OpenCLI",
             "browser_bridge_version": version,
@@ -518,7 +518,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--company", required=True, help="Company or target label used in output")
     parser.add_argument("--page", required=True, help="Public Facebook Page URL")
     parser.add_argument("--output", type=Path, help="Output directory (default: runs/<company>-facebook)")
-    parser.add_argument("--session", default="competitor-census-fb", help="OpenCLI browser session name")
+    parser.add_argument("--session", default="public-web-census-fb", help="OpenCLI browser session name")
     parser.add_argument("--bind", action="store_true", help="Bind the currently focused Chrome tab instead of opening --page")
     parser.add_argument("--opencli", dest="opencli_path", help="Path to the OpenCLI executable")
     parser.add_argument("--max-scrolls", type=int, default=80, help="Maximum downward scrolls (default: 80)")

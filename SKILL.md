@@ -1,11 +1,11 @@
 ---
-name: competitor-census
-description: Build evidence-backed competitor intelligence or customer-voice datasets and reports from publicly visible web and social channels, including live TikTok profile and comment collection, Facebook Page-post collection through an authorized browser, YouTube metadata and selected public-comment collection through yt-dlp, and validated model-agnostic analysis handoffs. Use when an agent must discover a competitor's active platforms, capture an in-scope public corpus, translate multilingual material, derive corpus-grounded content or issue taxonomies, analyze content performance, customer questions, sentiment, severity, and visible response patterns, preserve source-level traceability, or repeat the workflow for another company or market.
+name: public-web-census
+description: Collect, refresh, compare, validate, and analyze publicly visible web and social data as traceable evidence bundles. Supports TikTok profiles and selected conversations, Facebook Page posts through an authorized browser, YouTube metadata and selected public comments through yt-dlp, incremental updates, multilingual processing, and validated model-agnostic analysis handoffs. Use for competitor research, market entry, owned-channel monitoring, customer voice, content strategy, presales evidence, or product and service feedback when an agent must preserve source links, stable IDs, collection scope, update history, and the boundary between raw evidence and conclusions.
 ---
 
-# Competitor Census
+# Public Web Census
 
-Turn scattered public signals into two separate deliverables: a machine-readable evidence bundle and a decision-ready report. Treat a census as a best-effort capture of all in-scope, publicly visible records at a stated cutoff—not as a guarantee about hidden, deleted, personalized, or access-restricted content.
+Turn scattered public web signals into a refreshable evidence bundle and decision-ready outputs. Treat a census as a best-effort capture of all in-scope, publicly visible records at a stated cutoff—not as a guarantee about hidden, deleted, personalized, or access-restricted content.
 
 ## Non-negotiable boundaries
 
@@ -18,7 +18,7 @@ Turn scattered public signals into two separate deliverables: a machine-readable
 
 Read [references/collection-safety.md](references/collection-safety.md) before live collection.
 
-From a cloned repository, run `./competitor-census setup` for guided live-connector onboarding, then use `./competitor-census doctor` for later checks. The setup assistant may install OpenCLI, open its official Chrome Web Store page, and verify the browser bridge; extension approval, platform login, and human verification always remain manual. Use `./competitor-census install-skill --target codex` or `--target claude` when this checkout is not already inside the Agent's skill directory.
+From a cloned repository, run `./public-web-census setup` for guided live-connector onboarding, then use `./public-web-census doctor` for later checks. The setup assistant may install OpenCLI, open its official Chrome Web Store page, and verify the browser bridge; extension approval, platform login, and human verification always remain manual. Use `./public-web-census install-skill --target codex` or `--target claude` when this checkout is not already inside the Agent's skill directory.
 
 ## Choose the research mode
 
@@ -58,13 +58,13 @@ Collect all retrievable records inside the declared scope. Preserve source field
 
 Use incremental capture for virtualized or infinite-scroll pages. Deduplicate by stable ID or canonical URL, not by text alone. Normalize Unicode before matching disguised phone numbers or product codes. See [references/data-schema.md](references/data-schema.md).
 
-For a public TikTok profile, read [references/tiktok-adapter.md](references/tiktok-adapter.md) and use `./competitor-census tiktok`. Start with a one-window field check, verify identity plus date/text/view/link coverage, then widen the scroll scope. Use `--manual-scroll` when the public grid stops loading programmatically and a human can visually complete the ordinary scroll. This does not authorize bypassing a challenge.
+For a public TikTok profile, read [references/tiktok-adapter.md](references/tiktok-adapter.md) and use `./public-web-census tiktok`. Start with a one-window field check, verify identity plus date/text/view/link coverage, then widen the scroll scope. Use `--manual-scroll` when the public grid stops loading programmatically and a human can visually complete the ordinary scroll. This does not authorize bypassing a challenge.
 
-For a public YouTube channel, read [references/youtube-adapter.md](references/youtube-adapter.md) and use `./competitor-census youtube`. Start with a limited run, verify account identity and output fields, then set `--max-items-per-tab 0` only when the user wants a best-effort selected-tab census. The adapter collects metadata without downloading media and leaves translation/classification for the analysis phase.
+For a public YouTube channel, read [references/youtube-adapter.md](references/youtube-adapter.md) and use `./public-web-census youtube`. Start with a limited run, verify account identity and output fields, then set `--max-items-per-tab 0` only when the user wants a best-effort selected-tab census. The adapter collects metadata without downloading media and leaves translation/classification for the analysis phase.
 
-For selected public YouTube conversations, use `./competitor-census youtube-comments --bundle runs/target-company --top 30`. It reads comments through the existing `yt-dlp` dependency, does not need a Google API Key, and writes public comments and replies to the same `comments.csv`. Keep the declared comment cap in the research contract; `--max-comments-per-video 0` means all retrievable comments and replies for each selected video. Treat this as best effort, not a guarantee about disabled, deleted, restricted, or unreturned comments. If YouTube requests verification, stop without bypassing it.
+For selected public YouTube conversations, use `./public-web-census youtube-comments --bundle runs/target-company --top 30`. It reads comments through the existing `yt-dlp` dependency, does not need a Google API Key, and writes public comments and replies to the same `comments.csv`. Keep the declared comment cap in the research contract; `--max-comments-per-video 0` means all retrievable comments and replies for each selected video. Treat this as best effort, not a guarantee about disabled, deleted, restricted, or unreturned comments. If YouTube requests verification, stop without bypassing it.
 
-For a public Facebook Page, read [references/facebook-adapter.md](references/facebook-adapter.md) and use `./competitor-census facebook`. It incrementally captures each visible feed window through the user's authorized Chrome session, deduplicates by platform ID or canonical URL, and checkpoints after every round because Facebook virtualizes long feeds. Start with three scrolls and verify the output before widening the run. Treat a challenge or collector error as a stopped checkpoint, not a completed census.
+For a public Facebook Page, read [references/facebook-adapter.md](references/facebook-adapter.md) and use `./public-web-census facebook`. It incrementally captures each visible feed window through the user's authorized Chrome session, deduplicates by platform ID or canonical URL, and checkpoints after every round because Facebook virtualizes long feeds. Start with three scrolls and verify the output before widening the run. Treat a challenge or collector error as a stopped checkpoint, not a completed census.
 
 For repeat monitoring, read [references/incremental-updates.md](references/incremental-updates.md). Use a new run directory, apply an explicit date boundary when supported, and merge by stable ID with `scripts/merge_incremental.py`. Treat records absent from a bounded update as “not returned in this run,” not deleted.
 
@@ -74,7 +74,7 @@ When the purpose is alerting rather than a full refresh, also read [references/m
 
 Rank content using reach, comment volume, recency, and strategic relevance, then capture publicly visible comments and official replies from the chosen set. If useful comments are sparse, widen the content set and say so explicitly; never inflate a thin sample.
 
-For TikTok evidence bundles, use `./competitor-census tiktok-comments --bundle <run> --top 30 --owner <handle>`. The command updates visible video-page engagement fields and writes stable public comment/reply records. If a puzzle appears, accept only manual completion; otherwise keep the partial checkpoint and return `human_verification_required`.
+For TikTok evidence bundles, use `./public-web-census tiktok-comments --bundle <run> --top 30 --owner <handle>`. The command updates visible video-page engagement fields and writes stable public comment/reply records. If a puzzle appears, accept only manual completion; otherwise keep the partial checkpoint and return `human_verification_required`.
 
 Classify commenter identity only when the text supports it: end customer, installer/DIY, reseller, or EPC/project party. If a group has fewer than three credible records, state “sample too small; not reported separately.” Determine official replies by exact account identity or an explicit creator/author marker.
 
@@ -103,7 +103,7 @@ Read [references/analysis-playbook.md](references/analysis-playbook.md). Apply t
 5. **Opportunity mapping:** identify high-demand/low-supply topics and observable information gaps.
 6. **Evidence thresholds:** attach `n/N` to claims and mark small samples or ambiguous identity.
 
-Describe the competitor as the subject. Prefer “36 of 187 user comments asked about price” over “36 hits.” Separate observation, inference, and recommendation.
+In `competitor_intelligence` mode, describe the competitor as the subject. Prefer “36 of 187 user comments asked about price” over “36 hits.” In every mode, separate observation, inference, and recommendation.
 
 Validate and merge the Agent results only after every row is complete:
 
@@ -146,7 +146,7 @@ Then finalize the separate analysis artifacts:
 Then independently write the report:
 
 - one-page executive brief;
-- what the competitor publishes;
+- what the declared target publishes or what the selected public corpus contains;
 - what customers ask;
 - what content performs;
 - response behavior and public information gaps;
@@ -155,7 +155,7 @@ Then independently write the report:
 
 Every quantitative claim must link back to row IDs or source URLs. Keep non-Latin original text in the evidence bundle unless the requested report font is verified to support it.
 
-When a portable PDF is needed, run `./competitor-census export --html <report.html>`. The HTML and PDF remain presentation layers; do not delete the CSV/JSON evidence bundle after export.
+When a portable PDF is needed, run `./public-web-census export --html <report.html>`. The HTML and PDF remain presentation layers; do not delete the CSV/JSON evidence bundle after export.
 
 For `customer_voice`, also deliver:
 

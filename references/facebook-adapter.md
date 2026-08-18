@@ -1,6 +1,6 @@
 # Facebook Page connector
 
-Use `./competitor-census facebook` to collect publicly visible posts from a Facebook Page into the standard evidence bundle. The connector owns the collection logic, stable-ID handling, checkpoints, schema, manifest, validation handoff, and report workflow. It uses the third-party [OpenCLI](https://github.com/jackwener/OpenCLI) browser bridge to read the user's authorized Chrome session.
+Use `./public-web-census facebook` to collect publicly visible posts from a Facebook Page into the standard evidence bundle. The connector owns the collection logic, stable-ID handling, checkpoints, schema, manifest, validation handoff, and report workflow. It uses the third-party [OpenCLI](https://github.com/jackwener/OpenCLI) browser bridge to read the user's authorized Chrome session.
 
 ## Prerequisites
 
@@ -24,7 +24,7 @@ The collector does not receive, store, or export the Facebook password or browse
 ## Start with a verification run
 
 ```bash
-./competitor-census facebook \
+./public-web-census facebook \
   --company "Target Company" \
   --page "https://www.facebook.com/TargetPage" \
   --max-scrolls 3 \
@@ -44,7 +44,7 @@ Verify the Page identity, post links, dates, and a sample of visible metrics bef
 ## Run a deeper Page-feed census
 
 ```bash
-./competitor-census facebook \
+./public-web-census facebook \
   --company "Target Company" \
   --page "https://www.facebook.com/TargetPage" \
   --max-scrolls 100 \
@@ -57,7 +57,7 @@ Facebook removes older feed articles from the live DOM while scrolling. The conn
 To continue an interrupted run:
 
 ```bash
-./competitor-census facebook \
+./public-web-census facebook \
   --company "Target Company" \
   --page "https://www.facebook.com/TargetPage" \
   --output runs/target-facebook \
@@ -85,7 +85,7 @@ This connector covers Page posts. Public comments and replies use a separate dec
 ## Architecture and attribution
 
 ```text
-competitor-census CLI
+public-web-census CLI
   -> Facebook collection and evidence rules (this repository)
   -> OpenCLI browser bridge (third-party Apache-2.0 dependency)
   -> user's authorized Chrome session
@@ -93,4 +93,4 @@ competitor-census CLI
   -> deterministic validation and Agent analysis
 ```
 
-Competitor Census is not a fork or rebrand of OpenCLI. It calls OpenCLI as an installed dependency and adds the domain-specific collection, checkpoint, evidence, validation, and reporting layers in this repository. OpenCLI remains the work of its upstream authors under its own license.
+Public Web Census is not a fork or rebrand of OpenCLI. It calls OpenCLI as an installed dependency and adds the domain-specific collection, checkpoint, evidence, validation, and reporting layers in this repository. OpenCLI remains the work of its upstream authors under its own license.

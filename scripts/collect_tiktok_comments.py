@@ -353,7 +353,7 @@ def update_manifest(bundle: Path, selected: int, comments: int, status: str, cha
     path = bundle / "run_manifest.json"
     manifest = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"schema_version": "0.6"}
     manifest["conversation_collection"] = {
-        "collector": "competitor-census TikTok conversation connector",
+        "collector": "public-web-census TikTok conversation connector",
         "version": "0.6.0",
         "selected_content": selected,
         "public_comments_and_replies": comments,
@@ -374,7 +374,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--top", type=int, default=30, help="Select the top N TikTok videos by captured views (default: 30)")
     parser.add_argument("--video", action="append", default=[], help="Collect a specific video URL from content.csv; repeatable")
     parser.add_argument("--owner", action="append", default=[], help="Official handle or display name; repeatable")
-    parser.add_argument("--session", default="competitor-census-tt-comments", help="OpenCLI browser session name")
+    parser.add_argument("--session", default="public-web-census-tt-comments", help="OpenCLI browser session name")
     parser.add_argument("--opencli", dest="opencli_path", help="Path to the OpenCLI executable")
     parser.add_argument("--max-scrolls-per-video", type=int, default=8, help="Comment-panel scroll attempts per video")
     parser.add_argument("--scroll-amount", type=int, default=1200, help="Pixels per comment scroll")

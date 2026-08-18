@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="assets/hero.svg" alt="Competitor Census — 从公开信号到可追溯策略" width="100%" />
+  <img src="assets/hero.svg" alt="Public Web Census — 从公开信号到可追溯策略" width="100%" />
 </p>
 
-# Competitor Census｜竞品公开信息普查
+# Public Web Census｜公开网络信息普查
 
-**把任意友商分散在公开渠道中的信息，变成一份可追溯、可复用的竞品情报档案。**
+**把分散在公开网页与社媒中的信号，变成可更新、可追溯、可复用的证据。**
 
-Competitor Census 是面向全球市场、克隆后即可运行的 Agent Skill 与项目 CLI。输入公司和市场，它可以帮助你找到真正活跃的公开渠道，采集 TikTok 公开视频与对话、Facebook 公开主页帖子，或 YouTube 公开元数据及选定视频评论，建立结构化证据库，处理多语言内容，从完整语料中形成分类，量化内容表现与客户诉求，并生成每条关键结论都能回到数据行和原始链接的报告。当证据库包含公开对话时，还可以运行经过校验的客户声音分析模式。
+Public Web Census 是一套克隆后即可运行的 Agent Skill 与项目 CLI。输入公司、品牌、产品、账号或业务问题，它可以发现相关公开渠道，采集 TikTok 主页与选定对话、Facebook 公开主页帖子，或 YouTube 元数据及选定评论，保留稳定ID和原始链接，并在既有证据库上继续更新。市场、售前、客服和产品团队可以在同一证据层上开展竞品研究、自有账号监测、客户声音、内容策略和产品服务优化。
 
 > 先普查，后深挖；先证据，后结论。
 
@@ -14,12 +14,12 @@ Competitor Census 是面向全球市场、克隆后即可运行的 Agent Skill �
 
 | 能力 | 结果 |
 |---|---|
-| **平台普查** | 先找到并核验友商真正活跃的公开渠道，再决定深挖哪些平台 |
+| **平台普查** | 先找到并核验调查对象真正活跃的公开渠道，再决定深挖哪些平台 |
 | **可运行平台连接器** | 用统一 CLI 采集 TikTok 主页及选定对话、Facebook 主页帖子，或 YouTube 元数据及选定对话 |
 | **范围内全量采集** | 统一保留稳定 ID、发布日期、正文、播放量、可见互动字段、账号信息和原始链接 |
 | **多语言处理** | 原文与工作译文分开保存，不同语言进入同一套结构化数据 |
 | **自下而上归类** | Agent 通读完整语料后再形成类别，不用预设关键词硬套标签 |
-| **专业分析** | 对比内容供给与平均/中位传播效果，统计客户诉求、回复方式和机会缺口 |
+| **可复用分析** | 分析内容表现、客户诉求和回复方式，或为明确的业务问题准备证据 |
 | **客户声音模式** | 自下而上形成问题分类，区分意图、情绪与严重程度，关联可见官方回复，并对分享版用户名脱敏 |
 | **可追溯交付** | 输出 CSV 证据库、分类体系、校验结果和带证据链接的 HTML 报告 |
 | **协作交接** | 将审核后的证据转为多维表格式行动索引和简洁变化简报，不暴露完整原始语料 |
@@ -30,7 +30,7 @@ Competitor Census 是面向全球市场、克隆后即可运行的 Agent Skill �
 
 | 从这里开始 | 可回答的问题 | 交付物 |
 |---|---|---|
-| **基线普查** | 哪些公开渠道真正重要、发布了什么、什么内容有效？ | 可追溯竞品报告 |
+| **基线普查** | 哪些公开渠道真正重要、发布了什么、什么内容有效？ | 可追溯公开信息简报 |
 | **增量监测** | 与上一次审核快照相比，出现了哪些实质变化？ | 带证据链接的变化简报，而非互动数噪声 |
 | **证据型角色画像** | 公开信号能够支持哪些安装商、合作伙伴或终端用户判断？ | 含证据ID、反证与置信度边界的角色画像 |
 
@@ -41,24 +41,24 @@ Competitor Census 是面向全球市场、克隆后即可运行的 Agent Skill �
 离线演示无需 API Key、浏览器登录或第三方依赖：
 
 ```bash
-git clone https://github.com/KayZhongyi/competitor-census.git
-cd competitor-census
+git clone https://github.com/KayZhongyi/public-web-census.git
+cd public-web-census
 python3 scripts/run_demo.py
 ```
 
-打开 `demo/output/report.html`，或查看[在线虚构案例](https://kayzhongyi.github.io/competitor-census/)。
+打开 `demo/output/report.html`，或查看[在线虚构案例](https://kayzhongyi.github.io/public-web-census/)。
 
 <p align="center">
-  <img src="assets/demo-preview.svg" alt="可追溯竞品报告虚构示例" width="100%" />
+  <img src="assets/demo-preview.svg" alt="可追溯公开网络证据报告虚构示例" width="100%" />
 </p>
 
 运行真实平台连接器安装向导，再将当前仓库安装为 Agent Skill：
 
 ```bash
-./competitor-census setup
-./competitor-census doctor
-./competitor-census install-skill --target codex
-# 或：./competitor-census install-skill --target claude
+./public-web-census setup
+./public-web-census doctor
+./public-web-census install-skill --target codex
+# 或：./public-web-census install-skill --target claude
 ```
 
 `setup` 可协助安装 [OpenCLI](https://github.com/jackwener/OpenCLI)、打开官方 Chrome 扩展页面、重启本地桥接服务并验证连接。根据 Chrome 的安全机制，扩展授权以及 TikTok/Facebook 登录必须由用户本人在浏览器中完成；安装助手不会索取平台密码。需要同时安装 YouTube 连接器依赖时，增加 `--with-youtube`。之后可随时用 `doctor` 做只读检查。
@@ -66,25 +66,25 @@ python3 scripts/run_demo.py
 ## 使用项目自己的 CLI
 
 ```bash
-./competitor-census --help
+./public-web-census --help
 ```
 
 同一个命令入口覆盖真实平台采集、证据分析、客户声音、增量合并和离线演示：
 
 ```text
-./competitor-census setup
-./competitor-census doctor
-./competitor-census tiktok ...
-./competitor-census tiktok-comments ...
-./competitor-census facebook ...
-./competitor-census youtube ...
-./competitor-census youtube-comments ...
-./competitor-census prepare-analysis ...
-./competitor-census apply-analysis ...
-./competitor-census prepare-voice ...
-./competitor-census apply-voice ...
-./competitor-census merge ...
-./competitor-census export ...
+./public-web-census setup
+./public-web-census doctor
+./public-web-census tiktok ...
+./public-web-census tiktok-comments ...
+./public-web-census facebook ...
+./public-web-census youtube ...
+./public-web-census youtube-comments ...
+./public-web-census prepare-analysis ...
+./public-web-census apply-analysis ...
+./public-web-census prepare-voice ...
+./public-web-census apply-voice ...
+./public-web-census merge ...
+./public-web-census export ...
 ```
 
 ## 采集 TikTok 公开主页
@@ -94,13 +94,13 @@ TikTok 连接器通过用户已有权限的 Chrome 登录态读取公开主页�
 使用安装向导安装 OpenCLI、打开官方扩展页面并检查浏览器桥：
 
 ```bash
-./competitor-census setup
+./public-web-census setup
 ```
 
 先做小范围字段核验：
 
 ```bash
-./competitor-census tiktok \
+./public-web-census tiktok \
   --company "目标公司" \
   --profile "@targethandle" \
   --max-scrolls 1 \
@@ -110,7 +110,7 @@ TikTok 连接器通过用户已有权限的 Chrome 登录态读取公开主页�
 确认账号身份以及日期、文案、播放量、链接字段后，再扩大范围。若程序滚动不再加载新卡片，`--manual-scroll` 会保留同一浏览器会话，请人正常滚动公开主页后完成最后一次提取：
 
 ```bash
-./competitor-census tiktok \
+./public-web-census tiktok \
   --company "目标公司" \
   --profile "@targethandle" \
   --max-scrolls 100 \
@@ -121,7 +121,7 @@ TikTok 连接器通过用户已有权限的 Chrome 登录态读取公开主页�
 从已采集视频中按播放量选择 Top 30，进一步保存公开评论、可见二级回复、父子关系、评论点赞、官方身份及可见的视频页互动数：
 
 ```bash
-./competitor-census tiktok-comments \
+./public-web-census tiktok-comments \
   --bundle runs/target-tiktok \
   --top 30 \
   --owner "@targethandle" \
@@ -137,13 +137,13 @@ Facebook 连接器通过用户已有权限的 Chrome 登录态读取公开帖子
 先运行安装向导，在 Chrome 中批准官方扩展并正常登录 Facebook，然后检查浏览器桥：
 
 ```bash
-./competitor-census setup
+./public-web-census setup
 ```
 
 先用少量滚动核验账号、日期、互动数和原始链接：
 
 ```bash
-./competitor-census facebook \
+./public-web-census facebook \
   --company "目标公司" \
   --page "https://www.facebook.com/TargetPage" \
   --max-scrolls 3 \
@@ -153,7 +153,7 @@ Facebook 连接器通过用户已有权限的 Chrome 登录态读取公开帖子
 核验无误后再扩大声明范围：
 
 ```bash
-./competitor-census facebook \
+./public-web-census facebook \
   --company "目标公司" \
   --page "https://www.facebook.com/TargetPage" \
   --max-scrolls 100 \
@@ -168,7 +168,7 @@ Facebook 连接器通过用户已有权限的 Chrome 登录态读取公开帖子
 
 ```bash
 python3 -m pip install -U "yt-dlp[default]"
-./competitor-census youtube \
+./public-web-census youtube \
   --company "OpenAI" \
   --channel "https://www.youtube.com/@OpenAI" \
   --tabs videos \
@@ -184,7 +184,7 @@ python3 -m pip install -U "yt-dlp[default]"
 核验无误后，对所选标签页中可检索的公开内容执行尽可能完整的普查：
 
 ```bash
-./competitor-census youtube \
+./public-web-census youtube \
   --company "目标公司" \
   --channel "https://www.youtube.com/@TargetHandle" \
   --tabs videos,shorts,streams \
@@ -194,7 +194,7 @@ python3 -m pip install -U "yt-dlp[default]"
 随后可用同一套 `yt-dlp` 依赖，深挖已采集视频中播放量最高的视频评论。无需 Google API Key、浏览器登录态、Cookie，也不会下载媒体：
 
 ```bash
-./competitor-census youtube-comments \
+./public-web-census youtube-comments \
   --bundle runs/target-company \
   --top 30 \
   --max-comments-per-video 500
@@ -205,7 +205,7 @@ python3 -m pip install -U "yt-dlp[default]"
 需要持续监测时，将指定日期之后的新一轮采集写入独立目录，再按稳定ID合并：
 
 ```bash
-./competitor-census youtube \
+./public-web-census youtube \
   --company "目标公司" \
   --channel "https://www.youtube.com/@TargetHandle" \
   --since 2026-07-01 \
@@ -224,7 +224,7 @@ python3 scripts/merge_incremental.py \
 每次采集都会生成模型无关的 `analysis/analysis_task.md`。让你常用的文件型 Agent 按任务完成分析，再运行校验：
 
 ```text
-使用 $competitor-census 执行 runs/openai/analysis/analysis_task.md。
+使用 $public-web-census 执行 runs/openai/analysis/analysis_task.md。
 通读完整语料，形成分类体系，并完成每一条分析结果。
 ```
 
@@ -290,24 +290,24 @@ comments.csv + content.csv（原始证据，不改写）
 先克隆一次，再把当前仓库链接到所使用的 Agent：
 
 ```bash
-git clone https://github.com/KayZhongyi/competitor-census.git
-cd competitor-census
-./competitor-census install-skill --target codex
-# 或：./competitor-census install-skill --target claude
+git clone https://github.com/KayZhongyi/public-web-census.git
+cd public-web-census
+./public-web-census install-skill --target codex
+# 或：./public-web-census install-skill --target claude
 # 同时安装：重复传入 --target codex --target claude
 ```
 
 也可以直接克隆到 Skill 目录：
 
 ```bash
-git clone https://github.com/KayZhongyi/competitor-census.git ~/.codex/skills/competitor-census
-# Claude Code：改为克隆到 ~/.claude/skills/competitor-census
+git clone https://github.com/KayZhongyi/public-web-census.git ~/.codex/skills/public-web-census
+# Claude Code：改为克隆到 ~/.claude/skills/public-web-census
 ```
 
 调用示例：
 
 ```text
-使用 $competitor-census 调研 [国家/地区] 的 [公司] 公开渠道。
+使用 $public-web-census 调研 [国家/地区] 的 [公司] 公开渠道。
 先建立证据库，再生成可追溯的策略报告。
 ```
 
@@ -318,7 +318,7 @@ Skill 由 Markdown 流程和 Python 标准库脚本组成，其他具备终端�
 每份报告默认保留为带可点击证据链接的 HTML；需要便携交付时，可通过 Chrome 或 Chromium 导出矢量 PDF：
 
 ```bash
-./competitor-census export \
+./public-web-census export \
   --html runs/target-company/analysis_report.html \
   --pdf runs/target-company/analysis_report.pdf
 ```

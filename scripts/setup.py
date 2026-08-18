@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Guide live-connector setup for Competitor Census."""
+"""Guide live-connector setup for Public Web Census."""
 
 from __future__ import annotations
 
@@ -154,7 +154,7 @@ def install_ytdlp() -> bool:
 def main() -> int:
     args = parse_args()
     interactive = sys.stdin.isatty() and not args.check_only
-    print("Competitor Census live-connector setup\n")
+    print("Public Web Census live-connector setup\n")
 
     python_ok = sys.version_info >= (3, 10)
     print(f"[{'OK' if python_ok else 'FAIL'}] Python {sys.version.split()[0]} (3.10+ required)")
@@ -234,9 +234,9 @@ def main() -> int:
     print("\nThe assistant never asks for a platform password or writes browser credentials into this repository.")
 
     if opencli and extension_ok:
-        print("\n[READY] Browser bridge connected. Run './competitor-census doctor' at any time to recheck it.")
+        print("\n[READY] Browser bridge connected. Run './public-web-census doctor' at any time to recheck it.")
         return 0
-    print("\n[NOT READY] Finish the ACTION items above, then rerun './competitor-census setup'.")
+    print("\n[NOT READY] Finish the ACTION items above, then rerun './public-web-census setup'.")
     return 2
 
 

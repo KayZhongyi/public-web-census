@@ -418,7 +418,7 @@ def write_bundle(
         "started_at_utc": started_at,
         "cutoff_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "collector": {
-            "name": "competitor-census TikTok connector",
+            "name": "public-web-census TikTok connector",
             "version": "0.6.0",
             "browser_bridge": "OpenCLI",
             "browser_bridge_version": version,
@@ -498,7 +498,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--company", required=True, help="Company or target label used in output")
     parser.add_argument("--profile", required=True, help="TikTok @handle or public profile URL")
     parser.add_argument("--output", type=Path, help="Output directory (default: runs/<company>-tiktok)")
-    parser.add_argument("--session", default="competitor-census-tt", help="OpenCLI browser session name")
+    parser.add_argument("--session", default="public-web-census-tt", help="OpenCLI browser session name")
     parser.add_argument("--bind", action="store_true", help="Bind the focused Chrome tab instead of opening --profile")
     parser.add_argument("--manual-scroll", action="store_true", help="Wait for a human to scroll the visible profile before final extraction")
     parser.add_argument("--opencli", dest="opencli_path", help="Path to the OpenCLI executable")

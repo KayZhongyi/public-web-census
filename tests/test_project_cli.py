@@ -15,7 +15,7 @@ class ProjectCliTest(unittest.TestCase):
     def test_doctor_and_export_help(self) -> None:
         for command in ("setup", "doctor", "export", "install-skill"):
             result = subprocess.run(
-                [sys.executable, str(ROOT / "competitor-census"), command, "--help"],
+                [sys.executable, str(ROOT / "public-web-census"), command, "--help"],
                 check=True,
                 capture_output=True,
                 text=True,
@@ -25,7 +25,7 @@ class ProjectCliTest(unittest.TestCase):
 
     def test_setup_check_only_never_installs(self) -> None:
         result = subprocess.run(
-            [sys.executable, str(ROOT / "competitor-census"), "setup", "--check-only"],
+            [sys.executable, str(ROOT / "public-web-census"), "setup", "--check-only"],
             check=False,
             capture_output=True,
             text=True,
@@ -47,7 +47,7 @@ class ProjectCliTest(unittest.TestCase):
                 env=env,
                 cwd=ROOT,
             )
-            linked = Path(env["CODEX_HOME"]) / "skills" / "competitor-census"
+            linked = Path(env["CODEX_HOME"]) / "skills" / "public-web-census"
             self.assertTrue(linked.is_symlink())
             self.assertEqual(linked.resolve(), ROOT.resolve())
             self.assertIn("linked", result.stdout)

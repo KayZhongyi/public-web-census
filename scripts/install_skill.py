@@ -10,8 +10,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DESTINATIONS = {
-    "codex": Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")) / "skills" / "competitor-census",
-    "claude": Path.home() / ".claude" / "skills" / "competitor-census",
+    "codex": Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")) / "skills" / "public-web-census",
+    "claude": Path.home() / ".claude" / "skills" / "public-web-census",
 }
 
 
@@ -49,7 +49,7 @@ def main() -> int:
             )
         destination.symlink_to(ROOT, target_is_directory=True)
         print(f"[OK] {target}: linked {destination} -> {ROOT}")
-    print("Restart or open a new Agent session, then invoke $competitor-census.")
+    print("Restart or open a new Agent session, then invoke $public-web-census.")
     return 0
 
 

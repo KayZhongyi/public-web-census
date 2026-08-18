@@ -535,7 +535,7 @@ def render_report(
 </head>
 <body>
   <header>
-    <div class="eyebrow">Competitor Census · Customer Voice Mode</div>
+    <div class="eyebrow">Public Web Census · Customer Voice Mode</div>
     <h1>{html.escape(str(summary['target']))} customer voice</h1>
     <p>Public customer signals analyzed as traceable evidence: issue, intent, sentiment, severity, and visible official response remain linked to source rows.</p>
   </header>
