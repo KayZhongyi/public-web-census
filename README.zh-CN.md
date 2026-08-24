@@ -273,6 +273,20 @@ content.csv（原始证据，不改写）
 
 校验器会检查源文件指纹、ID 完整性、译文覆盖率、分类定义、置信度和代表性证据，全部通过后才生成分析数据和报告。
 
+### 用 Ollama 在本地完成分析
+
+采集阶段本身是确定性脚本，不需要 LLM。若想把翻译、归类和客户声音分析从云端 Agent 切换到本地，可安装 Ollama 并运行仓库自带的结构化输出执行器：
+
+```bash
+ollama pull qwen3:8b
+./public-web-census local-analysis \
+  --bundle runs/openai/current \
+  --mode content \
+  --model qwen3:8b
+```
+
+执行器会分批读取完整语料，写入同一套分析 packet，最后仍使用原有的 fail-closed 校验器。不会调用 OpenAI、Anthropic 或 DeepSeek 云端 API，也不会修改原始 CSV。OpenCode 交互式用法和模型取舍见 [`references/local-agent.md`](references/local-agent.md)。
+
 ### AI 不能自己给自己判分
 
 AI 输出只是候选结果，不会直接成为最终报告。确定性的**证据门**采用失败即停止设计：

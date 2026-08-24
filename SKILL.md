@@ -113,7 +113,26 @@ Validate completed Agent output with the existing fail-closed commands:
 ./public-web-census apply-voice --bundle runs/target/current
 ```
 
+For a no-cloud analysis run on a machine with Ollama, use the local runner. It
+fills the same packet and invokes the same fail-closed validator:
+
+```bash
+./public-web-census local-analysis \
+  --bundle runs/target/current \
+  --mode customer-voice \
+  --model qwen3:8b
+```
+
+The collector does not need an LLM. Use a local model only for translation and
+corpus-grounded classification. The runner batches records, uses JSON schema
+outputs, never edits raw CSV files, and fails before producing a final report
+if IDs or allowed labels do not match. `qwen3:8b` is the preferred local model
+when installed; the existing `AlphaESS-Brain:latest` model remains a fallback.
+
 Do not present a department recipe as an implemented analysis validator. Add a dedicated schema, checks, tests, and public-safe example before making that claim.
+
+For local execution details, model selection, and the OpenCode/Ollama option,
+read [references/local-agent.md](references/local-agent.md).
 
 ## 5. Deliver evidence and decisions separately
 

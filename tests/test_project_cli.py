@@ -45,6 +45,16 @@ class ProjectCliTest(unittest.TestCase):
             )
             self.assertIn("Usage:", result.stdout)
 
+    def test_local_analysis_help(self) -> None:
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "public-web-census"), "local-analysis", "--help"],
+            check=True,
+            capture_output=True,
+            text=True,
+            cwd=ROOT,
+        )
+        self.assertIn("Ollama", result.stdout)
+
     def test_setup_check_only_never_installs(self) -> None:
         result = subprocess.run(
             [sys.executable, str(ROOT / "public-web-census"), "setup", "--check-only"],

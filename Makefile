@@ -1,4 +1,4 @@
-.PHONY: demo test validate cli-help doctor tiktok-help tiktok-comments-help facebook-help youtube-help analysis-help voice-help incremental-help ledger-help
+.PHONY: demo test validate cli-help doctor tiktok-help tiktok-comments-help facebook-help youtube-help analysis-help voice-help incremental-help ledger-help local-analysis-help
 
 demo:
 	python3 scripts/run_demo.py
@@ -49,3 +49,6 @@ incremental-help:
 
 ledger-help:
 	python3 scripts/evidence_store.py --help
+
+local-analysis-help:
+	python3 scripts/local_analysis.py --help

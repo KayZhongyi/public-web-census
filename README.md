@@ -278,6 +278,20 @@ content.csv (source evidence, unchanged)
 
 The validator checks the source fingerprint, exact ID coverage, translation completeness, category definitions, confidence values, and representative evidence before producing the analyzed dataset and report.
 
+### Run analysis locally with Ollama
+
+Collection itself is deterministic and does not require an LLM. To replace the cloud Agent for translation and classification, install Ollama and run the bundled structured-output runner:
+
+```bash
+ollama pull qwen3:8b
+./public-web-census local-analysis \
+  --bundle runs/openai/current \
+  --mode content \
+  --model qwen3:8b
+```
+
+The runner batches the corpus, writes the same analysis packet, and invokes the existing fail-closed validator. It uses no OpenAI, Anthropic, or DeepSeek API token. See [`references/local-agent.md`](references/local-agent.md) for the OpenCode interactive option and model trade-offs.
+
 ### The Agent does not grade its own work
 
 Agent output is treated as a proposal, not trusted as a finished result. A deterministic **evidence gate** fails closed:
