@@ -48,6 +48,8 @@ The YouTube adapter additionally writes `duration_seconds`, `channel_id`, `avail
 
 The Facebook Page connector additionally writes `published_label`, `metric_labels`, `collected_at`, and `retrieval_status`. `published_label` preserves the visible date text when Facebook does not expose a machine-readable date. `metric_labels` preserves the raw visible engagement labels used for parsing. Blank engagement fields mean unavailable or unparsed, not zero. See [facebook-adapter.md](facebook-adapter.md).
 
+The LinkedIn connector uses the same additional fields. `published_label` preserves relative labels such as `2d` when an exact timestamp is not exposed. Visible reactions map to `likes`, reposts or shares map to `shares`, and impressions map to `views` when visible. A row without a visible post permalink uses the profile URL and `retrieval_status=captured_without_permalink`; see [linkedin-adapter.md](linkedin-adapter.md).
+
 The v0.3 analysis handoff keeps this file unchanged. Agent output is validated separately, then merged into `analyzed_content.csv` with `classification_confidence` and `classification_notes`. See [analysis-handoff.md](analysis-handoff.md).
 
 ## `comments.csv`

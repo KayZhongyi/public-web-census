@@ -1,241 +1,714 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Fictional Northstar Home Energy demo · Public Web Census</title>
+  <meta name="description" content="Public Web Census collects traceable public evidence across TikTok, Facebook, YouTube and LinkedIn before AI analysis.">
+  <title>Public Web Census · 让 AI 先拿出证据</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --ink:#0b2239; --gold:#d49a43; --paper:#f4f7f9; --muted:#637485; --line:#d9e2e8; }
-    * { box-sizing:border-box; }
-    body { margin:0; color:var(--ink); background:var(--paper); font:15px/1.6 Inter, ui-sans-serif, system-ui, sans-serif; }
-    a { color:#0e668c; text-decoration:none; }
-    .hero { background:#0b2239; color:white; padding:66px 7vw 78px; border-bottom:4px solid var(--gold); }
-    .eyebrow { color:#e9b45f; text-transform:uppercase; letter-spacing:.16em; font-size:12px; font-weight:800; overflow-wrap:anywhere; }
-    h1 { max-width:950px; margin:14px 0 12px; font-size:clamp(36px,6vw,68px); line-height:1.05; letter-spacing:0; overflow-wrap:anywhere; }
-    .hero p { max-width:850px; color:#d7e1e8; font-size:18px; overflow-wrap:anywhere; }
-    .scope { display:flex; flex-wrap:wrap; gap:9px; margin-top:24px; }
-    .scope span { border:1px solid #537088; border-radius:999px; padding:6px 12px; color:#e8eff4; font-size:13px; }
-    main { max-width:1180px; margin:auto; padding:42px 24px 80px; }
-    .metrics { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin-top:-78px; position:relative; }
-    .metric { background:white; border:1px solid var(--line); border-radius:8px; padding:20px; box-shadow:0 12px 30px #09233b14; min-width:0; }
-    .metric b { display:block; font-size:30px; letter-spacing:0; overflow-wrap:anywhere; }
-    .metric span { display:block; color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em; overflow-wrap:anywhere; }
-    section { background:white; border:1px solid var(--line); border-radius:8px; padding:28px; margin-top:20px; }
-    h2 { margin:0 0 6px; font-size:24px; letter-spacing:0; }
-    .sub { color:var(--muted); margin:0 0 22px; }
-    .finding { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:18px; }
-    .finding article { background:#f7f9fb; border-left:4px solid var(--gold); border-radius:6px; padding:16px; min-width:0; }
-    .finding b { display:block; font-size:21px; overflow-wrap:anywhere; }
-    .table-wrap { overflow-x:auto; }
-    table { width:100%; border-collapse:collapse; font-size:13px; min-width:760px; }
-    th { color:var(--muted); text-transform:uppercase; letter-spacing:.06em; font-size:11px; text-align:left; }
-    th, td { border-bottom:1px solid var(--line); padding:11px 9px; vertical-align:top; }
-    .bar { width:130px; height:8px; background:#e8eef2; border-radius:4px; overflow:hidden; }
-    .bar i { display:block; height:100%; background:var(--gold); }
-    .chips { display:flex; flex-wrap:wrap; gap:9px; }
-    .chip { background:#edf3f6; border-radius:999px; padding:7px 12px; }
-    .note { border:1px solid #ecd09e; background:#fff9ef; padding:14px 16px; border-radius:6px; margin-top:18px; color:#6c4a18; }
-    footer { color:var(--muted); text-align:center; padding:28px; }
-    @media (max-width:820px) { .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); margin-top:-48px; } .finding { grid-template-columns:1fr; } .hero { padding-bottom:60px; } }
+    :root {
+      color-scheme: dark;
+      --bg: #07101e;
+      --surface: #0c1727;
+      --surface-raised: #111e31;
+      --ink: #f4f7fb;
+      --muted: #9dacbf;
+      --quiet: #6e7e92;
+      --line: #26364b;
+      --line-strong: #3a4d66;
+      --accent: #4d82ff;
+      --accent-soft: #16346d;
+      --accent-ink: #dbe6ff;
+      --success: #66d3b2;
+      --warning: #f1bc63;
+      --shadow: 0 24px 64px rgba(0, 0, 0, .32);
+      --radius: 14px;
+      --page: min(1180px, calc(100vw - 48px));
+    }
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f1f4f8;
+      --surface: #ffffff;
+      --surface-raised: #f7f9fc;
+      --ink: #0a1728;
+      --muted: #536277;
+      --quiet: #78879a;
+      --line: #d6deea;
+      --line-strong: #b8c5d6;
+      --accent: #205fe9;
+      --accent-soft: #dfe9ff;
+      --accent-ink: #183f94;
+      --success: #087b61;
+      --warning: #9f6407;
+      --shadow: 0 24px 64px rgba(26, 46, 75, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Manrope, "Noto Sans SC", sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+    }
+    ::selection { color: white; background: var(--accent); }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    a { color: inherit; text-underline-offset: .25em; }
+    button { font: inherit; }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .shell { width: var(--page); margin-inline: auto; }
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .nav-inner {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--ink);
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -.02em;
+    }
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      position: relative;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    .brand-mark::before, .brand-mark::after {
+      content: "";
+      position: absolute;
+      left: 7px;
+      right: 7px;
+      height: 2px;
+      background: var(--accent);
+      transform-origin: left center;
+    }
+    .brand-mark::before { top: 9px; transform: rotate(27deg); }
+    .brand-mark::after { bottom: 9px; transform: rotate(-27deg); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { color: var(--muted); font-size: 14px; text-decoration: none; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-tools { display: flex; gap: 8px; }
+    .tool-button {
+      min-width: 42px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--muted);
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .tool-button:hover { color: var(--ink); border-color: var(--line-strong); }
+    .hero {
+      min-height: 780px;
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(520px, 1.1fr);
+      align-items: center;
+      gap: clamp(48px, 7vw, 96px);
+      padding: 92px 0 110px;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 28px;
+      max-width: 680px;
+      font-size: clamp(38px, 4.2vw, 60px);
+      line-height: .98;
+      letter-spacing: -.04em;
+      text-wrap: balance;
+    }
+    .hero-copy > p {
+      max-width: 34ch;
+      margin-bottom: 34px;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 22px);
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .button {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 18px;
+      border: 1px solid var(--line-strong);
+      border-radius: 12px;
+      color: var(--ink);
+      background: var(--surface);
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .button.primary { border-color: var(--accent); background: var(--accent); color: white; }
+    .button:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .dispatch {
+      position: relative;
+      min-height: 520px;
+      padding: 26px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .dispatch-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .dispatch-head strong { font-size: 13px; letter-spacing: .02em; }
+    .live-state {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .live-state::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 0 5px color-mix(in srgb, currentColor 14%, transparent);
+    }
+    .dispatch-grid {
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      gap: 26px;
+      padding-top: 30px;
+    }
+    .source-rail { display: grid; align-content: start; gap: 10px; }
+    .source-button {
+      width: 100%;
+      min-height: 62px;
+      display: grid;
+      grid-template-columns: 25px 1fr;
+      align-items: center;
+      gap: 9px;
+      padding: 0 10px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      color: var(--quiet);
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+    }
+    .source-button img { width: 22px; height: 22px; filter: grayscale(1) opacity(.7); }
+    .linkedin-mark {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 3px;
+      color: white;
+      background: #0a66c2;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .source-button span { font-size: 11px; font-weight: 700; }
+    .source-button[aria-selected="true"] {
+      border-color: var(--line-strong);
+      color: var(--ink);
+      background: var(--surface-raised);
+    }
+    .source-button[aria-selected="true"] img { filter: none; }
+    .evidence-route { position: relative; }
+    .route-line {
+      position: absolute;
+      top: 34px;
+      bottom: 46px;
+      left: 11px;
+      width: 1px;
+      background: var(--line-strong);
+    }
+    .route-line::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -2px;
+      width: 5px;
+      height: 52px;
+      border-radius: 3px;
+      background: var(--accent);
+      animation: scan 3.6s cubic-bezier(.16, 1, .3, 1) infinite;
+    }
+    .route-block { position: relative; padding-left: 38px; margin-bottom: 26px; }
+    .route-block::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: 6px;
+      width: 11px;
+      height: 11px;
+      border: 2px solid var(--bg);
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .route-block small {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--quiet);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .route-block h3 { margin-bottom: 8px; font-size: 17px; }
+    .route-block p { margin-bottom: 0; color: var(--muted); font-size: 13px; }
+    .field-stream { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+    .field-stream span {
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: var(--surface-raised);
+      font-size: 11px;
+    }
+    .proof-note { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .proof-note strong { color: var(--accent-ink); }
+    .section { padding: 118px 0; border-top: 1px solid var(--line); }
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(260px, .72fr) minmax(0, 1.28fr);
+      gap: clamp(40px, 8vw, 120px);
+      margin-bottom: 70px;
+    }
+    h2 {
+      margin-bottom: 0;
+      max-width: 560px;
+      font-size: clamp(36px, 5vw, 62px);
+      line-height: 1.05;
+      letter-spacing: -.035em;
+      text-wrap: balance;
+    }
+    .section-heading p { max-width: 54ch; align-self: end; margin-bottom: 4px; color: var(--muted); font-size: 18px; }
+    .use-list { border-top: 1px solid var(--line-strong); }
+    .use-row {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 36px;
+      padding: 30px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .use-row h3 { margin: 0; font-size: 21px; }
+    .use-row p { margin: 0; color: var(--muted); }
+    .use-row strong { color: var(--accent-ink); font-size: 13px; }
+    .platform-layout {
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      min-height: 480px;
+      border-top: 1px solid var(--line-strong);
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .platform-tabs { padding: 22px 24px 22px 0; border-right: 1px solid var(--line); }
+    .platform-tab {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 10px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--quiet);
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+    }
+    .platform-tab[aria-selected="true"] { color: var(--ink); }
+    .platform-tab[aria-selected="true"]::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+    .platform-panel {
+      display: grid;
+      grid-template-columns: 1.12fr .88fr;
+      gap: 64px;
+      align-content: center;
+      padding: 60px;
+    }
+    .platform-panel h3 { margin-bottom: 16px; font-size: 34px; letter-spacing: -.025em; }
+    .platform-panel > div > p { max-width: 45ch; color: var(--muted); }
+    .capability-list { margin: 28px 0 0; padding: 0; list-style: none; }
+    .capability-list li {
+      display: flex;
+      gap: 12px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .capability-list li::before { content: "✓"; color: var(--success); font-weight: 800; }
+    .support-facts { align-self: stretch; padding: 6px 0 6px 34px; border-left: 1px solid var(--line); }
+    .fact { padding: 17px 0; border-bottom: 1px solid var(--line); }
+    .fact small { display: block; color: var(--quiet); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+    .fact strong { display: block; margin-top: 4px; font-size: 15px; }
+    .workflow { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--line-strong); }
+    .workflow article { min-height: 280px; padding: 28px 24px 30px 0; border-right: 1px solid var(--line); }
+    .workflow article + article { padding-left: 24px; }
+    .workflow article:last-child { border-right: 0; }
+    .workflow span { color: var(--accent); font-size: 13px; font-weight: 800; }
+    .workflow h3 { margin: 54px 0 12px; font-size: 18px; }
+    .workflow p { color: var(--muted); font-size: 13px; }
+    .install-grid {
+      display: grid;
+      grid-template-columns: .82fr 1.18fr;
+      gap: clamp(48px, 8vw, 110px);
+      align-items: start;
+    }
+    .install-copy h2 { margin-bottom: 24px; }
+    .install-copy p { max-width: 43ch; color: var(--muted); }
+    .agent-switch {
+      display: inline-flex;
+      gap: 4px;
+      margin-top: 18px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .agent-switch button {
+      padding: 8px 14px;
+      border: 0;
+      border-radius: 8px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+    }
+    .agent-switch button[aria-selected="true"] { color: white; background: var(--accent); }
+    .prompt-panel { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+    .prompt-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); color: var(--quiet); font-size: 12px; }
+    .copy-button { border: 0; color: var(--accent-ink); background: transparent; cursor: pointer; font-weight: 700; }
+    .prompt-panel pre { min-height: 230px; margin: 0; padding: 26px; overflow: auto; color: var(--ink); font-size: 14px; white-space: pre-wrap; }
+    .setup-note {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--muted);
+      background: var(--surface-raised);
+      font-size: 13px;
+    }
+    .setup-note b { color: var(--warning); }
+    .guardrails {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 80px;
+      padding: 54px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+    .guardrails h2 { margin-bottom: 22px; font-size: clamp(34px, 4.5vw, 54px); }
+    .guardrails p { max-width: 48ch; color: var(--muted); }
+    .guardrail-list { margin: 0; padding: 0; list-style: none; }
+    .guardrail-list li { padding: 17px 0; border-bottom: 1px solid var(--line); }
+    .guardrail-list li:first-child { border-top: 1px solid var(--line); }
+    .guardrail-list strong { display: block; margin-bottom: 3px; }
+    .guardrail-list span { color: var(--muted); font-size: 13px; }
+    .close { padding: 140px 0 96px; text-align: center; }
+    .close h2 { max-width: 760px; margin: 0 auto 26px; }
+    .close p { margin-bottom: 32px; color: var(--muted); }
+    footer { padding: 28px 0 42px; border-top: 1px solid var(--line); color: var(--quiet); font-size: 12px; }
+    footer .shell { display: flex; justify-content: space-between; gap: 24px; }
+    footer a { color: var(--muted); }
+    @keyframes scan {
+      0% { transform: translateY(0); opacity: 0; }
+      14% { opacity: 1; }
+      75% { opacity: 1; }
+      100% { transform: translateY(290px); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .route-line::after { animation: none; }
+      .button { transition: none; }
+    }
+    @media (max-width: 980px) {
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding-top: 72px; }
+      .dispatch { min-height: 500px; }
+      .section-heading, .install-grid, .guardrails { grid-template-columns: 1fr; }
+      .platform-panel { grid-template-columns: 1fr; padding: 42px; }
+      .support-facts { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+      .workflow { grid-template-columns: 1fr 1fr; }
+      .workflow article { border-bottom: 1px solid var(--line); }
+    }
+    @media (max-width: 680px) {
+      :root { --page: min(100% - 30px, 1180px); }
+      .nav-inner { min-height: 62px; }
+      .brand span:last-child { font-size: 14px; }
+      h1 { font-size: clamp(36px, 10.5vw, 42px); white-space: nowrap; }
+      .hero { min-height: auto; padding: 66px 0 78px; }
+      .dispatch { padding: 17px; }
+      .dispatch-grid { grid-template-columns: 1fr; }
+      .source-rail { grid-template-columns: repeat(4, 1fr); }
+      .source-button { min-height: 54px; grid-template-columns: 1fr; justify-items: center; }
+      .source-button span { display: none; }
+      .section { padding: 84px 0; }
+      .section-heading { margin-bottom: 45px; }
+      .use-row { grid-template-columns: 1fr; gap: 12px; }
+      .platform-layout { grid-template-columns: 1fr; }
+      .platform-tabs { display: grid; grid-template-columns: repeat(4, 1fr); padding: 0; border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; }
+      .platform-tab { min-width: 82px; justify-content: center; padding: 16px 8px; }
+      .platform-tab[aria-selected="true"]::after { display: none; }
+      .platform-panel { padding: 30px 0; }
+      .workflow { grid-template-columns: 1fr; }
+      .workflow article, .workflow article + article { min-height: auto; padding: 24px 0; border-right: 0; }
+      .workflow h3 { margin-top: 22px; }
+      .guardrails { padding: 28px; }
+      footer .shell { flex-direction: column; }
+    }
   </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="eyebrow">Public Web Census · PUBLIC-SAFE OFFLINE DEMO</div>
-    <h1>Fictional Northstar Home Energy demo</h1>
-    <p>A fictional example showing how public channel records become a validated evidence bundle and source-linked report.</p>
-    <div class="scope"><span>Evidence bundle first</span><span>Point-in-time metrics</span><span>Source-linked</span><span>Human-verified conclusions</span></div>
-  </header>
-  <main>
-    <div class="metrics">
-      <div class="metric"><b>5</b><span>channels audited</span></div>
-      <div class="metric"><b>18</b><span>content records</span></div>
-      <div class="metric"><b>16</b><span>comments + replies</span></div>
-      <div class="metric"><b>45,200</b><span>visible views</span></div>
-      <div class="metric"><b>3</b><span>active platforms</span></div>
+  <nav class="nav" aria-label="Primary">
+    <div class="shell nav-inner">
+      <a class="brand" href="#top" aria-label="Public Web Census home"><span class="brand-mark" aria-hidden="true"></span><span>Public Web Census</span></a>
+      <div class="nav-links">
+        <a href="#uses" data-zh="业务用途" data-en="Use cases">业务用途</a>
+        <a href="#platforms" data-zh="平台支持" data-en="Platforms">平台支持</a>
+        <a href="#workflow" data-zh="工作方式" data-en="How it works">工作方式</a>
+        <a href="#install" data-zh="开始使用" data-en="Get started">开始使用</a>
+      </div>
+      <div class="nav-tools">
+        <button class="tool-button" id="language" type="button" aria-label="Switch language">EN</button>
+        <button class="tool-button" id="theme" type="button" aria-label="Switch theme" data-zh="明暗" data-en="Theme">明暗</button>
+      </div>
     </div>
-
-    <section>
-      <h2>What the evidence says</h2>
-      <p class="sub">Observations are separated from interpretation. Counts and denominators remain visible.</p>
-      <div class="finding">
-        <article><b>Education</b>Highest mean reach at 4,450 views across 4 records. Evidence: NS-010, NS-011, NS-008.</article>
-        <article><b>Product Promo</b>Largest publishing share at 39% (7/18). Evidence: NS-004, NS-002, NS-007.</article>
-        <article><b>Price</b>Most frequent user topic: 4/12 non-official comments.</article></div>
-      <div class="note"><b>Interpretation boundary:</b> These are descriptive patterns in the captured public corpus. Treat opportunities as testable hypotheses, not proof of sales impact or causality.</div>
+  </nav>
+  <main id="top">
+    <section class="shell hero">
+      <div class="hero-copy">
+        <h1 data-zh="别让 AI 猜市场。<br>让它先拿出证据。" data-en="Don’t let AI guess.<br>Make it show the evidence.">别让 AI 猜市场。<br>让它先拿出证据。</h1>
+        <p data-zh="采集可回查的公开信息，再让 AI 分析。" data-en="Collect traceable public evidence before AI analysis.">采集可回查的公开信息，再让 AI 分析。</p>
+        <div class="actions">
+          <a class="button primary" href="#install" data-zh="让 Agent 安装" data-en="Install for your Agent">让 Agent 安装</a>
+          <a class="button" href="#platforms" data-zh="查看支持范围" data-en="See platform coverage">查看支持范围</a>
+        </div>
+      </div>
+      <div class="dispatch" aria-label="Evidence workflow">
+        <div class="dispatch-head">
+          <strong data-zh="公开证据路径" data-en="PUBLIC EVIDENCE ROUTE">公开证据路径</strong>
+          <span class="live-state" data-zh="本地执行" data-en="RUNS LOCALLY">本地执行</span>
+        </div>
+        <div class="dispatch-grid">
+          <div class="source-rail" role="tablist" aria-label="Social platforms">
+            <button class="source-button" type="button" role="tab" aria-selected="true" data-platform="tiktok"><img src="https://cdn.simpleicons.org/tiktok/25F4EE" alt=""><span>TikTok</span></button>
+            <button class="source-button" type="button" role="tab" aria-selected="false" data-platform="facebook"><img src="https://cdn.simpleicons.org/facebook/1877F2" alt=""><span>Facebook</span></button>
+            <button class="source-button" type="button" role="tab" aria-selected="false" data-platform="youtube"><img src="https://cdn.simpleicons.org/youtube/FF0033" alt=""><span>YouTube</span></button>
+            <button class="source-button" type="button" role="tab" aria-selected="false" data-platform="linkedin"><span class="linkedin-mark" aria-hidden="true">in</span><span>LinkedIn</span></button>
+          </div>
+          <div class="evidence-route">
+            <div class="route-line" aria-hidden="true"></div>
+            <div class="route-block">
+              <small data-zh="采集对象" data-en="SOURCE">采集对象</small>
+              <h3 id="route-source">TikTok 账号与公开视频</h3>
+              <p id="route-boundary">在用户已授权的 Chrome 会话中只读采集；遇到验证即暂停。</p>
+            </div>
+            <div class="route-block">
+              <small data-zh="原始证据" data-en="EVIDENCE">原始证据</small>
+              <h3 data-zh="每条记录保留来路" data-en="Every record keeps its provenance">每条记录保留来路</h3>
+              <div class="field-stream">
+                <span data-zh="原文" data-en="Original text">原文</span><span data-zh="来源链接" data-en="Source URL">来源链接</span><span data-zh="发布时间" data-en="Published time">发布时间</span><span data-zh="可见指标" data-en="Visible metrics">可见指标</span><span data-zh="稳定 ID" data-en="Stable ID">稳定 ID</span>
+              </div>
+            </div>
+            <div class="route-block">
+              <small data-zh="业务输出" data-en="DECISION OUTPUT">业务输出</small>
+              <h3 data-zh="同一份证据，回答新的问题" data-en="Reuse the same evidence for new questions">同一份证据，回答新的问题</h3>
+              <p data-zh="竞对研究、账号复盘、客户声音与售前材料，都从可复核的数据开始。" data-en="Competitor research, channel reviews, customer voice and presales all start from inspectable data.">竞对研究、账号复盘、客户声音与售前材料，都从可复核的数据开始。</p>
+            </div>
+            <div class="proof-note"><strong data-zh="减少 AI 幻觉" data-en="Reduce AI hallucinations">减少 AI 幻觉</strong> · <span data-zh="不是要求模型“更自信”，而是要求结论能回到原始证据。" data-en="Not by asking for more confidence, but by requiring every conclusion to resolve to source evidence.">不是要求模型“更自信”，而是要求结论能回到原始证据。</span></div>
+          </div>
+        </div>
+      </div>
     </section>
-
-    <section>
-      <h2>Content supply vs. performance</h2>
-      <p class="sub">Mean and median are shown together to reduce distortion from outliers.</p>
-      <div class="table-wrap"><table><thead><tr><th>Category</th><th>n</th><th>Share</th><th>Mean views</th><th>Median</th><th>Relative reach</th><th>Evidence IDs</th></tr></thead><tbody>
-        <tr>
-          <td><strong>Education</strong></td>
-          <td>4</td>
-          <td>22%</td>
-          <td>4,450</td>
-          <td>4,400</td>
-          <td><div class="bar"><i style="width:100.0%"></i></div></td>
-          <td><code>NS-010</code>, <code>NS-011</code>, <code>NS-008</code></td>
-        </tr>
-
-        <tr>
-          <td><strong>Price</strong></td>
-          <td>2</td>
-          <td>11%</td>
-          <td>3,850</td>
-          <td>3,850</td>
-          <td><div class="bar"><i style="width:86.5%"></i></div></td>
-          <td><code>NS-013</code>, <code>NS-012</code></td>
-        </tr>
-
-        <tr>
-          <td><strong>Installation</strong></td>
-          <td>2</td>
-          <td>11%</td>
-          <td>2,950</td>
-          <td>2,950</td>
-          <td><div class="bar"><i style="width:66.3%"></i></div></td>
-          <td><code>NS-015</code>, <code>NS-014</code></td>
-        </tr>
-
-        <tr>
-          <td><strong>Case Study</strong></td>
-          <td>2</td>
-          <td>11%</td>
-          <td>2,550</td>
-          <td>2,550</td>
-          <td><div class="bar"><i style="width:57.3%"></i></div></td>
-          <td><code>NS-017</code>, <code>NS-016</code></td>
-        </tr>
-
-        <tr>
-          <td><strong>Service</strong></td>
-          <td>1</td>
-          <td>6%</td>
-          <td>1,800</td>
-          <td>1,800</td>
-          <td><div class="bar"><i style="width:40.4%"></i></div></td>
-          <td><code>NS-018</code></td>
-        </tr>
-
-        <tr>
-          <td><strong>Product Promo</strong></td>
-          <td>7</td>
-          <td>39%</td>
-          <td>986</td>
-          <td>980</td>
-          <td><div class="bar"><i style="width:22.2%"></i></div></td>
-          <td><code>NS-004</code>, <code>NS-002</code>, <code>NS-007</code></td>
-        </tr></tbody></table></div>
+    <section class="section" id="uses">
+      <div class="shell">
+        <div class="section-heading">
+          <h2 data-zh="从公开信息，走到业务动作。" data-en="From public signals to business action.">从公开信息，走到业务动作。</h2>
+          <p data-zh="它不是一份固定报告，而是一套可更新的采集方法。同事可以换对象、换市场、换问题，继续使用已经沉淀的证据。" data-en="This is not a fixed report. It is a refreshable collection method that colleagues can reuse across targets, markets and questions.">它不是一份固定报告，而是一套可更新的采集方法。同事可以换对象、换市场、换问题，继续使用已经沉淀的证据。</p>
+        </div>
+        <div class="use-list">
+          <article class="use-row"><h3 data-zh="竞对与市场研究" data-en="Competitor and market research">竞对与市场研究</h3><p data-zh="比较公开内容结构、用户关注点与可见互动，形成进入市场前可继续验证的判断。" data-en="Compare public content, audience concerns and visible engagement before entering a market.">比较公开内容结构、用户关注点与可见互动，形成进入市场前可继续验证的判断。</p><strong data-zh="用于选题、卖点与市场假设" data-en="For topics, propositions and market hypotheses">用于选题、卖点与市场假设</strong></article>
+          <article class="use-row"><h3 data-zh="自有账号复盘" data-en="Owned-channel review">自有账号复盘</h3><p data-zh="按月或按季度追加新记录，比较内容表现与重复问题，让下一轮发布有迹可循。" data-en="Append new records monthly or quarterly and compare performance and recurring questions.">按月或按季度追加新记录，比较内容表现与重复问题，让下一轮发布有迹可循。</p><strong data-zh="用于内容计划与社媒策略" data-en="For content planning and social strategy">用于内容计划与社媒策略</strong></article>
+          <article class="use-row"><h3 data-zh="公开客户声音" data-en="Public customer voice">公开客户声音</h3><p data-zh="把公开视频下的高频疑问与使用障碍沉淀成证据，补充公司已有客服和销售反馈。" data-en="Turn recurring public questions and usage friction into evidence that complements internal feedback.">把公开视频下的高频疑问与使用障碍沉淀成证据，补充公司已有客服和销售反馈。</p><strong data-zh="用于产品、客服、教程与 FAQ" data-en="For product, support, tutorials and FAQ">用于产品、客服、教程与 FAQ</strong></article>
+        </div>
+      </div>
     </section>
-
-
-        <section>
-          <h2>Voice of customer</h2>
-          <p class="sub">Official replies are excluded from customer-demand counts.</p>
-          <div class="chips"><span class='chip'><b>Price</b> 4/12</span><span class='chip'><b>Sizing</b> 2/12</span><span class='chip'><b>Installation</b> 2/12</span><span class='chip'><b>Compatibility</b> 2/12</span><span class='chip'><b>Warranty</b> 1/12</span><span class='chip'><b>Delivery</b> 1/12</span></div>
-          <p class="note"><b>Visible official response modes:</b> redirect 2/4, useful answer 1/4, template 1/4. A redirect is counted separately from a useful public answer.</p>
-        </section>
-
-    <section>
-      <h2>Evidence ledger</h2>
-      <p class="sub">The report keeps row IDs, dates, visible metrics, working text, and links together.</p>
-      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Platform</th><th>Date</th><th>Working text</th><th>Views</th><th>Likes</th><th>Comments</th><th>Evidence</th></tr></thead><tbody>
-        <tr>
-          <td><code>NS-010</code></td>
-          <td>TikTok</td>
-          <td>2026-04-18</td>
-          <td>What happens during a grid outage</td>
-          <td>5,200</td>
-          <td>402</td>
-          <td>22</td>
-          <td><a href="https://example.com/content/NS-010">source ↗</a></td>
-        </tr>
-
-        <tr>
-          <td><code>NS-011</code></td>
-          <td>Instagram</td>
-          <td>2026-05-03</td>
-          <td>5 kWh or 10 kWh battery?</td>
-          <td>4,600</td>
-          <td>350</td>
-          <td>21</td>
-          <td><a href="https://example.com/content/NS-011">source ↗</a></td>
-        </tr>
-
-        <tr>
-          <td><code>NS-008</code></td>
-          <td>TikTok</td>
-          <td>2026-01-27</td>
-          <td>How to choose the right battery size</td>
-          <td>4,200</td>
-          <td>310</td>
-          <td>18</td>
-          <td><a href="https://example.com/content/NS-008">source ↗</a></td>
-        </tr>
-
-        <tr>
-          <td><code>NS-013</code></td>
-          <td>Instagram</td>
-          <td>2026-05-22</td>
-          <td>Budget examples by system size</td>
-          <td>4,100</td>
-          <td>329</td>
-          <td>31</td>
-          <td><a href="https://example.com/content/NS-013">source ↗</a></td>
-        </tr>
-
-        <tr>
-          <td><code>NS-009</code></td>
-          <td>YouTube</td>
-          <td>2026-02-25</td>
-          <td>Three mistakes when sizing a home system</td>
-          <td>3,800</td>
-          <td>265</td>
-          <td>15</td>
-          <td><a href="https://example.com/content/NS-009">source ↗</a></td>
-        </tr>
-
-        <tr>
-          <td><code>NS-012</code></td>
-          <td>TikTok</td>
-          <td>2026-03-08</td>
-          <td>How much does a home system cost?</td>
-          <td>3,600</td>
-          <td>281</td>
-          <td>27</td>
-          <td><a href="https://example.com/content/NS-012">source ↗</a></td>
-        </tr>
-
-        <tr>
-          <td><code>NS-015</code></td>
-          <td>YouTube</td>
-          <td>2026-06-07</td>
-          <td>Basic installation steps</td>
-          <td>3,100</td>
-          <td>210</td>
-          <td>17</td>
-          <td><a href="https://example.com/content/NS-015">source ↗</a></td>
-        </tr>
-
-        <tr>
-          <td><code>NS-014</code></td>
-          <td>TikTok</td>
-          <td>2026-04-29</td>
-          <td>Safe battery installation checklist</td>
-          <td>2,800</td>
-          <td>190</td>
-          <td>14</td>
-          <td><a href="https://example.com/content/NS-014">source ↗</a></td>
-        </tr></tbody></table></div>
+    <section class="section" id="platforms">
+      <div class="shell">
+        <div class="section-heading">
+          <h2 data-zh="四个平台，一套证据标准。" data-en="Four platforms. One evidence standard.">四个平台，一套证据标准。</h2>
+          <p data-zh="支持范围按代码当前能力展示。空白字段保持空白，不把“未取得”伪装成零，也不把“评论数”说成“评论正文”。" data-en="Coverage reflects shipped code. Missing fields stay blank, and comment counts never masquerade as comment bodies.">支持范围按代码当前能力展示。空白字段保持空白，不把“未取得”伪装成零，也不把“评论数”说成“评论正文”。</p>
+        </div>
+        <div class="platform-layout">
+          <div class="platform-tabs" role="tablist" aria-label="Platform coverage">
+            <button class="platform-tab" role="tab" aria-selected="true" data-panel="tiktok">TikTok</button><button class="platform-tab" role="tab" aria-selected="false" data-panel="facebook">Facebook</button><button class="platform-tab" role="tab" aria-selected="false" data-panel="youtube">YouTube</button><button class="platform-tab" role="tab" aria-selected="false" data-panel="linkedin">LinkedIn</button>
+          </div>
+          <div class="platform-panel" id="platform-panel" role="tabpanel"></div>
+        </div>
+      </div>
     </section>
-
-    <section>
-      <h2>Scope and limitations</h2>
-      <p>This is a deliberately small, fictional dataset used to demonstrate the workflow. Public visibility does not authorize bypassing platform controls or unrestricted republication.</p>
+    <section class="section" id="workflow">
+      <div class="shell">
+        <div class="section-heading">
+          <h2 data-zh="你说业务问题，Agent 负责跑流程。" data-en="State the business question. Let the Agent run the workflow.">你说业务问题，Agent 负责跑流程。</h2>
+          <p data-zh="采集本身不需要昂贵模型。Codex 或 Claude 负责编排；原始信息保存在本地 CSV 与 SQLite 中，可继续追加、复核和重新分析。" data-en="Collection itself needs no premium model. Codex or Claude orchestrates while CSV and SQLite preserve local, refreshable evidence.">采集本身不需要昂贵模型。Codex 或 Claude 负责编排；原始信息保存在本地 CSV 与 SQLite 中，可继续追加、复核和重新分析。</p>
+        </div>
+        <div class="workflow">
+          <article><span>01</span><h3 data-zh="说明对象与问题" data-en="Name target and question">说明对象与问题</h3><p data-zh="给出账号、市场和你想回答的业务问题。" data-en="Provide the account, market and business question.">给出账号、市场和你想回答的业务问题。</p></article>
+          <article><span>02</span><h3 data-zh="确认身份与范围" data-en="Verify identity and scope">确认身份与范围</h3><p data-zh="Agent 核对平台、账号与采集边界，人在关键处确认。" data-en="The Agent verifies platform, identity and scope with human confirmation.">Agent 核对平台、账号与采集边界，人在关键处确认。</p></article>
+          <article><span>03</span><h3 data-zh="采集公开记录" data-en="Collect public records">采集公开记录</h3><p data-zh="从普通可见页面读取原文、链接、时间和互动指标。" data-en="Read visible text, links, time and engagement from ordinary pages.">从普通可见页面读取原文、链接、时间和互动指标。</p></article>
+          <article><span>04</span><h3 data-zh="增量保存与校验" data-en="Refresh and validate">增量保存与校验</h3><p data-zh="按稳定 ID 识别新增与变化，保留每轮历史。" data-en="Detect new and changed records by stable ID and preserve history.">按稳定 ID 识别新增与变化，保留每轮历史。</p></article>
+          <article><span>05</span><h3 data-zh="基于证据分析" data-en="Analyze from evidence">基于证据分析</h3><p data-zh="结论、翻译和分类与原始数据分开，重要判断可回查。" data-en="Keep conclusions, translation and labels separate from raw evidence.">结论、翻译和分类与原始数据分开，重要判断可回查。</p></article>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="install">
+      <div class="shell install-grid">
+        <div class="install-copy">
+          <h2 data-zh="有 Codex 或 Claude，就能开始。" data-en="If you have Codex or Claude, you can start.">有 Codex 或 Claude，就能开始。</h2>
+          <p data-zh="让 Agent 打开 GitHub 仓库并安装 Skill。之后直接用自然语言下达采集任务，无需记住命令。" data-en="Ask your Agent to open the GitHub repository and install the Skill. Then use natural language instead of memorizing commands.">让 Agent 打开 GitHub 仓库并安装 Skill。之后直接用自然语言下达采集任务，无需记住命令。</p>
+          <div class="agent-switch" role="tablist" aria-label="Agent"><button type="button" role="tab" aria-selected="true" data-agent="codex">Codex</button><button type="button" role="tab" aria-selected="false" data-agent="claude">Claude</button></div>
+          <div class="setup-note"><b data-zh="需要你完成" data-en="You stay in control">需要你完成</b><span data-zh="首次安装 Chrome 扩展、登录平台，以及平台出现的人机验证。Skill 不索取密码，也不绕过验证。" data-en="Install the Chrome extension once, sign in to platforms, and complete any human verification yourself. The Skill never requests passwords or bypasses challenges.">首次安装 Chrome 扩展、登录平台，以及平台出现的人机验证。Skill 不索取密码，也不绕过验证。</span></div>
+        </div>
+        <div class="prompt-panel">
+          <div class="prompt-bar"><span id="prompt-label">Codex · COPY THIS PROMPT</span><button class="copy-button" type="button" id="copy" data-zh="复制" data-en="Copy">复制</button></div>
+          <pre id="prompt">请打开 https://github.com/KayZhongyi/public-web-census ，把它安装为 Codex Skill，并运行 setup 和 doctor。完成后告诉我需要在 Chrome 中手动做什么，不要代替我登录或处理验证码。</pre>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="shell guardrails">
+        <div>
+          <h2 data-zh="减少幻觉，靠的是证据边界。" data-en="Hallucination risk falls when evidence has boundaries.">减少幻觉，靠的是证据边界。</h2>
+          <p data-zh="Public Web Census 不承诺模型永不出错。它做的是让原始事实先落地，让程序验证记录完整性，让人保留最终判断。" data-en="Public Web Census does not promise infallible models. It grounds source facts first, validates record integrity, and keeps final judgment human.">Public Web Census 不承诺模型永不出错。它做的是让原始事实先落地，让程序验证记录完整性，让人保留最终判断。</p>
+        </div>
+        <ul class="guardrail-list">
+          <li><strong data-zh="公开可见与只读" data-en="Publicly visible and read-only">公开可见与只读</strong><span data-zh="不自动发帖、评论、点赞或发送消息。" data-en="Never posts, comments, likes or sends messages automatically.">不自动发帖、评论、点赞或发送消息。</span></li>
+          <li><strong data-zh="原始数据不被覆盖" data-en="Raw evidence stays immutable">原始数据不被覆盖</strong><span data-zh="翻译、分类、分析都写入独立文件。" data-en="Translation, classification and analysis live in separate files.">翻译、分类、分析都写入独立文件。</span></li>
+          <li><strong data-zh="关键结论能回到来源" data-en="Important claims resolve to sources">关键结论能回到来源</strong><span data-zh="稳定 ID、原文与链接一起保存。" data-en="Stable ID, original text and source URL travel together.">稳定 ID、原文与链接一起保存。</span></li>
+          <li><strong data-zh="人掌握身份与验证" data-en="Humans control identity and verification">人掌握身份与验证</strong><span data-zh="账号确认、平台验证和业务判断均由人负责。" data-en="Humans own target confirmation, platform challenges and business judgment.">账号确认、平台验证和业务判断均由人负责。</span></li>
+        </ul>
+      </div>
+    </section>
+    <section class="shell close">
+      <h2 data-zh="报告会结束，证据还会支持下一次判断。" data-en="Reports end. Evidence keeps supporting the next decision.">报告会结束，证据还会支持下一次判断。</h2>
+      <p data-zh="开源、可本地运行、可由下一位同事继续使用。" data-en="Open source, locally runnable, and reusable by the next colleague.">开源、可本地运行、可由下一位同事继续使用。</p>
+      <a class="button primary" href="https://github.com/KayZhongyi/public-web-census" data-zh="在 GitHub 查看" data-en="View on GitHub">在 GitHub 查看</a>
     </section>
   </main>
-  <footer>Generated by Public Web Census · 2026-07-28T04:29:59+00:00</footer>
+  <footer><div class="shell"><span>Public Web Census · MIT License</span><span><a href="https://github.com/KayZhongyi/public-web-census">GitHub</a> · <a href="https://github.com/KayZhongyi/public-web-census/blob/main/README.md">English</a> · <a href="https://github.com/KayZhongyi/public-web-census/blob/main/README.zh-CN.md">中文</a></span></div></footer>
+  <script>
+    const platformCopy = {
+      zh: {
+        tiktok: { title: "TikTok", description: "面向公开账号的内容普查。读取公开视频、稳定视频 ID、发布时间、播放量与可见互动；可对选定视频继续采评论和回复。", capabilities: ["账号公开视频与可见指标", "选定视频的评论与回复", "增量更新与本地历史"], facts: [["账号内容", "已支持"], ["评论正文", "选定内容支持"], ["登录态", "通常需要"], ["人机验证", "暂停并交给人"]] },
+        facebook: { title: "Facebook", description: "通过用户已授权的 Chrome 会话读取公开 Page 帖子，保留正文、链接、可见日期标签和互动指标。", capabilities: ["Page 帖子与公开链接", "虚拟化长列表增量累积", "本地证据包与后续分析"], facts: [["Page 帖子", "已支持"], ["评论正文", "暂未实现"], ["登录态", "通常需要"], ["人机验证", "暂停并交给人"]] },
+        youtube: { title: "YouTube", description: "采集频道视频、Shorts 与直播元数据；再按热度、评论量或业务相关性选择视频，读取公开评论与回复。", capabilities: ["视频、Shorts 与直播元数据", "选定视频的评论与回复", "无需 YouTube API Key"], facts: [["频道内容", "已支持"], ["评论正文", "选定内容支持"], ["登录态", "通常不需要"], ["媒体下载", "不会下载"]] },
+        linkedin: { title: "LinkedIn", description: "读取公司页或个人主页可见帖子，保留正文、来源、时间标签、反应数、评论数和转发数。", capabilities: ["公司页帖子", "个人主页帖子", "可见互动指标与稳定 ID"], facts: [["公司与个人帖子", "已支持"], ["评论正文", "暂未实现"], ["登录态", "需要"], ["人机验证", "暂停并交给人"]] }
+      },
+      en: {
+        tiktok: { title: "TikTok", description: "Census public profiles for videos, stable IDs, publish time, views and visible engagement. Deep-read selected conversations.", capabilities: ["Public profile videos and metrics", "Comments and replies on selected videos", "Incremental local history"], facts: [["Profile posts", "Supported"], ["Comment bodies", "Selected posts"], ["Login", "Usually required"], ["Human checks", "Pause for user"]] },
+        facebook: { title: "Facebook", description: "Read public Page posts through an authorized Chrome session and keep text, links, visible date labels and engagement.", capabilities: ["Page posts and public links", "Virtualized-feed accumulation", "Local evidence bundle for analysis"], facts: [["Page posts", "Supported"], ["Comment bodies", "Not yet"], ["Login", "Usually required"], ["Human checks", "Pause for user"]] },
+        youtube: { title: "YouTube", description: "Collect video, Shorts and live metadata, then select high-relevance videos for public comments and replies.", capabilities: ["Video, Shorts and live metadata", "Comments and replies on selected videos", "No YouTube API key"], facts: [["Channel content", "Supported"], ["Comment bodies", "Selected videos"], ["Login", "Usually not"], ["Media download", "Never"]] },
+        linkedin: { title: "LinkedIn", description: "Read visible posts from company and personal profiles with text, source, time label, reactions, comment count and reposts.", capabilities: ["Company-page posts", "Personal-profile posts", "Visible metrics and stable IDs"], facts: [["Company + person posts", "Supported"], ["Comment bodies", "Not yet"], ["Login", "Required"], ["Human checks", "Pause for user"]] }
+      }
+    };
+    const routeCopy = {
+      zh: { tiktok: ["TikTok 账号与公开视频", "在用户已授权的 Chrome 会话中只读采集；遇到验证即暂停。"], facebook: ["Facebook Page 与公开帖子", "从当前可见页面累积帖子；评论正文暂不采集。"], youtube: ["YouTube 频道、视频与评论", "频道元数据可直接采集；评论按选定视频深入读取。"], linkedin: ["LinkedIn 公司页与个人主页", "在登录会话中读取可见帖子；评论数量与评论正文严格区分。"] },
+      en: { tiktok: ["TikTok profiles and public videos", "Read-only collection in an authorized Chrome session; pause at verification."], facebook: ["Facebook Pages and public posts", "Accumulate currently visible posts; comment bodies are not yet collected."], youtube: ["YouTube channels, videos and comments", "Collect channel metadata, then deep-read selected video conversations."], linkedin: ["LinkedIn company and personal profiles", "Read visible posts in a signed-in session; count and body remain distinct."] }
+    };
+    const prompts = {
+      zh: {
+        codex: "请打开 https://github.com/KayZhongyi/public-web-census ，把它安装为 Codex Skill，并运行 setup 和 doctor。完成后告诉我需要在 Chrome 中手动做什么，不要代替我登录或处理验证码。",
+        claude: "请打开 https://github.com/KayZhongyi/public-web-census ，把它安装为 Claude Skill，并运行 setup 和 doctor。完成后告诉我需要在 Chrome 中手动做什么，不要代替我登录或处理验证码。"
+      },
+      en: {
+        codex: "Open https://github.com/KayZhongyi/public-web-census, install it as a Codex Skill, then run setup and doctor. Tell me which Chrome steps need my input. Do not sign in or solve verification challenges for me.",
+        claude: "Open https://github.com/KayZhongyi/public-web-census, install it as a Claude Skill, then run setup and doctor. Tell me which Chrome steps need my input. Do not sign in or solve verification challenges for me."
+      }
+    };
+    let language = "zh";
+    let activeAgent = "codex";
+    let activePlatform = "tiktok";
+    function renderPanel(platform) {
+      const data = platformCopy[language][platform];
+      const capabilities = data.capabilities.map(function(item) { return "<li>" + item + "</li>"; }).join("");
+      const facts = data.facts.map(function(item) { return "<div class='fact'><small>" + item[0] + "</small><strong>" + item[1] + "</strong></div>"; }).join("");
+      document.getElementById("platform-panel").innerHTML = "<div><h3>" + data.title + "</h3><p>" + data.description + "</p><ul class='capability-list'>" + capabilities + "</ul></div><div class='support-facts'>" + facts + "</div>";
+    }
+    function renderRoute(platform) {
+      const data = routeCopy[language][platform];
+      document.getElementById("route-source").textContent = data[0];
+      document.getElementById("route-boundary").textContent = data[1];
+    }
+    function renderPrompt() {
+      document.getElementById("prompt").textContent = prompts[language][activeAgent];
+      document.getElementById("prompt-label").textContent = activeAgent.charAt(0).toUpperCase() + activeAgent.slice(1) + " · COPY THIS PROMPT";
+    }
+    document.querySelectorAll("[data-platform]").forEach(function(button) {
+      button.addEventListener("click", function() {
+        activePlatform = button.dataset.platform;
+        document.querySelectorAll("[data-platform]").forEach(function(item) { item.setAttribute("aria-selected", String(item === button)); });
+        renderRoute(activePlatform);
+      });
+    });
+    document.querySelectorAll("[data-panel]").forEach(function(button) {
+      button.addEventListener("click", function() {
+        document.querySelectorAll("[data-panel]").forEach(function(item) { item.setAttribute("aria-selected", String(item === button)); });
+        renderPanel(button.dataset.panel);
+      });
+    });
+    document.querySelectorAll("[data-agent]").forEach(function(button) {
+      button.addEventListener("click", function() {
+        activeAgent = button.dataset.agent;
+        document.querySelectorAll("[data-agent]").forEach(function(item) { item.setAttribute("aria-selected", String(item === button)); });
+        renderPrompt();
+      });
+    });
+    document.getElementById("language").addEventListener("click", function() {
+      language = language === "zh" ? "en" : "zh";
+      document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+      document.getElementById("language").textContent = language === "zh" ? "EN" : "中";
+      document.querySelectorAll("[data-zh][data-en]").forEach(function(node) { node.innerHTML = node.dataset[language]; });
+      renderPanel(document.querySelector("[data-panel][aria-selected='true']").dataset.panel);
+      renderRoute(activePlatform);
+      renderPrompt();
+    });
+    document.getElementById("theme").addEventListener("click", function() {
+      const root = document.documentElement;
+      root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+    });
+    document.getElementById("copy").addEventListener("click", async function() {
+      await navigator.clipboard.writeText(document.getElementById("prompt").textContent);
+      const button = document.getElementById("copy");
+      button.textContent = language === "zh" ? "已复制" : "Copied";
+      window.setTimeout(function() { button.textContent = language === "zh" ? "复制" : "Copy"; }, 1400);
+    });
+    renderPanel("tiktok");
+  </script>
 </body>
 </html>

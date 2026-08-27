@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import os
 import shutil
 import subprocess
 import sys
@@ -23,7 +24,7 @@ OPENCLI_PROJECT_URL = "https://github.com/jackwener/OpenCLI"
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Set up the optional browser bridge used for live TikTok and Facebook "
+            "Set up the optional browser bridge used for live TikTok, Facebook, and LinkedIn "
             "collection. Extension approval and platform login always remain manual."
         )
     )
@@ -95,12 +96,18 @@ def node_major(node: str) -> int | None:
 
 
 def chrome_path() -> str | None:
+    windows_roots = [
+        os.environ.get("PROGRAMFILES"),
+        os.environ.get("PROGRAMFILES(X86)"),
+        os.environ.get("LOCALAPPDATA"),
+    ]
     candidates = [
         shutil.which("google-chrome"),
         shutil.which("google-chrome-stable"),
         shutil.which("chromium"),
         shutil.which("chromium-browser"),
         "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        *(str(Path(root) / "Google/Chrome/Application/chrome.exe") for root in windows_roots if root),
     ]
     return next((str(path) for path in candidates if path and Path(path).exists()), None)
 
@@ -185,7 +192,7 @@ def main() -> int:
             print("[FAIL] OpenCLI installation failed. Review npm output above.")
 
     if not opencli:
-        print("[ACTION] OpenCLI is required for live TikTok/Facebook collection.")
+        print("[ACTION] OpenCLI is required for live TikTok/Facebook/LinkedIn collection.")
         print(f"         npm install -g {OPENCLI_PACKAGE}")
         print(f"         Project: {OPENCLI_PROJECT_URL}")
     else:
@@ -229,7 +236,7 @@ def main() -> int:
 
     print("\nHuman steps that the setup assistant cannot and should not automate:")
     print("  1. Approve the official OpenCLI extension in Chrome.")
-    print("  2. Sign into TikTok/Facebook directly in the Chrome profile you will use.")
+    print("  2. Sign into TikTok/Facebook/LinkedIn directly in the Chrome profile you will use.")
     print("  3. Complete any platform human-verification challenge yourself.")
     print("\nThe assistant never asks for a platform password or writes browser credentials into this repository.")
 

@@ -1,423 +1,246 @@
-<p align="center">
-  <img src="assets/hero.svg" alt="Public Web Census — 从公开信号到可追溯策略" width="100%" />
-</p>
+<div align="center">
 
-# Public Web Census｜公开网络信息普查
+# Public Web Census
 
-**把分散在公开网页与社媒中的信号，变成可更新、可追溯、可复用的证据。**
+### 别让 AI 猜市场，让它先拿出证据。
 
-Public Web Census 是一套克隆后即可运行的 Agent Skill 与项目 CLI。输入公司、品牌、产品、账号或业务问题，它可以发现相关公开渠道，采集 TikTok 主页与选定对话、Facebook 公开主页帖子，或 YouTube 元数据及选定评论，保留稳定ID和原始链接，并在既有证据库上继续更新。市场、售前、客服和产品团队可以在同一证据层上开展竞品研究、自有账号监测、客户声音、内容策略和产品服务优化。
+先采集可回查的公开信息，再让 AI 分析。减少 AI 幻觉，让每一次业务判断可追溯、可更新、可复用。
 
-> 先普查，后深挖；先证据，后结论。
+[English](README.md) · [功能演示](https://kayzhongyi.github.io/public-web-census/) · [开始使用](#有-codex-或-claude就能开始) · [平台支持](#平台支持)
 
-## 它能实现什么
+</div>
 
-| 能力 | 结果 |
+![Public Web Census 功能演示](assets/product-tour.png)
+
+Public Web Census 是一套给 **Codex 或 Claude** 使用的 Agent Skill。你只需要用自然语言说明目标账号、市场与业务问题，Agent 会核对范围、采集公开记录、在本地保存原始证据，再基于证据分析。
+
+它主要解决四类工作：
+
+- **竞对与市场研究**：在进入市场前比较公开内容、用户关注点与可见互动。
+- **自有账号复盘**：按月或按季度更新同一批账号，识别新增内容与重复问题。
+- **公开客户声音**：用公开平台的疑问与使用障碍，补充销售、客服已有反馈。
+- **售前证据**：把可溯源的市场信号带入文案、PPT、Flyer 与卖点评审。
+
+## 它和直接问 AI 有什么不同
+
+| 直接问 AI | Public Web Census |
 |---|---|
-| **平台普查** | 先找到并核验调查对象真正活跃的公开渠道，再决定深挖哪些平台 |
-| **可运行平台连接器** | 用统一 CLI 采集 TikTok 主页及选定对话、Facebook 主页帖子，或 YouTube 元数据及选定对话 |
-| **范围内全量采集** | 统一保留稳定 ID、发布日期、正文、播放量、可见互动字段、账号信息和原始链接 |
-| **版本化证据账本** | 以SQLite保存每次导入的观察历史和原始包，不用新结果覆盖旧证据 |
-| **实质变化识别** | 区分新增、更新、未变化和本轮未观察，并拆分内容、互动与元数据变化 |
-| **多语言处理** | 原文与工作译文分开保存，不同语言进入同一套结构化数据 |
-| **自下而上归类** | Agent 通读完整语料后再形成类别，不用预设关键词硬套标签 |
-| **可复用分析** | 分析内容表现、客户诉求和回复方式，或为明确的业务问题准备证据 |
-| **客户声音模式** | 自下而上形成问题分类，区分意图、情绪与严重程度，关联可见官方回复，并对分享版用户名脱敏 |
-| **可追溯交付** | 输出 CSV 证据库、分类体系、校验结果和带证据链接的 HTML 报告 |
-| **协作交接** | 将审核后的证据转为多维表格式行动索引和简洁变化简报，不暴露完整原始语料 |
+| AI 可能给出总结，却说不清看过什么 | 保存原文、来源链接、时间、可见指标与稳定 ID |
+| 报告生成后很快过时 | 追加新观测，同时保留历史 |
+| 翻译与判断可能覆盖事实 | 原始证据、翻译、分类和结论分开保存 |
+| 语气自信不代表依据可靠 | ID、覆盖范围或证据引用不匹配时停止生成 |
+| 信息留在一个人的上下文里 | 下一位同事或 Agent 可以继续使用同一份证据账本 |
 
-证据结构与分析层不绑定具体平台，因此同一流程可以跨公司、跨语言、跨地区，并接入经过批准的采集工具。
+> 这套方法用于减少 AI 幻觉风险，不宣称任何模型能够“永不幻觉”。
 
-## 一套证据库，三种决策模式
+## 有 Codex 或 Claude，就能开始
 
-| 从这里开始 | 可回答的问题 | 交付物 |
-|---|---|---|
-| **基线普查** | 哪些公开渠道真正重要、发布了什么、什么内容有效？ | 可追溯公开信息简报 |
-| **增量监测** | 与上一次审核快照相比，出现了哪些实质变化？ | 带证据链接的变化简报，而非互动数噪声 |
-| **证据型角色画像** | 公开信号能够支持哪些安装商、合作伙伴或终端用户判断？ | 含证据ID、反证与置信度边界的角色画像 |
+最简单的方法，是把下面一段话发给你已经在使用的 Agent。
 
-这不是一个“抓下来再总结”的工具。SQLite保留追加式观察历史，`current/`只是可以重建的CSV/JSON当前视图；翻译、分析、报告和协作交接可以反复运行而不覆盖原始采集结果。存储设计见 [`references/versioned-evidence-store.md`](references/versioned-evidence-store.md)，跨部门用法见 [`references/department-recipes.md`](references/department-recipes.md)。
+<details open>
+<summary><strong>Codex</strong></summary>
 
-## 版本化工作流
-
-```bash
-./public-web-census discover \
-  --workspace runs/example \
-  --target "示例公司" \
-  --market "新加坡" \
-  --purpose "了解公开渠道中的产品问题"
-
-./public-web-census collect youtube \
-  --workspace runs/example \
-  --company "示例公司" \
-  --channel "https://www.youtube.com/@Example" \
-  --output runs/example-youtube-2026-08
-
-./public-web-census diff --workspace runs/example
-./public-web-census validate --workspace runs/example
+```text
+请打开 https://github.com/KayZhongyi/public-web-census ，把它安装为
+Codex Skill，并运行 setup 和 doctor。完成后告诉我需要在 Chrome 中
+手动做什么，不要代替我登录或处理验证码。
 ```
 
-统一的 `collect` 命令会先执行现有平台连接器，成功后再自动归档并导入证据包。已有采集结果可以通过 `refresh --workspace ... --bundle ...` 导入。
+</details>
 
-## 克隆、检查、运行
+<details>
+<summary><strong>Claude</strong></summary>
 
-离线演示无需 API Key、浏览器登录或第三方依赖：
+```text
+请打开 https://github.com/KayZhongyi/public-web-census ，把它安装为
+Claude Skill，并运行 setup 和 doctor。完成后告诉我需要在 Chrome 中
+手动做什么，不要代替我登录或处理验证码。
+```
+
+</details>
+
+安装后，直接说业务需求，不需要记命令：
+
+```text
+使用 Public Web Census 采集这两家缅甸竞对在 TikTok 和 Facebook 上
+可见的公开内容，保存成可以持续更新的工作区。比较内容主题、可见互动
+和重复出现的客户问题。重要结论都要能回到原始记录。
+```
+
+```text
+更新我们上季度的 YouTube 和 LinkedIn 证据，告诉我新增了什么、哪些
+客户问题重复出现，以及产品、客服和市场团队分别应该关注什么。没有
+取得的指标保持空白，不要写成 0。
+```
+
+### 手动安装
+
+macOS：
 
 ```bash
 git clone https://github.com/KayZhongyi/public-web-census.git
 cd public-web-census
-python3 scripts/run_demo.py
-```
-
-打开 `demo/output/report.html`，或查看[在线虚构案例](https://kayzhongyi.github.io/public-web-census/)。
-
-<p align="center">
-  <img src="assets/demo-preview.svg" alt="可追溯公开网络证据报告虚构示例" width="100%" />
-</p>
-
-运行真实平台连接器安装向导，再将当前仓库安装为 Agent Skill：
-
-```bash
+python3 scripts/install_skill.py --target all
 ./public-web-census setup
 ./public-web-census doctor
-./public-web-census install-skill --target codex
-# 或：./public-web-census install-skill --target claude
 ```
 
-`setup` 可协助安装 [OpenCLI](https://github.com/jackwener/OpenCLI)、打开官方 Chrome 扩展页面、重启本地桥接服务并验证连接。根据 Chrome 的安全机制，扩展授权以及 TikTok/Facebook 登录必须由用户本人在浏览器中完成；安装助手不会索取平台密码。需要同时安装 YouTube 连接器依赖时，增加 `--with-youtube`。之后可随时用 `doctor` 做只读检查。
+Windows PowerShell：
 
-## 使用项目自己的 CLI
-
-```bash
-./public-web-census --help
+```powershell
+git clone https://github.com/KayZhongyi/public-web-census.git
+cd public-web-census
+py scripts\install_skill.py --target all --mode copy
+py public-web-census setup
+py public-web-census doctor
 ```
 
-同一个命令入口覆盖发现、采集、版本更新、证据分析和交付：
+安装器会在支持符号链接的系统上链接仓库；Windows 无法创建链接时可安全复制。已有同名 Skill 时会拒绝覆盖。
+
+## 平台支持
+
+下表只写仓库代码现在已经实现的能力。
+
+| 平台 | 帖子 / 视频 | 可见指标 | 评论正文 | 访问方式 |
+|---|---|---|---|---|
+| TikTok | 公开账号视频 | 播放量；选定内容的互动 | 支持选定视频的评论与回复 | 已授权 Chrome；验证时暂停 |
+| Facebook | 公开 Page 帖子 | 页面暴露时采反应、评论数、分享数 | 暂未实现 | 已授权 Chrome；验证时暂停 |
+| YouTube | 视频、Shorts 与直播元数据 | 播放、点赞、评论数及可用元数据 | 支持选定视频的评论与回复 | 通常无需登录；无需 API Key |
+| LinkedIn | 公司页与个人主页帖子 | 反应数、评论数、转发数；可见时采展示数 | 暂未实现 | 已登录 Chrome；验证时暂停 |
+
+空白字段表示不可见或未解析，**不代表 0**。采到了评论数量，不等于采到了评论正文。
+
+各平台的精确边界：
+
+- [TikTok](references/tiktok-adapter.md)
+- [Facebook](references/facebook-adapter.md)
+- [YouTube](references/youtube-adapter.md)
+- [LinkedIn](references/linkedin-adapter.md)
+
+## 工作方式
 
 ```text
-./public-web-census setup
-./public-web-census doctor
-./public-web-census discover ...
-./public-web-census collect youtube ...
-./public-web-census refresh ...
-./public-web-census diff ...
-./public-web-census validate ...
-./public-web-census snapshot ...
-./public-web-census history ...
-./public-web-census analyze content ...
-./public-web-census tiktok ...
-./public-web-census tiktok-comments ...
-./public-web-census facebook ...
-./public-web-census youtube ...
-./public-web-census youtube-comments ...
-./public-web-census prepare-analysis ...
-./public-web-census apply-analysis ...
-./public-web-census prepare-voice ...
-./public-web-census apply-voice ...
-./public-web-census merge ...
-./public-web-census export ...
+业务问题
+    ↓
+核对目标与账号
+    ↓
+采集普通页面可见的公开记录
+    ↓
+CSV 证据包 + SQLite 历史观测
+    ↓
+程序校验完整性
+    ↓
+AI 基于证据分析
+    ↓
+市场 / 内容 / 客户声音 / 售前判断
 ```
 
-## 采集 TikTok 公开主页
-
-TikTok 连接器通过用户已有权限的 Chrome 登录态读取公开主页网格，为范围内可检索的视频保存稳定视频 ID、发布日期、原始文案、采集时播放量和原始链接。它不下载视频，也不调用 TikTok 私有接口。
-
-使用安装向导安装 OpenCLI、打开官方扩展页面并检查浏览器桥：
-
-```bash
-./public-web-census setup
-```
-
-先做小范围字段核验：
-
-```bash
-./public-web-census tiktok \
-  --company "目标公司" \
-  --profile "@targethandle" \
-  --max-scrolls 1 \
-  --output runs/target-tiktok-check
-```
-
-确认账号身份以及日期、文案、播放量、链接字段后，再扩大范围。若程序滚动不再加载新卡片，`--manual-scroll` 会保留同一浏览器会话，请人正常滚动公开主页后完成最后一次提取：
-
-```bash
-./public-web-census tiktok \
-  --company "目标公司" \
-  --profile "@targethandle" \
-  --max-scrolls 100 \
-  --manual-scroll \
-  --output runs/target-tiktok
-```
-
-从已采集视频中按播放量选择 Top 30，进一步保存公开评论、可见二级回复、父子关系、评论点赞、官方身份及可见的视频页互动数：
-
-```bash
-./public-web-census tiktok-comments \
-  --bundle runs/target-tiktok \
-  --top 30 \
-  --owner "@targethandle" \
-  --owner "目标公司"
-```
-
-TikTok 可能在评论加载前弹出拼图验证。命令会保存可续跑检查点并停止，验证只能由人手动完成，程序不会破解或绕过。人工完成后使用 `--resume` 续跑；也可以在交互式终端增加 `--wait-for-human`，让命令原地等待。字段出处、覆盖范围口径、筛选规则和限制见 [`references/tiktok-adapter.md`](references/tiktok-adapter.md)。
-
-## 采集 Facebook 公开主页
-
-Facebook 连接器通过用户已有权限的 Chrome 登录态读取公开帖子；每次滚动前先保存当前页面窗口，按平台帖子 ID 或永久链接去重，并在每轮完成后写入检查点。当前公开命令覆盖主页帖子；Facebook 评论与回复仍属于已记录的扩展项，不包装成已经交付的连接器。
-
-先运行安装向导，在 Chrome 中批准官方扩展并正常登录 Facebook，然后检查浏览器桥：
-
-```bash
-./public-web-census setup
-```
-
-先用少量滚动核验账号、日期、互动数和原始链接：
-
-```bash
-./public-web-census facebook \
-  --company "目标公司" \
-  --page "https://www.facebook.com/TargetPage" \
-  --max-scrolls 3 \
-  --output runs/target-facebook-check
-```
-
-核验无误后再扩大声明范围：
-
-```bash
-./public-web-census facebook \
-  --company "目标公司" \
-  --page "https://www.facebook.com/TargetPage" \
-  --max-scrolls 100 \
-  --output runs/target-facebook
-```
-
-连接器全程只读，不发布、点赞、评论、关注或私信。遇到人机验证时会停止并保留可续跑检查点，只能由人手动完成验证，程序不会绕过。`--bind`、断点续跑、字段说明和覆盖范围表述见 [`references/facebook-adapter.md`](references/facebook-adapter.md)。
-
-## 采集 YouTube 公开频道
-
-仓库自带 YouTube 公开元数据连接器，不下载视频文件。建议先用少量记录核验账号和字段：
-
-```bash
-python3 -m pip install -U "yt-dlp[default]"
-./public-web-census youtube \
-  --company "OpenAI" \
-  --channel "https://www.youtube.com/@OpenAI" \
-  --tabs videos \
-  --max-items-per-tab 10
-```
-
-运行后，`runs/openai/` 会同时得到证据库、基础报告、运行记录和可直接交给 Agent 的分析任务。
-
-<p align="center">
-  <img src="assets/youtube-live-demo.gif" alt="从 YouTube 公开元数据到证据库与报告" width="100%" />
-</p>
-
-核验无误后，对所选标签页中可检索的公开内容执行尽可能完整的普查：
-
-```bash
-./public-web-census youtube \
-  --company "目标公司" \
-  --channel "https://www.youtube.com/@TargetHandle" \
-  --tabs videos,shorts,streams \
-  --max-items-per-tab 0
-```
-
-随后可用同一套 `yt-dlp` 依赖，深挖已采集视频中播放量最高的视频评论。无需 Google API Key、浏览器登录态、Cookie，也不会下载媒体：
-
-```bash
-./public-web-census youtube-comments \
-  --bundle runs/target-company \
-  --top 30 \
-  --max-comments-per-video 500
-```
-
-命令会把评论 ID、回复关系、公开显示名称、可见时间、点赞数、原始链接和可确定的官方账号标记写入 `comments.csv`，再生成已有的客户声音分析任务。只有在范围声明明确要求时，才使用 `--max-comments-per-video 0` 读取单条视频下全部可检索评论。评论采集仍是尽力获取：关闭、删除、受限、排序变化或平台未返回的评论可能缺失；遇到人机验证时命令会停止，绝不绕过。
-
-需要持续监测时，将指定日期之后的新一轮采集写入独立目录，再按稳定ID合并：
-
-```bash
-./public-web-census youtube \
-  --company "目标公司" \
-  --channel "https://www.youtube.com/@TargetHandle" \
-  --since 2026-07-01 \
-  --output runs/target-2026-07
-
-python3 scripts/merge_incremental.py \
-  --base runs/target-baseline/content.csv \
-  --incoming runs/target-2026-07/content.csv \
-  --output runs/target-current/content.csv
-```
-
-合并报告会分别统计新增、更新、未变化和本轮未出现的记录，不会把“本轮未出现”直接判定为删除；同时记录具体变化字段，使监测简报优先关注内容或运营层面的实质变化，而不是日常互动数波动。
-
-## 用任意 Agent 完成分析
-
-每次采集都会生成模型无关的 `analysis/analysis_task.md`。让你常用的文件型 Agent 按任务完成分析，再运行校验：
+每条内容使用同一套证据字段：
 
 ```text
-使用 $public-web-census 执行 runs/openai/analysis/analysis_task.md。
-通读完整语料，形成分类体系，并完成每一条分析结果。
+稳定 ID · 平台 · 账号 · 原文 · 来源链接
+发布时间或可见标签 · 当时可见指标 · 采集时间
 ```
 
-```bash
-python3 scripts/apply_analysis.py --bundle runs/openai
-```
+持续更新的工作区会保留：
 
 ```text
-content.csv（原始证据，不改写）
-  → Agent 通读完整语料
-  → taxonomy.json + analysis_results.csv
-  → 确定性校验
-  → analyzed_content.csv + analysis_report.html
+runs/target/
+├── evidence.sqlite3     不可变的历史观测
+├── captures/            原始证据包与文件指纹
+├── changes/             新增、更新、未变、当轮未观察到
+└── current/             可移交的 CSV / JSON 当前快照
 ```
 
-校验器会检查源文件指纹、ID 完整性、译文覆盖率、分类定义、置信度和代表性证据，全部通过后才生成分析数据和报告。
+同一批证据可以继续回答新的问题，不需要每次从零开始。再次采集时，程序按稳定 ID 识别新增和变化，同时保留过去的观测。
 
-### 用 Ollama 在本地完成分析
+## 遇到登录或人机验证怎么办
 
-采集阶段本身是确定性脚本，不需要 LLM。若想把翻译、归类和客户声音分析从云端 Agent 切换到本地，可安装 Ollama 并运行仓库自带的结构化输出执行器：
+TikTok、Facebook 与 LinkedIn 可能需要登录，或出现平台自己的安全验证。
+
+1. Agent 打开或绑定你已经授权的 Chrome 会话。
+2. 出现验证时，采集停止；支持检查点的连接器会先保存当前结果。
+3. 你在 Chrome 中亲自完成登录或验证。
+4. 告诉 Agent 已经完成，它会继续或重新运行采集。
+
+Skill 不索取平台密码、不保存浏览器凭证、不自动解 CAPTCHA，也不绕过访问控制。
+
+## 公司内部怎么推广
+
+当前版本最适合做 **“已经安装 Codex 或 Claude 的团队试点”**。
+
+建议的公司部署方式：
+
+1. 在内部 Git 镜像或软件目录中固定一个经过审查的版本。
+2. 每位同事使用自己的授权 Chrome，不集中保存任何社媒账号凭证。
+3. 证据工作区放在有权限控制的团队存储中，因为公开评论仍可能包含个人标识。
+4. 明确账号核验、数据复核、业务解释和更新节奏的负责人。
+5. 先用一个市场和一个自有账号验证质量，再逐步扩展。
+
+目前尚未包含：
+
+- 中央网页服务器或共享凭证服务；
+- 企业级定时任务；
+- Facebook 与 LinkedIn 评论正文采集；
+- 管理后台、SSO 与角色权限。
+
+这些能力应在本地辅助使用验证成功、准备转为集中部署时再增加。
+
+## CLI 参考
+
+非技术同事可以一直在 Codex 或 Claude 中操作。CLI 主要用于复核和自动化：
 
 ```bash
-ollama pull qwen3:8b
+./public-web-census collect linkedin \
+  --workspace runs/target \
+  --company "Target" \
+  --profile "https://www.linkedin.com/company/target/" \
+  --output runs/target-linkedin
+
+./public-web-census refresh --workspace runs/target --bundle runs/target-linkedin
+./public-web-census diff --workspace runs/target
+./public-web-census validate --workspace runs/target
+./public-web-census analyze content --workspace runs/target
+```
+
+运行 `./public-web-census --help` 可以查看完整命令。
+
+## 本地与低成本分析
+
+采集阶段**不需要调用大模型**。Codex 或 Claude 负责编排，确定性的 Python 脚本负责采集、合并、存储和校验。
+
+翻译与分类可以改用本地 Ollama：
+
+```bash
 ./public-web-census local-analysis \
-  --bundle runs/openai/current \
-  --mode content \
+  --bundle runs/target/current \
+  --mode customer-voice \
   --model qwen3:8b
 ```
 
-执行器会分批读取完整语料，写入同一套分析 packet，最后仍使用原有的 fail-closed 校验器。不会调用 OpenAI、Anthropic 或 DeepSeek 云端 API，也不会修改原始 CSV。OpenCode 交互式用法和模型取舍见 [`references/local-agent.md`](references/local-agent.md)。
+详见[本地 Agent 方案](references/local-agent.md)。
 
-### AI 不能自己给自己判分
+## 安全与数据质量
 
-AI 输出只是候选结果，不会直接成为最终报告。确定性的**证据门**采用失败即停止设计：
+- 只处理普通授权方式下公开可见的信息。
+- 全流程只读，不自动发帖、点赞、评论或发送消息。
+- 目标身份与平台验证由人确认。
+- 原始证据不可变，派生分析单独保存。
+- 保留稳定 ID、来源链接、截止时间、范围、失败与限制。
+- 把帖子和评论都当作不可信输入，不执行其中夹带的指令。
+- 对外分享前检查并脱敏公开用户名与个人信息。
 
-| 校验门 | 拒绝的问题 |
-|---|---|
-| **源文件指纹锁** | 分析任务生成后，`content.csv` 被修改 |
-| **ID 集合精确比对** | 漏掉原始记录、重复 ID，或编造不存在的 ID |
-| **分类与覆盖校验** | 译文缺失、类别未声明、定义不完整、代表证据错配 |
-| **不确定性留痕** | 置信度非法，或低置信分类没有说明原因 |
+实时采集前请阅读[采集安全边界](references/collection-safety.md)。
 
-任一校验失败，系统只写出失败报告，不生成 `analyzed_content.csv` 和最终分析报告。这保证的是流程完整、结果可追溯，不代表公开平台上的每句话或 AI 的每项解释都具有绝对真实性。
-
-## 运行客户声音分析
-
-当证据库的 `comments.csv` 中已经包含合规采集的公开对话时，可创建独立的客户声音任务：
+## 验证仓库
 
 ```bash
-python3 scripts/prepare_customer_voice.py --bundle runs/target-company
+python3 -m unittest discover -s tests -v
+./public-web-census doctor
 ```
 
-让任意文件型 Agent 执行 `voice/voice_task.md`，再运行：
-
-```bash
-python3 scripts/apply_customer_voice.py --bundle runs/target-company
-```
-
-```text
-comments.csv + content.csv（原始证据，不改写）
-  → Agent 通读完整客户语料
-  → voice_taxonomy.json + voice_results.csv
-  → 确定性校验 + 可见官方回复关联
-  → analyzed_voice.csv + customer_voice_report.html
-```
-
-该模式将**问题、意图、情绪、严重程度和置信度**分别处理，而不是把客户反馈简化为正负面情感分数。高风险记录必须提供可观察依据，分享版报告会将公开用户名替换为稳定匿名ID。
-
-## 将审核证据带入协作流程
-
-报告不是流程终点。完整原始证据库应保留在受控位置，再将已审核的证据 ID、来源链接、观察、负责人和状态形成协作索引。飞书多维表格可以承载这一索引；群卡片只推送需要响应的新信号、决策和行动，不在群内堆放全量语料。
-
-本仓库提供的是协作交接规范，而不是带凭据的 SaaS 集成。飞书自动同步需要获得批准的企业自建应用、最小权限、受控目标位置和密钥管理。实施前请阅读 [`references/collaboration-handoff.md`](references/collaboration-handoff.md)。
-
-## 安装为 Agent Skill
-
-先克隆一次，再把当前仓库链接到所使用的 Agent：
-
-```bash
-git clone https://github.com/KayZhongyi/public-web-census.git
-cd public-web-census
-./public-web-census install-skill --target codex
-# 或：./public-web-census install-skill --target claude
-# 同时安装：重复传入 --target codex --target claude
-```
-
-也可以直接克隆到 Skill 目录：
-
-```bash
-git clone https://github.com/KayZhongyi/public-web-census.git ~/.codex/skills/public-web-census
-# Claude Code：改为克隆到 ~/.claude/skills/public-web-census
-```
-
-调用示例：
-
-```text
-使用 $public-web-census 调研 [国家/地区] 的 [公司] 公开渠道。
-先建立证据库，再生成可追溯的策略报告。
-```
-
-Skill 由 Markdown 流程和 Python 标准库脚本组成，其他具备终端和浏览器能力的 Agent 也可以执行。TikTok 和 Facebook 使用 OpenCLI 这一外部 Apache-2.0 浏览器桥，YouTube 使用 `yt-dlp`；本仓库提供采集规则、统一命令、检查点、证据结构、校验和报告流程。第三方归属见 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
-
-## 导出矢量 PDF
-
-每份报告默认保留为带可点击证据链接的 HTML；需要便携交付时，可通过 Chrome 或 Chromium 导出矢量 PDF：
-
-```bash
-./public-web-census export \
-  --html runs/target-company/analysis_report.html \
-  --pdf runs/target-company/analysis_report.pdf
-```
-
-PDF 只是展示层，CSV 与 JSON 证据库仍应与其一同保留。
-
-## 最终交付什么
-
-| 交付物 | 用途 |
-|---|---|
-| `platform_census.csv` | 账号核验、活跃度与深挖决策 |
-| `content.csv` | 公开内容、发布日期和互动指标等源级证据 |
-| `comments.csv` | 采集到的用户对话和官方回复关系 |
-| `run_manifest.json` | 调研范围、截止时间、工具、覆盖与运行记录 |
-| `evidence.sqlite3` | 面向重复使用的运行、对象、观察和变化追加式历史 |
-| `captures/<run-id>/` | 带来源指纹的历次原始证据包归档 |
-| `changes/<run-id>.json` | 每次更新的新增、变化、未变化和本轮未观察记录 |
-| `current/` | 每个稳定ID最新观察组成的可重建CSV/JSON当前视图 |
-| `analysis/taxonomy.json` | 从语料中形成的类别定义与代表性证据 ID |
-| `analysis/validation_report.json` | 可机器检查的完整性与一致性结果 |
-| `analyzed_content.csv` | 在不改写原始证据的前提下合并译文与分类 |
-| `analysis_report.html` | 带数量、分母、证据 ID 和原始链接的管理层报告 |
-| `voice/voice_taxonomy.json` | 从客户语料中形成的问题定义和代表性评论 ID |
-| `voice/validation_report.json` | 客户声音分析的完整性、一致性和标签校验 |
-| `analyzed_voice.csv` | 含匿名作者ID和可见回复关系的客户声音分析数据 |
-| `customer_voice_report.html` | 问题、意图、情绪、严重程度、回应和证据一体化报告 |
-
-## 面向业务决策的分析方法
-
-- **自下而上分类：** 类别来自真实语料，而不是固定模板。
-- **供给—效果错位：** 同时比较发布占比、平均播放量和中位播放量。
-- **客户声音分析：** 对具体问题和诉求做带分母的频次统计。
-- **客户信号分诊：** 将问题、意图、情绪、严重程度和置信度分开处理。
-- **回复模式分析：** 区分有效回答、模板回复、渠道引导和未公开回复。
-- **机会映射：** 把高需求、低供给主题转化为可验证的内容与服务机会。
-- **证据阈值：** 小样本和歧义记录保留标记，不包装成确定结论。
-
-友商分析方法见 [`references/analysis-playbook.md`](references/analysis-playbook.md)，客户声音方法见 [`references/customer-voice-playbook.md`](references/customer-voice-playbook.md)，场景选择见 [`references/research-modes.md`](references/research-modes.md)。
-
-## 为可信复用而设计
-
-- 原始证据与翻译、分类、结论始终分离。
-- 稳定 ID 和原始链接让每个关键数字都可复核。
-- 输入指纹防止旧分析误套到已经变化的新语料。
-- 客户声音分享版输出默认将公开用户名替换为稳定匿名ID。
-- 账号核验、平台验证和最终业务判断保留人工确认。
-- 标准 CSV/JSON 接口便于继续增加合规连接器和报告格式。
-- SQLite观察记录、原始包归档和稳定ID支持持续监测，同时保留历次原始证据。
-- 协作摘要始终保留证据 ID 和原始链接，避免群内结论再次成为不可追溯的信息。
-
-公开信息采集规范见 [`references/collection-safety.md`](references/collection-safety.md)。仓库中的演示公司与数据全部为虚构内容。
-
-欢迎贡献合规连接器、分析方法和报告主题，详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+`python3 scripts/run_demo.py` 使用明确标注的合成测试数据验证报告与证据校验器。公开功能演示页不包含虚构业务数据。
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE)。第三方组件见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

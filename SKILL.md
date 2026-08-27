@@ -1,11 +1,23 @@
 ---
 name: public-web-census
-description: Collect, refresh, compare, validate, and analyze publicly visible web and social data as versioned, traceable evidence. Supports repeatable workspaces, SQLite observation history, portable CSV/JSON snapshots, TikTok profiles and selected conversations, Facebook Page posts through an authorized browser, YouTube metadata and selected comments through yt-dlp, multilingual analysis, and evidence-linked handoffs. Use for competitor research, market entry, owned-channel monitoring, customer voice, content strategy, presales evidence, or product and service feedback when an Agent must preserve sources, stable IDs, scope, update history, and the boundary between raw evidence and conclusions.
+description: Collect, refresh, compare, validate, and analyze publicly visible web and social data as versioned, traceable evidence. Supports repeatable workspaces, SQLite observation history, portable CSV/JSON snapshots, TikTok profiles and selected conversations, Facebook Page posts, YouTube metadata and selected comments, LinkedIn company or personal-profile posts, multilingual analysis, and evidence-linked handoffs. Use for competitor research, market entry, owned-channel monitoring, customer voice, content strategy, presales evidence, or product and service feedback when an Agent must reduce hallucination risk by preserving sources, stable IDs, scope, update history, and the boundary between raw evidence and conclusions.
 ---
 
 # Public Web Census
 
 Turn scattered public web signals into a refreshable evidence ledger and decision-ready outputs. Treat a census as a best-effort capture of all retrievable records inside a declared scope at a stated cutoff, never as a guarantee about hidden, deleted, personalized, or restricted content.
+
+## Keep the user-facing workflow simple
+
+The user may be a non-technical market, presales, product, or management colleague. Accept a natural-language request and translate it into the commands below. Do not make the user choose scripts, schemas, or storage paths unless a choice materially changes the result.
+
+On first use:
+
+1. Run `./public-web-census doctor`.
+2. If browser collection is not ready, run `./public-web-census setup` and explain only the manual Chrome steps.
+3. Never ask for a platform password. Pause while the user signs in or completes platform verification directly in Chrome.
+4. Create a versioned workspace by default when the user asks to update, monitor, compare over time, share with colleagues, or reuse the data later.
+5. Report what was collected, where the evidence lives, which scope was covered, and which fields or surfaces were unavailable.
 
 ## Preserve these invariants
 
@@ -51,6 +63,7 @@ Read the relevant connector reference before running it:
 - TikTok profile or selected conversations: [references/tiktok-adapter.md](references/tiktok-adapter.md)
 - Facebook Page posts: [references/facebook-adapter.md](references/facebook-adapter.md)
 - YouTube channel metadata or selected conversations: [references/youtube-adapter.md](references/youtube-adapter.md)
+- LinkedIn company or personal-profile posts: [references/linkedin-adapter.md](references/linkedin-adapter.md)
 
 Run a connector directly for a one-off bundle, or use the unified command to collect and ingest:
 

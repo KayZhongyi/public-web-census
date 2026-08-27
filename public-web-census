@@ -16,6 +16,7 @@ COMMANDS: dict[str, tuple[str, list[str]]] = {
     "install-skill": ("install_skill.py", []),
     "demo": ("run_demo.py", []),
     "facebook": ("collect_facebook.py", []),
+    "linkedin": ("collect_linkedin.py", []),
     "tiktok": ("collect_tiktok.py", []),
     "tiktok-comments": ("collect_tiktok_comments.py", []),
     "youtube": ("collect_youtube.py", []),
@@ -33,9 +34,11 @@ COMMANDS: dict[str, tuple[str, list[str]]] = {
     "validate": ("evidence_store.py", ["validate"]),
     "snapshot": ("evidence_store.py", ["export"]),
     "history": ("evidence_store.py", ["history"]),
+    "migrate-legacy-tiktok": ("migrate_legacy_tiktok.py", []),
 }
 COLLECTORS = {
     "facebook": "collect_facebook.py",
+    "linkedin": "collect_linkedin.py",
     "tiktok": "collect_tiktok.py",
     "tiktok-comments": "collect_tiktok_comments.py",
     "youtube": "collect_youtube.py",
@@ -72,6 +75,8 @@ Direct live connectors:
                    evidence records; human verification is never bypassed
   facebook          Collect public Facebook Page posts through an authorized
                     Chrome session using the OpenCLI browser bridge
+  linkedin          Collect visible LinkedIn company or personal-profile posts,
+                    engagement counts, stable IDs, and source links via Chrome
   youtube           Collect public YouTube channel metadata with yt-dlp
   youtube-comments  Deep-read selected public YouTube video conversations
                    with yt-dlp; no API key or media download
@@ -86,13 +91,14 @@ Delivery:
   export            Export an HTML report to vector PDF with Chrome/Chromium
 
 Evidence workflow:
-  demo              Build the fictional offline report
+  demo              Verify the evidence pipeline with an explicitly synthetic fixture
   ingest            Alias of refresh for explicit import workflows
   prepare-analysis  Create an Agent analysis packet
   apply-analysis    Validate and merge completed analysis
   prepare-voice     Create a customer-voice analysis packet
   apply-voice       Validate customer-voice analysis
   local-analysis    Run the model-dependent analysis phase without cloud API tokens
+  migrate-legacy-tiktok  Convert the original Chinese TikTok CSV export to a standard bundle
   merge             Merge a new capture into a baseline by stable ID
 
 Run './public-web-census <command> --help' for command-specific options.
@@ -136,7 +142,7 @@ def collect(args: list[str]) -> int:
         print(
             "Usage: ./public-web-census collect <platform> [--workspace PATH] "
             "[--ingest-label LABEL] <connector options>\n\n"
-            "Platforms: facebook, tiktok, tiktok-comments, youtube, youtube-comments\n"
+            "Platforms: facebook, linkedin, tiktok, tiktok-comments, youtube, youtube-comments\n"
             "When --workspace is supplied, use --output for profile/channel collectors or "
             "--bundle for comment collectors. A successful capture is archived and ingested."
         )

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 import shutil
 import subprocess
 import sys
@@ -34,12 +35,18 @@ def command_result(command: list[str], timeout: int = 45) -> tuple[bool, str]:
 
 
 def chrome_path() -> str | None:
+    windows_roots = [
+        os.environ.get("PROGRAMFILES"),
+        os.environ.get("PROGRAMFILES(X86)"),
+        os.environ.get("LOCALAPPDATA"),
+    ]
     candidates = [
         shutil.which("google-chrome"),
         shutil.which("google-chrome-stable"),
         shutil.which("chromium"),
         shutil.which("chromium-browser"),
         "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        *(str(Path(root) / "Google/Chrome/Application/chrome.exe") for root in windows_roots if root),
     ]
     return next((str(path) for path in candidates if path and Path(path).exists()), None)
 
@@ -65,11 +72,11 @@ def main() -> int:
         summary = next((line for line in bridge.splitlines() if "Connectivity:" in line), "browser bridge check completed")
         print(f"[{'OK' if bridge_ok else 'WARN'}] Browser bridge: {summary.strip()}")
         if not bridge_ok:
-            print("       Live TikTok/Facebook collection needs Chrome plus the OpenCLI extension.")
+            print("       Live TikTok/Facebook/LinkedIn collection needs Chrome plus the OpenCLI extension.")
             print(f"       Guided setup: ./public-web-census setup")
             print(f"       Extension: {OPENCLI_EXTENSION_URL}")
     else:
-        print("[WARN] OpenCLI: not installed (needed for live TikTok/Facebook collection)")
+        print("[WARN] OpenCLI: not installed (needed for live TikTok/Facebook/LinkedIn collection)")
         print("       Guided setup: ./public-web-census setup")
 
     ytdlp = ytdlp_command()

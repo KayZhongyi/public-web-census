@@ -1,4 +1,4 @@
-.PHONY: demo test validate cli-help doctor tiktok-help tiktok-comments-help facebook-help youtube-help analysis-help voice-help incremental-help ledger-help local-analysis-help
+.PHONY: demo test validate cli-help doctor tiktok-help tiktok-comments-help facebook-help linkedin-help youtube-help analysis-help voice-help incremental-help ledger-help local-analysis-help
 
 demo:
 	python3 scripts/run_demo.py
@@ -12,6 +12,7 @@ validate: test
 	./public-web-census tiktok --help >/dev/null
 	./public-web-census tiktok-comments --help >/dev/null
 	./public-web-census facebook --help >/dev/null
+	./public-web-census linkedin --help >/dev/null
 	./public-web-census discover --help >/dev/null
 	./public-web-census refresh --help >/dev/null
 	./public-web-census validate --help >/dev/null
@@ -32,6 +33,9 @@ tiktok-comments-help:
 
 facebook-help:
 	./public-web-census facebook --help
+
+linkedin-help:
+	./public-web-census linkedin --help
 
 youtube-help:
 	./public-web-census youtube --help

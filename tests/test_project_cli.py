@@ -84,6 +84,31 @@ class ProjectCliTest(unittest.TestCase):
             self.assertEqual(linked.resolve(), ROOT.resolve())
             self.assertIn("linked", result.stdout)
 
+    def test_installer_copy_mode_supports_windows_fallback(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            env = dict(os.environ)
+            env["CODEX_HOME"] = str(Path(tmp) / "codex-home")
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(ROOT / "scripts/install_skill.py"),
+                    "--target",
+                    "codex",
+                    "--mode",
+                    "copy",
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+                env=env,
+                cwd=ROOT,
+            )
+            installed = Path(env["CODEX_HOME"]) / "skills" / "public-web-census"
+            self.assertTrue((installed / "SKILL.md").is_file())
+            self.assertTrue((installed / "scripts" / "collect_linkedin.py").is_file())
+            self.assertFalse(installed.is_symlink())
+            self.assertIn("copied", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

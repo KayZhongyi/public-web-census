@@ -12,6 +12,17 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class DemoTest(unittest.TestCase):
+    def test_public_tour_is_bilingual_and_data_free(self) -> None:
+        rendered = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
+
+        self.assertIn("别让 AI 猜市场", rendered)
+        self.assertIn("Don’t let AI guess.", rendered)
+        for platform in ("TikTok", "Facebook", "YouTube", "LinkedIn"):
+            self.assertIn(platform, rendered)
+        self.assertNotIn("Fictional", rendered)
+        self.assertNotIn("Northstar Home Energy", rendered)
+        self.assertNotIn("45,200", rendered)
+
     def test_demo_builds_evidence_linked_report(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             report = Path(tmp) / "report.html"
