@@ -110,6 +110,8 @@ py public-web-census doctor
 
 空白字段表示不可见或未解析，**不代表 0**。采到了评论数量，不等于采到了评论正文。
 
+**为什么 YouTube 的方式不同：**`yt-dlp` 是面向 YouTube 的专用提取器，直接读取结构化公开元数据，不下载视频，也不需要打开浏览器。TikTok、Facebook 和 LinkedIn 的内容主要由浏览器页面渲染，且可能需要人工完成平台验证，因此使用已授权的 Chrome 会话。
+
 各平台的精确边界：
 
 - [TikTok](references/tiktok-adapter.md)

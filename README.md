@@ -111,6 +111,8 @@ Coverage below reflects the code currently shipped in this repository.
 
 Blank fields mean unavailable or unparsed, **not zero**. A visible comment count does not mean comment text was collected.
 
+**Why YouTube is different:** `yt-dlp` is a YouTube-aware extractor. It reads structured public metadata without downloading media or opening a browser. TikTok, Facebook, and LinkedIn use an authorized Chrome session because their visible feeds are browser-rendered and may require human verification.
+
 Connector details:
 
 - [TikTok](references/tiktok-adapter.md)

@@ -224,7 +224,10 @@ def main() -> int:
         print(f"[{'OK' if extension_ok else 'ACTION'}] Chrome extension/browser bridge: {detail}")
 
     ytdlp = ytdlp_command()
-    if args.with_youtube and not ytdlp and not args.check_only:
+    wants_ytdlp = args.with_youtube
+    if not ytdlp and interactive and not wants_ytdlp:
+        wants_ytdlp = ask("Install yt-dlp for YouTube collection?")
+    if wants_ytdlp and not ytdlp and not args.check_only:
         if install_ytdlp():
             ytdlp = ytdlp_command()
     if ytdlp:

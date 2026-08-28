@@ -2,6 +2,8 @@
 
 Use `./public-web-census youtube` for a real, public-metadata vertical slice. It invokes `scripts/collect_youtube.py`, which uses `yt-dlp`, does not download media, and writes the standard Public Web Census evidence bundle. Use `./public-web-census youtube-comments` afterward to deep-read selected public video conversations into the same bundle.
 
+`yt-dlp` is a YouTube-aware extractor, not a generic crawler. It already understands YouTube's public page structure and returns normalized metadata, which makes this connector simpler than the browser-backed TikTok, Facebook, and LinkedIn connectors. Those platforms remain on the authorized Chrome route because their feeds are rendered in-session and may require human verification.
+
 ## Install the collector dependency
 
 Use a current official release:
