@@ -10,7 +10,7 @@ Collect traceable public signals before AI analysis. Reduce hallucination risk a
 
 </div>
 
-![Public Web Census product tour](assets/product-tour.png)
+![Public Web Census product tour in English light mode](assets/product-tour-light-en.png)
 
 Public Web Census is an Agent Skill for colleagues who use **Codex or Claude**. Give it a target account, market, and business question in natural language. The Agent verifies scope, collects visible public records, preserves raw evidence locally, and analyzes only after the evidence exists.
 

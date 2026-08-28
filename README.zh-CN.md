@@ -10,7 +10,7 @@
 
 </div>
 
-![Public Web Census 功能演示](assets/product-tour.png)
+![Public Web Census 英文明色功能演示](assets/product-tour-light-en.png)
 
 Public Web Census 是一套给 **Codex 或 Claude** 使用的 Agent Skill。你只需要用自然语言说明目标账号、市场与业务问题，Agent 会核对范围、采集公开记录、在本地保存原始证据，再基于证据分析。
 

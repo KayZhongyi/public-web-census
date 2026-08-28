@@ -14,9 +14,12 @@ ROOT = Path(__file__).resolve().parents[1]
 class DemoTest(unittest.TestCase):
     def test_public_tour_is_bilingual_and_data_free(self) -> None:
         rendered = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
         self.assertIn('<html lang="en" data-theme="light">', rendered)
         self.assertIn('let language = "en";', rendered)
+        self.assertIn("assets/product-tour-light-en.png", readme)
+        self.assertTrue((ROOT / "assets" / "product-tour-light-en.png").is_file())
         self.assertIn("别让 AI 猜市场", rendered)
         self.assertIn("Don’t let AI guess.", rendered)
         for platform in ("TikTok", "Facebook", "YouTube", "LinkedIn"):
