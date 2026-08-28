@@ -15,6 +15,8 @@ class DemoTest(unittest.TestCase):
     def test_public_tour_is_bilingual_and_data_free(self) -> None:
         rendered = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
 
+        self.assertIn('<html lang="en" data-theme="light">', rendered)
+        self.assertIn('let language = "en";', rendered)
         self.assertIn("别让 AI 猜市场", rendered)
         self.assertIn("Don’t let AI guess.", rendered)
         for platform in ("TikTok", "Facebook", "YouTube", "LinkedIn"):

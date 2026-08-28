@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Public Web Census collects traceable public evidence across TikTok, Facebook, YouTube and LinkedIn before AI analysis.">
-  <title>Public Web Census · 让 AI 先拿出证据</title>
+  <title>Public Web Census | Evidence before analysis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -651,7 +651,7 @@
         claude: "Open https://github.com/KayZhongyi/public-web-census, install it as a Claude Skill, then run setup and doctor. Tell me which Chrome steps need my input. Do not sign in or solve verification challenges for me."
       }
     };
-    let language = "zh";
+    let language = "en";
     let activeAgent = "codex";
     let activePlatform = "tiktok";
     function renderPanel(platform) {
@@ -668,6 +668,14 @@
     function renderPrompt() {
       document.getElementById("prompt").textContent = prompts[language][activeAgent];
       document.getElementById("prompt-label").textContent = activeAgent.charAt(0).toUpperCase() + activeAgent.slice(1) + " · COPY THIS PROMPT";
+    }
+    function renderLanguage() {
+      document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+      document.getElementById("language").textContent = language === "zh" ? "EN" : "中";
+      document.querySelectorAll("[data-zh][data-en]").forEach(function(node) { node.innerHTML = node.dataset[language]; });
+      renderPanel(document.querySelector("[data-panel][aria-selected='true']").dataset.panel);
+      renderRoute(activePlatform);
+      renderPrompt();
     }
     document.querySelectorAll("[data-platform]").forEach(function(button) {
       button.addEventListener("click", function() {
@@ -691,12 +699,7 @@
     });
     document.getElementById("language").addEventListener("click", function() {
       language = language === "zh" ? "en" : "zh";
-      document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
-      document.getElementById("language").textContent = language === "zh" ? "EN" : "中";
-      document.querySelectorAll("[data-zh][data-en]").forEach(function(node) { node.innerHTML = node.dataset[language]; });
-      renderPanel(document.querySelector("[data-panel][aria-selected='true']").dataset.panel);
-      renderRoute(activePlatform);
-      renderPrompt();
+      renderLanguage();
     });
     document.getElementById("theme").addEventListener("click", function() {
       const root = document.documentElement;
@@ -708,7 +711,7 @@
       button.textContent = language === "zh" ? "已复制" : "Copied";
       window.setTimeout(function() { button.textContent = language === "zh" ? "复制" : "Copy"; }, 1400);
     });
-    renderPanel("tiktok");
+    renderLanguage();
   </script>
 </body>
 </html>
