@@ -15,13 +15,16 @@ class DemoTest(unittest.TestCase):
     def test_public_tour_is_bilingual_and_data_free(self) -> None:
         rendered = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        readme_zh = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
 
         self.assertIn('<html lang="en" data-theme="light">', rendered)
         self.assertIn('let language = "en";', rendered)
         self.assertIn("assets/product-tour-light-en.png", readme)
         self.assertTrue((ROOT / "assets" / "product-tour-light-en.png").is_file())
-        self.assertIn("别让 AI 猜市场", rendered)
-        self.assertIn("Don’t let AI guess.", rendered)
+        self.assertIn("察公开之言", rendered)
+        self.assertIn("Read public voices.", rendered)
+        self.assertIn("# 察言观数", readme_zh)
+        self.assertIn("# Public Web Census", readme)
         for platform in ("TikTok", "Facebook", "YouTube", "LinkedIn"):
             self.assertIn(platform, rendered)
         self.assertNotIn("Fictional", rendered)

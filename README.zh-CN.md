@@ -1,18 +1,26 @@
 <div align="center">
 
-# Public Web Census
+# 察言观数
 
-### 别让 AI 猜市场，让它先拿出证据。
+### Public Web Census
 
-先采集可回查的公开信息，再让 AI 分析。减少 AI 幻觉，让每一次业务判断可追溯、可更新、可复用。
+**察公开之言，观市场之数，让 AI 有据可依。**
+
+把社媒内容、公开评论与可见互动，沉淀为可追溯、可更新、可复用的业务证据。
 
 [English](README.md) · [功能演示](https://kayzhongyi.github.io/public-web-census/) · [开始使用](#有-codex-或-claude就能开始) · [平台支持](#平台支持)
 
 </div>
 
-![Public Web Census 英文明色功能演示](assets/product-tour-light-en.png)
+![察言观数（Public Web Census）英文明色功能演示](assets/product-tour-light-en.png)
 
-Public Web Census 是一套给 **Codex 或 Claude** 使用的 Agent Skill。你只需要用自然语言说明目标账号、市场与业务问题，Agent 会核对范围、采集公开记录、在本地保存原始证据，再基于证据分析。
+察言观数（Public Web Census）是一套给 **Codex 或 Claude** 使用的 Agent Skill。你只需要用自然语言说明目标账号、市场与业务问题，Agent 会核对范围、采集公开记录、在本地保存原始证据，再基于证据分析。
+
+| 察言 | 观数 |
+|---|---|
+| 采集帖子、视频文案与公开评论 | 记录播放、点赞、评论、分享及时间变化 |
+
+二者共同沉淀为带原文、来源链接、时间和稳定 ID 的证据，再交给 AI 分析。
 
 它主要解决四类工作：
 
@@ -23,7 +31,7 @@ Public Web Census 是一套给 **Codex 或 Claude** 使用的 Agent Skill。你�
 
 ## 它和直接问 AI 有什么不同
 
-| 直接问 AI | Public Web Census |
+| 直接问 AI | 察言观数 |
 |---|---|
 | AI 可能给出总结，却说不清看过什么 | 保存原文、来源链接、时间、可见指标与稳定 ID |
 | 报告生成后很快过时 | 追加新观测，同时保留历史 |
@@ -62,7 +70,7 @@ Claude Skill，并运行 setup 和 doctor。完成后告诉我需要在 Chrome �
 安装后，直接说业务需求，不需要记命令：
 
 ```text
-使用 Public Web Census 采集这两家缅甸竞对在 TikTok 和 Facebook 上
+使用察言观数（Public Web Census）采集这两家缅甸竞对在 TikTok 和 Facebook 上
 可见的公开内容，保存成可以持续更新的工作区。比较内容主题、可见互动
 和重复出现的客户问题。重要结论都要能回到原始记录。
 ```

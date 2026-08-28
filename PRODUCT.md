@@ -12,11 +12,11 @@ Primary users are company leaders, market teams, presales teams, product teams, 
 
 ## Product Purpose
 
-Public Web Census turns public social-web pages into refreshable, source-linked evidence that an AI Agent can analyze without treating generated prose as fact. Success means a colleague can install the Skill, describe an account and a business question in natural language, complete any required browser verification themselves, and receive reusable raw records plus an evidence-aware analysis.
+Public Web Census—branded in Chinese as 察言观数—turns public social-web pages into refreshable, source-linked evidence that an AI Agent can analyze without treating generated prose as fact. Success means a colleague can install the Skill, describe an account and a business question in natural language, complete any required browser verification themselves, and receive reusable raw records plus an evidence-aware analysis.
 
 ## Positioning
 
-Do not let AI guess the market. Make it show the evidence first. The product combines logged-in browser collection, stable record identities, incremental history, source links, and deterministic validation so that AI-assisted market, customer-voice, and presales work is grounded in inspectable public data.
+Read public voices. Track visible signals. Ground AI in evidence. The product combines logged-in browser collection, stable record identities, incremental history, source links, and deterministic validation so that AI-assisted market, customer-voice, and presales work is grounded in inspectable public data.
 
 ## Operating Context
 
@@ -38,9 +38,12 @@ Do not let AI guess the market. Make it show the evidence first. The product com
 
 ## Brand Commitments
 
-- Product name: Public Web Census.
+- English product name: Public Web Census.
+- Chinese product name: 察言观数.
+- Repository and CLI name: `public-web-census`.
 - Chinese and English documentation are first-class.
 - Voice: concise, evidence-led, useful to business decision-makers, and explicit about real platform boundaries.
+- Chinese promise: 察公开之言，观市场之数，让 AI 有据可依。
 - Core message: reduce AI hallucinations by making public evidence traceable, refreshable, and reusable.
 
 ## Evidence on Hand

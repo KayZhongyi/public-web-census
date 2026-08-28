@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Public Web Census collects traceable public evidence across TikTok, Facebook, YouTube and LinkedIn before AI analysis.">
-  <title>Public Web Census | Evidence before analysis</title>
+  <title>Public Web Census · 察言观数 | Ground AI in evidence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -127,6 +127,7 @@
       gap: clamp(48px, 7vw, 96px);
       padding: 92px 0 110px;
     }
+    .hero > *, .dispatch-grid > * { min-width: 0; }
     h1, h2, h3, p { margin-top: 0; }
     h1 {
       margin-bottom: 28px;
@@ -460,9 +461,15 @@
       :root { --page: min(100% - 30px, 1180px); }
       .nav-inner { min-height: 62px; }
       .brand span:last-child { font-size: 14px; }
-      h1 { font-size: clamp(36px, 10.5vw, 42px); white-space: nowrap; }
+      #theme { display: none; }
+      h1 { font-size: clamp(34px, 9.2vw, 38px); white-space: normal; }
       .hero { min-height: auto; padding: 66px 0 78px; }
+      .actions { display: grid; grid-template-columns: 1fr; }
+      .actions .button { width: 100%; }
       .dispatch { padding: 17px; }
+      .dispatch-head { gap: 12px; }
+      .dispatch-head strong { max-width: 58%; }
+      .live-state { white-space: nowrap; }
       .dispatch-grid { grid-template-columns: 1fr; }
       .source-rail { grid-template-columns: repeat(4, 1fr); }
       .source-button { min-height: 54px; grid-template-columns: 1fr; justify-items: center; }
@@ -486,7 +493,7 @@
 <body>
   <nav class="nav" aria-label="Primary">
     <div class="shell nav-inner">
-      <a class="brand" href="#top" aria-label="Public Web Census home"><span class="brand-mark" aria-hidden="true"></span><span>Public Web Census</span></a>
+      <a class="brand" href="#top" aria-label="Public Web Census home"><span class="brand-mark" aria-hidden="true"></span><span data-zh="察言观数" data-en="Public Web Census">Public Web Census</span></a>
       <div class="nav-links">
         <a href="#uses" data-zh="业务用途" data-en="Use cases">业务用途</a>
         <a href="#platforms" data-zh="平台支持" data-en="Platforms">平台支持</a>
@@ -502,8 +509,8 @@
   <main id="top">
     <section class="shell hero">
       <div class="hero-copy">
-        <h1 data-zh="别让 AI 猜市场。<br>让它先拿出证据。" data-en="Don’t let AI guess.<br>Make it show the evidence.">别让 AI 猜市场。<br>让它先拿出证据。</h1>
-        <p data-zh="采集可回查的公开信息，再让 AI 分析。" data-en="Collect traceable public evidence before AI analysis.">采集可回查的公开信息，再让 AI 分析。</p>
+        <h1 data-zh="察公开之言。<br>观市场之数。" data-en="Read public voices.<br>Track visible signals.">Read public voices.<br>Track visible signals.</h1>
+        <p data-zh="让 AI 有据可依。公开内容、互动数据和来源链接，先沉淀，再分析。" data-en="Ground AI in evidence. Preserve public content, visible metrics and source links before analysis.">Ground AI in evidence. Preserve public content, visible metrics and source links before analysis.</p>
         <div class="actions">
           <a class="button primary" href="#install" data-zh="让 Agent 安装" data-en="Install for your Agent">让 Agent 安装</a>
           <a class="button" href="#platforms" data-zh="查看支持范围" data-en="See platform coverage">查看支持范围</a>
@@ -605,7 +612,7 @@
       <div class="shell guardrails">
         <div>
           <h2 data-zh="减少幻觉，靠的是证据边界。" data-en="Hallucination risk falls when evidence has boundaries.">减少幻觉，靠的是证据边界。</h2>
-          <p data-zh="Public Web Census 不承诺模型永不出错。它做的是让原始事实先落地，让程序验证记录完整性，让人保留最终判断。" data-en="Public Web Census does not promise infallible models. It grounds source facts first, validates record integrity, and keeps final judgment human.">Public Web Census 不承诺模型永不出错。它做的是让原始事实先落地，让程序验证记录完整性，让人保留最终判断。</p>
+          <p data-zh="察言观数不承诺模型永不出错。它做的是让原始事实先落地，让程序验证记录完整性，让人保留最终判断。" data-en="Public Web Census does not promise infallible models. It grounds source facts first, validates record integrity, and keeps final judgment human.">Public Web Census does not promise infallible models. It grounds source facts first, validates record integrity, and keeps final judgment human.</p>
         </div>
         <ul class="guardrail-list">
           <li><strong data-zh="公开可见与只读" data-en="Publicly visible and read-only">公开可见与只读</strong><span data-zh="不自动发帖、评论、点赞或发送消息。" data-en="Never posts, comments, likes or sends messages automatically.">不自动发帖、评论、点赞或发送消息。</span></li>
@@ -621,7 +628,7 @@
       <a class="button primary" href="https://github.com/KayZhongyi/public-web-census" data-zh="在 GitHub 查看" data-en="View on GitHub">在 GitHub 查看</a>
     </section>
   </main>
-  <footer><div class="shell"><span>Public Web Census · MIT License</span><span><a href="https://github.com/KayZhongyi/public-web-census">GitHub</a> · <a href="https://github.com/KayZhongyi/public-web-census/blob/main/README.md">English</a> · <a href="https://github.com/KayZhongyi/public-web-census/blob/main/README.zh-CN.md">中文</a></span></div></footer>
+  <footer><div class="shell"><span data-zh="察言观数 · MIT License" data-en="Public Web Census · MIT License">Public Web Census · MIT License</span><span><a href="https://github.com/KayZhongyi/public-web-census">GitHub</a> · <a href="https://github.com/KayZhongyi/public-web-census/blob/main/README.md">English</a> · <a href="https://github.com/KayZhongyi/public-web-census/blob/main/README.zh-CN.md">中文</a></span></div></footer>
   <script>
     const platformCopy = {
       zh: {
@@ -671,6 +678,8 @@
     }
     function renderLanguage() {
       document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+      document.title = language === "zh" ? "察言观数 | 让 AI 有据可依" : "Public Web Census | Ground AI in evidence";
+      document.querySelector(".brand").setAttribute("aria-label", language === "zh" ? "察言观数首页" : "Public Web Census home");
       document.getElementById("language").textContent = language === "zh" ? "EN" : "中";
       document.querySelectorAll("[data-zh][data-en]").forEach(function(node) { node.innerHTML = node.dataset[language]; });
       renderPanel(document.querySelector("[data-panel][aria-selected='true']").dataset.panel);

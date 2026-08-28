@@ -2,9 +2,11 @@
 
 # Public Web Census
 
-### Don’t let AI guess the market. Make it show the evidence.
+### 察言观数
 
-Collect traceable public signals before AI analysis. Reduce hallucination risk and keep every decision source-linked, refreshable, and reusable.
+**Read public voices. Track visible signals. Ground AI in evidence.**
+
+Turn public web records into traceable, refreshable evidence before AI analysis.
 
 [中文](README.zh-CN.md) · [Product tour](https://kayzhongyi.github.io/public-web-census/) · [Get started](#start-with-codex-or-claude) · [Platform coverage](#platform-coverage)
 
@@ -12,7 +14,7 @@ Collect traceable public signals before AI analysis. Reduce hallucination risk a
 
 ![Public Web Census product tour in English light mode](assets/product-tour-light-en.png)
 
-Public Web Census is an Agent Skill for colleagues who use **Codex or Claude**. Give it a target account, market, and business question in natural language. The Agent verifies scope, collects visible public records, preserves raw evidence locally, and analyzes only after the evidence exists.
+Public Web Census—branded in Chinese as **察言观数**—is an Agent Skill for colleagues who use **Codex or Claude**. Give it a target account, market, and business question in natural language. The Agent verifies scope, collects visible public records, preserves raw evidence locally, and analyzes only after the evidence exists.
 
 It is designed for:
 
